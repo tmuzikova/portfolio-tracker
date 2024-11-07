@@ -1,1 +1,3 @@
-export const TransactionsTable = () => {};
+export const TransactionsTable = () => {
+  return <>Transactions</>;
+};
