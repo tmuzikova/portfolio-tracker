@@ -50,30 +50,16 @@ module.exports = {
               // disables cross-feature imports:
               // eg. src/features/discussions should not import from src/features/comments, etc.
               {
-                target: './src/features/auth',
+                target: './src/features/Dashboard',
                 from: './src/features',
-                except: ['./auth'],
+                except: ['./Dashboard'],
               },
               {
-                target: './src/features/comments',
+                target: './src/features/TransactionsTable',
                 from: './src/features',
-                except: ['./comments'],
+                except: ['./TransactionsTable'],
               },
-              {
-                target: './src/features/discussions',
-                from: './src/features',
-                except: ['./discussions'],
-              },
-              {
-                target: './src/features/teams',
-                from: './src/features',
-                except: ['./teams'],
-              },
-              {
-                target: './src/features/users',
-                from: './src/features',
-                except: ['./users'],
-              },
+
               // enforce unidirectional codebase:
 
               // e.g. src/app can import from src/features but not the other way around
@@ -129,22 +115,11 @@ module.exports = {
         'check-file/filename-naming-convention': [
           'error',
           {
-            '**/*.{ts,tsx}': 'KEBAB_CASE',
+            '**/*.tsx': 'PascalCase',
+            '**/*.ts': 'camelCase',
           },
           {
             ignoreMiddleExtensions: true,
-          },
-        ],
-      },
-    },
-    {
-      plugins: ['check-file'],
-      files: ['src/**/!(__tests__)/*'],
-      rules: {
-        'check-file/folder-naming-convention': [
-          'error',
-          {
-            '**/*': 'KEBAB_CASE',
           },
         ],
       },
