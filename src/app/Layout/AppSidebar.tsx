@@ -2,7 +2,6 @@ import { Home, Plus, Receipt } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
@@ -36,7 +35,6 @@ export const AppSidebar = () => {
     link: 'group-data-[state=collapsed]:!px-6 group-data-[state=collapsed]:!py-6',
     group: 'group-data-[state=collapsed]:!px-0',
     content: 'group-data-[state=collapsed]:!px-2',
-    header: 'group-data-[state=collapsed]:hidden ',
   };
 
   return (
@@ -90,9 +88,6 @@ export const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className={clsx(collapsedClasses.header)}>
-        footer
-      </SidebarFooter>
     </Sidebar>
   );
 };

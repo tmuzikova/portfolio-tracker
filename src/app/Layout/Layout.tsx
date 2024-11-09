@@ -8,7 +8,7 @@ export const Layout = () => {
     <>
       <SidebarProvider>
         <AppSidebar />
-        <main>
+        <main className="w-full">
           <Navbar />
           <Outlet />
         </main>
