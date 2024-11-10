@@ -22,6 +22,7 @@ export const StatCards = () => {
         >
           {data.portfolioValue} CZK
         </StatCard>
+
         <StatCard
           title="Celková hodnota portfolia"
           tooltip="Celková hodnota portfolia se započítaným realizovaným ziskem a poplatky."
@@ -29,6 +30,7 @@ export const StatCards = () => {
           {data.totalValue} CZK
         </StatCard>
       </div>
+
       <div className="flex flex-col gap-5">
         <StatCard
           title="Nerealizovaný zisk"
@@ -36,12 +38,14 @@ export const StatCards = () => {
         >
           {data.unrealizedProfit} CZK
         </StatCard>
+
         <StatCard
           title="Realizovaný zisk"
           tooltip="Realizovaný zisk z prodeje aktiv."
         >
           {data.realizedProfit} CZK
         </StatCard>
+
         <StatCard
           title="Investovaná částka"
           tooltip="Celková investovaná částka bez započítaných poplatků."
@@ -49,10 +53,12 @@ export const StatCards = () => {
           {data.investedAmount} CZK
         </StatCard>
       </div>
+
       <div className="flex flex-col gap-5">
         <StatCard title="Dividendy" className="h-[320px]">
           {data.dividends} CZK
         </StatCard>
+
         <StatCard title="Poplatky">{data.fees} CZK</StatCard>
       </div>
     </>

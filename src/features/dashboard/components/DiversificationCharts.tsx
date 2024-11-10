@@ -57,6 +57,7 @@ export const DiversificationCharts = () => {
     <Card className="flex flex-col">
       <CardHeader className="pb-0">
         <CardTitle>Diverzifikace portfolia</CardTitle>
+
         <div className="flex gap-2 sm:py-6">
           {diversificationTypes.map((type) => (
             <Button
