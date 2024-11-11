@@ -15,18 +15,25 @@ type StatCard = {
 
 export const StatCard = (props: StatCard) => {
   return (
-    <Card className={`h-[150px] w-[371px] ${props.className}`}>
+    <Card
+      className={`flex h-[150px] flex-col justify-between ${props.className}`}
+    >
       <CardHeader>
-        <div className="">
-          <div className="flex items-center gap-2">
-            <CardDescription>{props.title}</CardDescription>
-            {props.tooltip && (
-              <QuestionMarkTooltip>{props.tooltip}</QuestionMarkTooltip>
-            )}
-          </div>
-          <CardTitle>{props.children}</CardTitle>
+        <div className="flex items-center gap-2">
+          <CardTitle className="text-[18px] font-normal text-muted-foreground">
+            {props.title}
+          </CardTitle>
+          {props.tooltip && (
+            <QuestionMarkTooltip>{props.tooltip}</QuestionMarkTooltip>
+          )}
         </div>
       </CardHeader>
+
+      <div className="px-6 pb-4">
+        <CardTitle className="text-[28px] font-semibold">
+          {props.children}
+        </CardTitle>
+      </div>
     </Card>
   );
 };

@@ -180,7 +180,7 @@ export const Dashboard = () => {
 
   return (
     <section className="container mx-auto px-4">
-      <header className="padding-y flex flex-row justify-between">
+      <header className="flex flex-row justify-between py-6">
         <h1 className="text-[34px] font-semibold">Přehled</h1>
         <AddTransactionButton />
       </header>
@@ -198,7 +198,7 @@ export const Dashboard = () => {
           <DiversificationCharts />
         </section>
 
-        <section className="pb-12">
+        <section className="w-full pb-12">
           <StockTable data={stockTableData} columns={columns} />
         </section>
       </div>
