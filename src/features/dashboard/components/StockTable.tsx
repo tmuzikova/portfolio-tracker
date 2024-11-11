@@ -47,7 +47,9 @@ export function StockTable<TData, TValue>({
     <div>
       <Card>
         <CardHeader>
-          <CardTitle>Výkon jednotlivých aktiv</CardTitle>
+          <CardTitle className="text-center md:text-left">
+            Výkon jednotlivých aktiv
+          </CardTitle>
         </CardHeader>
 
         <Table>

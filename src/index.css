@@ -87,14 +87,3 @@
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
-.padding-x {
-  @apply px-[200px] sm:px-16;
-}
-
-.padding-y {
-  @apply py-6 sm:py-16;
-}
-
-.padding {
-  @apply px-6 py-10 sm:px-16 sm:py-16;
-}
