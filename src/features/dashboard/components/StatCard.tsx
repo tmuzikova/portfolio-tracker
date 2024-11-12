@@ -1,19 +1,14 @@
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { QuestionMarkTooltip } from './QuestionMarkTooltip';
 
-type StatCard = {
+type StatCardProps = {
   title: string;
   tooltip?: string;
   className?: string;
   children: React.ReactNode;
 };
 
-export const StatCard = (props: StatCard) => {
+export const StatCard = (props: StatCardProps) => {
   return (
     <Card
       className={`flex h-[150px] flex-col justify-between ${props.className}`}
@@ -29,10 +24,10 @@ export const StatCard = (props: StatCard) => {
         </div>
       </CardHeader>
 
-      <div className="px-6 pb-4">
-        <CardTitle className="text-[28px] font-semibold">
+      <div>
+        <CardContent className="text-[28px] font-semibold">
           {props.children}
-        </CardTitle>
+        </CardContent>
       </div>
     </Card>
   );

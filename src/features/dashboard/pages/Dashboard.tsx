@@ -2,8 +2,8 @@ import { AddTransactionButton } from '@/components/AddTransactionButton';
 import { StatCards } from '../components/StatCards';
 import { PortfolioHistoryChart } from '../components/PortfolioHistoryChart';
 import { DiversificationCharts } from '../components/DiversificationCharts';
-import { StockTable } from '../components/StockTable';
 import { columns, StockTableData } from '../components/columns';
+import { DataTable } from '@/components/DataTable';
 
 export const Dashboard = () => {
   //to be replaced with real data later
@@ -199,7 +199,11 @@ export const Dashboard = () => {
         </section>
 
         <section className="w-full">
-          <StockTable data={stockTableData} columns={columns} />
+          <DataTable
+            data={stockTableData}
+            columns={columns}
+            headerTitle="Výkon jednotlivých aktiv"
+          />
         </section>
       </div>
     </section>

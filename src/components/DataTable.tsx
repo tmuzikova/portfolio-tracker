@@ -17,21 +17,23 @@ import {
 } from '@/components/ui/table';
 
 import { useState } from 'react';
-import { Card } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { TablePagination } from '@/components/TablePagination';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  headerTitle?: string;
 }
 
-export function TransactionTable<TData, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
+  headerTitle,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const stockTable = useReactTable({
+  const dataTable = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -46,9 +48,17 @@ export function TransactionTable<TData, TValue>({
   return (
     <div>
       <Card>
+        {headerTitle && (
+          <CardHeader>
+            <CardTitle className="text-center md:text-left">
+              {headerTitle}
+            </CardTitle>
+          </CardHeader>
+        )}
+
         <Table>
           <TableHeader>
-            {stockTable.getHeaderGroups().map((headerGroup) => (
+            {dataTable.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
@@ -66,8 +76,8 @@ export function TransactionTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {stockTable.getRowModel().rows?.length ? (
-              stockTable.getRowModel().rows.map((row) => (
+            {dataTable.getRowModel().rows?.length ? (
+              dataTable.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
@@ -96,7 +106,7 @@ export function TransactionTable<TData, TValue>({
         </Table>
       </Card>
 
-      <TablePagination table={stockTable} />
+      <TablePagination table={dataTable} />
     </div>
   );
 }

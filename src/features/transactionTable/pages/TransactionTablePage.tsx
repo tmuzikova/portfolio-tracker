@@ -1,6 +1,6 @@
 import { AddTransactionButton } from '@/components/AddTransactionButton';
-import { TransactionTable } from '../components/TransactionTable';
 import { columns, TransactionTableData } from '../components/columns';
+import { DataTable } from '@/components/DataTable';
 
 export const TransactionTablePage = () => {
   const stockTableData: TransactionTableData[] = [
@@ -166,7 +166,7 @@ export const TransactionTablePage = () => {
       </header>
 
       <section>
-        <TransactionTable data={stockTableData} columns={columns} />
+        <DataTable data={stockTableData} columns={columns} />
       </section>
     </section>
   );
