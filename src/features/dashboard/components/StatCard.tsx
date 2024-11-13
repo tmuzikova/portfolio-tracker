@@ -1,11 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { QuestionMarkTooltip } from './QuestionMarkTooltip';
 
-type StatCardProps = {
-  title: string;
+export type CardData = {
+  value: number;
   tooltip?: string;
+  title: string;
+};
+
+type StatCardProps = {
+  data: CardData;
+  children?: React.ReactNode;
   className?: string;
-  children: React.ReactNode;
 };
 
 export const StatCard = (props: StatCardProps) => {
@@ -16,16 +21,17 @@ export const StatCard = (props: StatCardProps) => {
       <CardHeader>
         <div className="flex items-center gap-2">
           <CardTitle className="text-[18px] font-normal text-muted-foreground">
-            {props.title}
+            {props.data.title}
           </CardTitle>
-          {props.tooltip && (
-            <QuestionMarkTooltip>{props.tooltip}</QuestionMarkTooltip>
+          {props.data.tooltip && (
+            <QuestionMarkTooltip>{props.data.tooltip}</QuestionMarkTooltip>
           )}
         </div>
       </CardHeader>
 
       <div>
         <CardContent className="text-[28px] font-semibold">
+          {props.data.value}
           {props.children}
         </CardContent>
       </div>
