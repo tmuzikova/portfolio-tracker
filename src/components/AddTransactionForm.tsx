@@ -49,7 +49,8 @@ const schema = z.object({
   currency: z.string(),
   fee: z
     .string()
-    .transform((val) => parseFloat(val))
+    .optional()
+    .transform((val) => (val?.trim() ? parseFloat(val) : 0))
     .refine((val) => !isNaN(val) && val >= 0, {
       message: 'Value must be at least 0',
     }),
@@ -211,7 +212,12 @@ export const AddTransactionForm = () => {
               <FormItem>
                 <FormLabel>Počet ks</FormLabel>
                 <FormControl>
-                  <Input {...field} type="number" placeholder="Počet ks" />
+                  <Input
+                    {...field}
+                    type="number"
+                    placeholder="Počet ks"
+                    value={field.value || ''}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -224,7 +230,7 @@ export const AddTransactionForm = () => {
               <FormItem>
                 <FormLabel>Datum transakce</FormLabel>
                 <FormControl>
-                  <Input {...field} type="date" />
+                  <Input {...field} type="date" value={field.value || ''} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -240,7 +246,12 @@ export const AddTransactionForm = () => {
               <FormItem>
                 <FormLabel>Cena / ks</FormLabel>
                 <FormControl>
-                  <Input {...field} type="number" placeholder="Cena / ks" />
+                  <Input
+                    {...field}
+                    type="number"
+                    placeholder="Cena / ks"
+                    value={field.value || ''}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -253,7 +264,12 @@ export const AddTransactionForm = () => {
               <FormItem>
                 <FormLabel>Měna</FormLabel>
                 <FormControl>
-                  <Input {...field} type="text" placeholder="Měna" />
+                  <Input
+                    {...field}
+                    type="text"
+                    placeholder="Měna"
+                    value={field.value || ''}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -268,7 +284,12 @@ export const AddTransactionForm = () => {
             <FormItem>
               <FormLabel>Poplatky</FormLabel>
               <FormControl>
-                <Input {...field} type="number" placeholder="Poplatky" />
+                <Input
+                  {...field}
+                  type="number"
+                  placeholder="Poplatky"
+                  value={field.value || ''}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
