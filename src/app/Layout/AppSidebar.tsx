@@ -1,4 +1,4 @@
-import { Home, Plus, Receipt } from 'lucide-react';
+import { Home, Plus as PlusIcon, Receipt } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/sidebar';
 import { useLocation } from 'react-router-dom';
 import clsx from 'clsx';
+import { AddTransactionModal } from '@/components/AddTransactionModal';
 const items = [
   {
     title: 'Přehled',
@@ -72,18 +73,21 @@ export const AppSidebar = () => {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-              <SidebarMenuButton
-                className={clsx(
-                  'mt-6 bg-[hsl(var(--sidebar-primary))] py-6 pl-4 text-[hsl(var(--sidebar-primary-foreground))] transition-colors hover:bg-[hsl(var(--sidebar-primary))] hover:text-[hsl(var(--sidebar-primary-foreground))]',
-                  collapsedClasses.button,
-                  collapsedClasses.link,
-                )}
-              >
-                <span>
-                  <Plus />
-                </span>
-                <span className="text-[16px]">Přidat transakci</span>
-              </SidebarMenuButton>
+
+              <AddTransactionModal>
+                <SidebarMenuButton
+                  className={clsx(
+                    'mt-6 bg-[hsl(var(--sidebar-primary))] py-6 pl-4 text-[hsl(var(--sidebar-primary-foreground))] transition-colors hover:bg-[hsl(var(--sidebar-primary))] hover:text-[hsl(var(--sidebar-primary-foreground))]',
+                    collapsedClasses.button,
+                    collapsedClasses.link,
+                  )}
+                >
+                  <span>
+                    <PlusIcon />
+                  </span>
+                  <span className="text-[16px]">Přidat transakci</span>
+                </SidebarMenuButton>
+              </AddTransactionModal>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

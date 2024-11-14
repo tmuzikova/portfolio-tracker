@@ -1,9 +1,11 @@
-import { AddTransactionButton } from '@/components/AddTransactionButton';
+import { AddTransactionModal } from '@/components/AddTransactionModal';
 import { StatCards } from '../components/StatCards';
 import { PortfolioHistoryChart } from '../components/PortfolioHistoryChart';
 import { DiversificationCharts } from '../components/DiversificationCharts';
 import { columns, StockTableData } from '../components/columns';
 import { DataTable } from '@/components/DataTable';
+import { Button } from '@/components/ui/button';
+import { Plus as PlusIcon } from 'lucide-react';
 
 export const Dashboard = () => {
   //to be replaced with real data later
@@ -182,7 +184,13 @@ export const Dashboard = () => {
     <section className="container mx-auto px-4 pb-12">
       <header className="flex flex-row justify-between py-6">
         <h1 className="text-[34px] font-semibold">Přehled</h1>
-        <AddTransactionButton />
+        <AddTransactionModal>
+          <Button className="!h-[48px] !w-[48px]">
+            <span>
+              <PlusIcon className="!h-6 !w-6" />
+            </span>
+          </Button>
+        </AddTransactionModal>
       </header>
 
       <div className="flex flex-col gap-12">

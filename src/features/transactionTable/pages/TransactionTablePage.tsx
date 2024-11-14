@@ -1,4 +1,4 @@
-import { AddTransactionButton } from '@/components/AddTransactionButton';
+import { AddTransactionModal } from '@/components/AddTransactionModal';
 import { columns, TransactionTableData } from '../components/columns';
 import { DataTable } from '@/components/DataTable';
 
@@ -162,7 +162,7 @@ export const TransactionTablePage = () => {
     <section className="container mx-auto px-4 pb-12">
       <header className="flex flex-row justify-between py-6">
         <h1 className="text-[34px] font-semibold">Transakce</h1>
-        <AddTransactionButton />
+        <AddTransactionModal />
       </header>
 
       <section>
