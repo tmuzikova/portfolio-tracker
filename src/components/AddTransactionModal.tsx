@@ -1,6 +1,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -21,8 +22,12 @@ export const AddTransactionModal = ({ children }: AddTransactionModalProps) => {
           <DialogTitle className="mx-auto text-[28px]">
             Přidejte transakci
           </DialogTitle>
-          <AddTransactionForm />
+          <DialogDescription className="mx-auto max-w-sm text-center">
+            Vyplňte níže uvedený formulář a přidejte novou transakci do svého
+            portfolia.
+          </DialogDescription>
         </DialogHeader>
+        <AddTransactionForm />
       </DialogContent>
     </Dialog>
   );
