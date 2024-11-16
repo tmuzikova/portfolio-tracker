@@ -1,14 +1,6 @@
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from './ui/command';
-import {
   FormControl,
   FormField,
   FormItem,
@@ -22,26 +14,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { Loader as LoaderIcon } from 'lucide-react';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSymbolListContext } from '@/stores/SymbolListContext';
+import { VirtualizedCombobox } from './VirtualizedCombobox';
 
 const schema = z.object({
-  transactionType: z.string(),
-  symbol: z.string(),
+  transactionType: z.string({ required_error: 'Prosím zadejte typ transakce' }),
+  symbol: z.string({ required_error: 'Prosím zadejte ticker symbol' }),
   quantity: z
-    .string()
+    .string({ required_error: 'Prosím zadejte počet kusů' })
     .transform((val) => parseFloat(val))
     .refine((val) => !isNaN(val) && val >= 1, {
       message: 'Value must be at least 1',
     }),
-  date: z.string(),
+  date: z.string({
+    required_error: 'Prosím zadejte datum provedení transakce',
+  }),
   price: z
-    .string()
+    .string({ required_error: 'Prosím zadejte jednotkovou cenu' })
     .transform((val) => parseFloat(val))
     .refine((val) => !isNaN(val) && val >= 1, {
       message: 'Value must be at least 1',
@@ -58,60 +52,25 @@ const schema = z.object({
 
 type AddTransactionFormFields = z.infer<typeof schema>;
 
-//to be replaced with Stock Symbol List data
-const stocks = [
-  {
-    value: 'aapl',
-    label: 'Apple Inc. (AAPL)',
-  },
-  {
-    value: 'msft',
-    label: 'Microsoft Corporation (MSFT)',
-  },
-  {
-    value: 'googl',
-    label: 'Alphabet Inc. (GOOGL)',
-  },
-  {
-    value: 'amzn',
-    label: 'Amazon.com, Inc. (AMZN)',
-  },
-  {
-    value: 'tsla',
-    label: 'Tesla, Inc. (TSLA)',
-  },
-  {
-    value: 'nvda',
-    label: 'NVIDIA Corporation (NVDA)',
-  },
-  {
-    value: 'ko',
-    label: 'The Coca-Cola Company (KO)',
-  },
-  {
-    value: 'jnj',
-    label: 'Johnson & Johnson (JNJ)',
-  },
-  {
-    value: 'meta',
-    label: 'Meta Platforms, Inc. (META)',
-  },
-  {
-    value: 'intc',
-    label: 'Intel Corporation (INTC)',
-  },
-];
-
 export const AddTransactionForm = () => {
-  const [openCombobox, setOpenCombobox] = useState(false);
-
+  const { symbolList, isLoading } = useSymbolListContext();
   const methods = useForm<AddTransactionFormFields>({
     resolver: zodResolver(schema),
   });
 
+  const [selectedSymbol, setSelectedSymbol] = useState('');
+
   const onSubmit: SubmitHandler<AddTransactionFormFields> = (data) => {
     console.log(data);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <LoaderIcon className="h-8 w-8 animate-spin text-gray-500" />
+      </div>
+    );
+  }
 
   return (
     <FormProvider {...methods}>
@@ -148,57 +107,15 @@ export const AddTransactionForm = () => {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Ticker symbol</FormLabel>
-              <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={openCombobox}
-                      className="justify-between"
-                    >
-                      {field.value
-                        ? stocks.find((stock) => stock.value === field.value)
-                            ?.label
-                        : 'Zadejte symbol'}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="p-0">
-                  <Command>
-                    <CommandInput
-                      placeholder="Hledat symbol"
-                      {...methods.register('symbol', { required: true })}
-                    />
-                    <CommandList>
-                      <CommandEmpty>Žádné výsledky.</CommandEmpty>
-                      <CommandGroup>
-                        {stocks.map((stock) => (
-                          <CommandItem
-                            key={stock.value}
-                            value={stock.value}
-                            onSelect={() => {
-                              methods.setValue('symbol', stock.value);
-                              setOpenCombobox(false);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                'mr-2 h-4 w-4',
-                                field.value === stock.value
-                                  ? 'opacity-100'
-                                  : 'opacity-0',
-                              )}
-                            />
-                            {stock.label}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+              <VirtualizedCombobox
+                options={symbolList || []}
+                placeholder="Hledat dle symbolu či názvu"
+                selectedOption={selectedSymbol}
+                onSelect={(symbol) => {
+                  methods.setValue('symbol', symbol);
+                  setSelectedSymbol(symbol);
+                }}
+              />
               <FormMessage />
             </FormItem>
           )}

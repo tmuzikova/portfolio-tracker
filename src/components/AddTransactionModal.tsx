@@ -22,10 +22,7 @@ export const AddTransactionModal = ({ children }: AddTransactionModalProps) => {
           <DialogTitle className="mx-auto text-[28px]">
             Přidejte transakci
           </DialogTitle>
-          <DialogDescription className="mx-auto max-w-sm text-center">
-            Vyplňte níže uvedený formulář a přidejte novou transakci do svého
-            portfolia.
-          </DialogDescription>
+          <DialogDescription />
         </DialogHeader>
         <AddTransactionForm />
       </DialogContent>
