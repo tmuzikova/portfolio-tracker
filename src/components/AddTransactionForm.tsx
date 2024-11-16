@@ -16,7 +16,7 @@ import {
 } from './ui/select';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Loader as LoaderIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSymbolListContext } from '@/stores/SymbolListContext';
@@ -57,11 +57,29 @@ export const AddTransactionForm = () => {
   const methods = useForm<AddTransactionFormFields>({
     resolver: zodResolver(schema),
   });
-
   const [selectedSymbol, setSelectedSymbol] = useState('');
 
+  useEffect(() => {
+    const existingTransactions = JSON.parse(
+      localStorage.getItem('transactions') || '[]',
+    );
+    console.log('Loaded transactions:', existingTransactions);
+  }, []);
+
   const onSubmit: SubmitHandler<AddTransactionFormFields> = (data) => {
-    console.log(data);
+    try {
+      const existingTransactions = JSON.parse(
+        localStorage.getItem('transactions') || '[]',
+      );
+
+      const updatedTransactions = [...existingTransactions, data];
+
+      localStorage.setItem('transactions', JSON.stringify(updatedTransactions));
+
+      console.log('Transaction saved successfully!', updatedTransactions);
+    } catch (error) {
+      console.error('Error saving transaction:', error);
+    }
   };
 
   if (isLoading) {
