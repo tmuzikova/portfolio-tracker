@@ -1,29 +1,29 @@
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown as ArrowUpDownIcon } from 'lucide-react';
 import { Button } from './ui/button';
-import { Column } from '@tanstack/react-table';
+import { ReactNode } from 'react';
 
-type TableColumnHeaderProps<TData, TValue> = {
-  column: Column<TData, TValue>;
-  title: string;
+type TableColumnHeaderProps = {
+  children: ReactNode;
+  toggleColumnSorting: () => void;
   buttonClassName?: string;
-  wrapperClassName?: string;
+  className?: string;
 };
 
-export const TableColumnHeader = <TData, TValue>({
-  column,
-  title,
+export const TableColumnHeader = ({
+  children,
+  toggleColumnSorting,
   buttonClassName = '',
-  wrapperClassName = '',
-}: TableColumnHeaderProps<TData, TValue>) => {
+  className = '',
+}: TableColumnHeaderProps) => {
   return (
-    <div className={wrapperClassName}>
+    <div className={className}>
       <Button
         variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        onClick={toggleColumnSorting}
         className={buttonClassName}
       >
-        {title}
-        <ArrowUpDown className="ml-2 h-4 w-4" />
+        {children}
+        <ArrowUpDownIcon className="ml-2 h-4 w-4" />
       </Button>
     </div>
   );

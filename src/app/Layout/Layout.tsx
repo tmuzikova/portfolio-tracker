@@ -6,17 +6,15 @@ import { Footer } from './Footer';
 
 export const Layout = () => {
   return (
-    <>
-      <SidebarProvider>
-        <AppSidebar />
-        <main className="flex w-full flex-col">
-          <div className="flex-grow">
-            <Navbar />
-            <Outlet />
-          </div>
-          <Footer />
-        </main>
-      </SidebarProvider>
-    </>
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="flex w-full flex-col">
+        <div className="flex-grow">
+          <Navbar />
+          <Outlet />
+        </div>
+        <Footer />
+      </main>
+    </SidebarProvider>
   );
 };

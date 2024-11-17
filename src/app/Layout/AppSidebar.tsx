@@ -1,4 +1,8 @@
-import { Home, Plus, Receipt } from 'lucide-react';
+import {
+  Home as HomeIcon,
+  Plus as PlusIcon,
+  Receipt as ReceiptIcon,
+} from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -9,18 +13,18 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 const items = [
   {
     title: 'Přehled',
     url: '/',
-    icon: Home,
+    icon: HomeIcon,
   },
   {
     title: 'Transakce',
     url: '/transaction-table',
-    icon: Receipt,
+    icon: ReceiptIcon,
   },
 ];
 
@@ -60,15 +64,15 @@ export const AppSidebar = () => {
                     isActive={location.pathname === item.url}
                     className={clsx(collapsedClasses.button)}
                   >
-                    <a
-                      href={item.url}
+                    <Link
+                      to={item.url}
                       className={clsx('py-6 pl-4', collapsedClasses.link)}
                     >
                       <span>
                         <item.icon />
                       </span>
                       <span className="text-[16px]">{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -80,7 +84,7 @@ export const AppSidebar = () => {
                 )}
               >
                 <span>
-                  <Plus />
+                  <PlusIcon />
                 </span>
                 <span className="text-[16px]">Přidat transakci</span>
               </SidebarMenuButton>

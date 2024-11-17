@@ -45,8 +45,13 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const getPreviousPage = () => dataTable.previousPage();
+  const getNextPage = () => dataTable.nextPage();
+  const isPreviousPageDisabled = !dataTable.getCanPreviousPage();
+  const isNextPageDisabled = !dataTable.getCanNextPage();
+
   return (
-    <div>
+    <>
       <Card>
         {headerTitle && (
           <CardHeader>
@@ -106,7 +111,12 @@ export function DataTable<TData, TValue>({
         </Table>
       </Card>
 
-      <TablePagination table={dataTable} />
-    </div>
+      <TablePagination
+        getPreviousPage={getPreviousPage}
+        getNextPage={getNextPage}
+        isPreviousPageDisabled={isPreviousPageDisabled}
+        isNextPageDisabled={isNextPageDisabled}
+      />
+    </>
   );
 }
