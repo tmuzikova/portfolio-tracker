@@ -1,4 +1,4 @@
-import { StatCard } from './StatCard';
+import { CardData, StatCard } from './StatCard';
 
 export const StatCards = () => {
   //to be replaced with real data
@@ -12,13 +12,56 @@ export const StatCards = () => {
     fees: 1300,
   };
 
+  const cardData: { [key: string]: CardData } = {
+    portfolioValue: {
+      value: data.portfolioValue,
+      tooltip:
+        'Hodnota aktuálního portfolia bez realizovaného zisku, poplatků a dividend.',
+      title: 'Hodnota portfolia',
+    },
+    totalValue: {
+      value: data.totalValue,
+      tooltip:
+        'Celková hodnota portfolia se započítaným realizovaným ziskem a poplatky.',
+      title: 'Celková hodnota portfolia',
+    },
+    unrealizedProfit: {
+      value: data.unrealizedProfit,
+      tooltip:
+        'Rozdíl mezi nákupní a současnou cenou aktuálně vlastněných aktiv.',
+      title: 'Nerealizovaný zisk',
+    },
+    realizedProfit: {
+      value: data.realizedProfit,
+      tooltip: 'Realizovaný zisk z prodeje aktiv.',
+      title: 'Realizovaný zisk',
+    },
+    investedAmount: {
+      value: data.investedAmount,
+      tooltip: 'Celková investovaná částka bez započítaných poplatků.',
+      title: 'Investovaná částka',
+    },
+    dividends: {
+      value: data.dividends,
+      tooltip: 'Dividendy počítány dle složení aktuálního portfolia.',
+      title: 'Dividendy',
+    },
+    fees: {
+      value: data.fees,
+      tooltip: 'Poplatky za obchodování.',
+      title: 'Poplatky',
+    },
+  };
+
   const unrealizedProfitPercentage = (
     (data.unrealizedProfit / data.portfolioValue) *
     100
   ).toFixed(2);
+
   const dividendYield = ((data.dividends / data.portfolioValue) * 100).toFixed(
     2,
   );
+
   const dividendYieldOnCost = (
     (data.dividends / data.investedAmount) *
     100
@@ -32,54 +75,23 @@ export const StatCards = () => {
     <>
       <div className="flex w-full flex-wrap gap-5 lg:flex-nowrap">
         <div className="flex w-full flex-col gap-5">
-          <StatCard
-            title="Hodnota portfolia"
-            tooltip="Hodnota aktuálního portfolia bez realizovaného zisku, poplatků a dividend."
-            className="lg:h-[320px]"
-          >
-            {data.portfolioValue} CZK
-          </StatCard>
-
-          <StatCard
-            title="Celková hodnota portfolia"
-            tooltip="Celková hodnota portfolia se započítaným realizovaným ziskem a poplatky."
-          >
-            {data.totalValue} CZK
-          </StatCard>
+          <StatCard data={cardData.portfolioValue} className="lg:h-[320px]" />
+          <StatCard data={cardData.totalValue} />
         </div>
 
         <div className="flex w-full flex-col gap-5">
-          <StatCard
-            title="Nerealizovaný zisk"
-            tooltip="Rozdíl mezi nákupní a současnou cenou aktuálně vlastněných aktiv."
-          >
-            {data.unrealizedProfit} CZK
+          <StatCard data={cardData.unrealizedProfit}>
             <div className="text-[14px] font-normal text-muted-foreground">
               {unrealizedProfitPercentage} % z hodnoty portfolia
             </div>
           </StatCard>
 
-          <StatCard
-            title="Realizovaný zisk"
-            tooltip="Realizovaný zisk z prodeje aktiv."
-          >
-            {data.realizedProfit} CZK
-          </StatCard>
-
-          <StatCard
-            title="Investovaná částka"
-            tooltip="Celková investovaná částka bez započítaných poplatků."
-          >
-            {data.investedAmount} CZK
-          </StatCard>
+          <StatCard data={cardData.realizedProfit} />
+          <StatCard data={cardData.investedAmount} />
         </div>
 
         <div className="flex w-full flex-col gap-5">
-          <StatCard
-            title="Dividendy"
-            className="h-[320px]"
-            tooltip="Dividendy počítány dle složení aktuálního portfolia."
-          >
+          <StatCard data={cardData.dividends} className="h-[320px]">
             <div className="text-[14px] font-normal text-muted-foreground">
               Dividendový výnos
             </div>
@@ -95,8 +107,7 @@ export const StatCards = () => {
             <div>{data.dividends} CZK</div>
           </StatCard>
 
-          <StatCard title="Poplatky" className="flex flex-col">
-            <div>{data.fees} CZK</div>
+          <StatCard data={cardData.fees}>
             <div className="text-[14px] font-normal text-muted-foreground">
               {feesPercentageOfInvestment} % z investované částky
             </div>
