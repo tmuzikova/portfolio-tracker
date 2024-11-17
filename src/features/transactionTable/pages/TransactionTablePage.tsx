@@ -1,6 +1,8 @@
 import { AddTransactionModal } from '@/components/AddTransactionModal';
 import { columns, TransactionTableData } from '../components/columns';
 import { DataTable } from '@/components/DataTable';
+import { Plus as PlusIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export const TransactionTablePage = () => {
   const stockTableData: TransactionTableData[] = [
@@ -162,7 +164,13 @@ export const TransactionTablePage = () => {
     <section className="container mx-auto px-4 pb-12">
       <header className="flex flex-row justify-between py-6">
         <h1 className="text-[34px] font-semibold">Transakce</h1>
-        <AddTransactionModal />
+        <AddTransactionModal>
+          <Button className="!h-[48px] !w-[48px]">
+            <span>
+              <PlusIcon className="!h-6 !w-6" />
+            </span>
+          </Button>
+        </AddTransactionModal>
       </header>
 
       <section>
