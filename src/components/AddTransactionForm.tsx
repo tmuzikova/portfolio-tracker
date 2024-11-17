@@ -81,6 +81,8 @@ export const AddTransactionForm = () => {
   });
 
   const [selectedSymbol, setSelectedSymbol] = useState('');
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const existingTransactions = JSON.parse(
@@ -100,8 +102,21 @@ export const AddTransactionForm = () => {
       localStorage.setItem('transactions', JSON.stringify(updatedTransactions));
 
       console.log('Transaction saved successfully!', updatedTransactions);
+
+      setSuccessMessage('Transakce byla úspěšně odeslána.');
+      setErrorMessage(null);
+
+      methods.reset();
+      setSelectedSymbol('');
+
+      setTimeout(() => setSuccessMessage(null), 7000);
     } catch (error) {
       console.error('Error saving transaction:', error);
+
+      setErrorMessage('Nastala chyba při ukládání transakce. Zkuste to znovu.');
+      setSuccessMessage(null);
+
+      setTimeout(() => setErrorMessage(null), 7000);
     }
   };
 
@@ -119,6 +134,17 @@ export const AddTransactionForm = () => {
         className="mx-auto flex max-w-sm flex-col gap-4 p-4"
         onSubmit={methods.handleSubmit(onSubmit)}
       >
+        {successMessage && (
+          <div className="rounded-md bg-green-100 p-3 text-green-800">
+            {successMessage}
+          </div>
+        )}
+        {errorMessage && (
+          <div className="rounded-md bg-red-100 p-3 text-red-800">
+            {errorMessage}
+          </div>
+        )}
+
         <FormField
           control={methods.control}
           name="transactionType"
