@@ -23,30 +23,51 @@ import { useSymbolListContext } from '@/stores/SymbolListContext';
 import { VirtualizedCombobox } from './VirtualizedCombobox';
 
 const schema = z.object({
-  transactionType: z.string({ required_error: 'Prosím zadejte typ transakce' }),
+  transactionType: z.enum(['buy', 'sell'], {
+    required_error: 'Prosím zadejte typ transakce',
+  }),
   symbol: z.string({ required_error: 'Prosím zadejte ticker symbol' }),
   quantity: z
     .string({ required_error: 'Prosím zadejte počet kusů' })
-    .transform((val) => parseFloat(val))
+    .transform((val) => parseInt(val, 10))
     .refine((val) => !isNaN(val) && val >= 1, {
-      message: 'Value must be at least 1',
+      message: 'Počet kusů musí být alespoň 1 a celé číslo.',
     }),
-  date: z.string({
-    required_error: 'Prosím zadejte datum provedení transakce',
-  }),
+  date: z
+    .string({
+      required_error: 'Prosím zadejte datum provedení transakce',
+    })
+    .refine((val) => !isNaN(Date.parse(val)), {
+      message: 'Neplatné datum.',
+    })
+    .refine(
+      (val) => {
+        const date = new Date(val);
+        const today = new Date();
+        const fiveYearsAgo = new Date();
+        fiveYearsAgo.setFullYear(today.getFullYear() - 5);
+
+        return date >= fiveYearsAgo && date <= today;
+      },
+      {
+        message: 'Datum musí být v rozmezí posledních 5 let a ne v budoucnosti',
+      },
+    ),
   price: z
     .string({ required_error: 'Prosím zadejte jednotkovou cenu' })
     .transform((val) => parseFloat(val))
-    .refine((val) => !isNaN(val) && val >= 1, {
-      message: 'Value must be at least 1',
+    .refine((val) => !isNaN(val) && val > 0, {
+      message: 'Cena musí být nenulová a kladná.',
     }),
-  currency: z.string(),
+  currency: z.string({
+    required_error: 'Prosím zadejte měnu transakce',
+  }),
   fee: z
     .string()
     .optional()
     .transform((val) => (val?.trim() ? parseFloat(val) : 0))
     .refine((val) => !isNaN(val) && val >= 0, {
-      message: 'Value must be at least 0',
+      message: 'Poplatky musí být nezáporné číslo',
     }),
 });
 
@@ -54,9 +75,11 @@ type AddTransactionFormFields = z.infer<typeof schema>;
 
 export const AddTransactionForm = () => {
   const { symbolList, isLoading } = useSymbolListContext();
+
   const methods = useForm<AddTransactionFormFields>({
     resolver: zodResolver(schema),
   });
+
   const [selectedSymbol, setSelectedSymbol] = useState('');
 
   useEffect(() => {
@@ -144,13 +167,15 @@ export const AddTransactionForm = () => {
             control={methods.control}
             name="quantity"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Počet ks</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     type="number"
                     placeholder="Počet ks"
+                    min="1"
+                    step="1"
                     value={field.value || ''}
                   />
                 </FormControl>
@@ -161,15 +186,29 @@ export const AddTransactionForm = () => {
           <FormField
             control={methods.control}
             name="date"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Datum transakce</FormLabel>
-                <FormControl>
-                  <Input {...field} type="date" value={field.value || ''} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const today = new Date();
+              const maxDate = today.toISOString().split('T')[0];
+              const minDate = new Date();
+              minDate.setFullYear(today.getFullYear() - 5);
+              const formattedMinDate = minDate.toISOString().split('T')[0];
+
+              return (
+                <FormItem className="w-full">
+                  <FormLabel>Datum transakce</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="date"
+                      min={formattedMinDate}
+                      max={maxDate}
+                      value={field.value || ''}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
         </div>
 
@@ -185,6 +224,8 @@ export const AddTransactionForm = () => {
                     {...field}
                     type="number"
                     placeholder="Cena / ks"
+                    min="0.01"
+                    step="0.001"
                     value={field.value || ''}
                   />
                 </FormControl>
@@ -223,6 +264,7 @@ export const AddTransactionForm = () => {
                   {...field}
                   type="number"
                   placeholder="Poplatky"
+                  min="0"
                   value={field.value || ''}
                 />
               </FormControl>
