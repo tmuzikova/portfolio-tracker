@@ -1,28 +1,33 @@
-import { Table } from '@tanstack/react-table';
 import { Button } from './ui/button';
 
-type TablePaginationProps<TData> = {
-  table: Table<TData>;
+type TablePaginationProps = {
+  getPreviousPage: () => void;
+  getNextPage: () => void;
+  isPreviousPageDisabled: boolean;
+  isNextPageDisabled: boolean;
 };
 
-export const TablePagination = <TData,>({
-  table,
-}: TablePaginationProps<TData>) => {
+export const TablePagination = ({
+  getPreviousPage,
+  getNextPage,
+  isPreviousPageDisabled,
+  isNextPageDisabled,
+}: TablePaginationProps) => {
   return (
     <div className="flex items-center justify-end space-x-2 py-4">
       <Button
         variant="outline"
         size="sm"
-        onClick={() => table.previousPage()}
-        disabled={!table.getCanPreviousPage()}
+        onClick={getPreviousPage}
+        disabled={isPreviousPageDisabled}
       >
         Předchozí
       </Button>
       <Button
         variant="outline"
         size="sm"
-        onClick={() => table.nextPage()}
-        disabled={!table.getCanNextPage()}
+        onClick={getNextPage}
+        disabled={isNextPageDisabled}
       >
         Další
       </Button>

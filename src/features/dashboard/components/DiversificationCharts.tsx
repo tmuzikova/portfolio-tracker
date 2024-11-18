@@ -32,12 +32,20 @@ const chartConfig = {
   JNJ: { label: 'Johnson & Johnson (JNJ)', color: '#6a737b' },
 } satisfies ChartConfig;
 
-const diversificationTypes = ['Aktiva', 'Typ aktiva', 'Sektor', 'Měna', 'Země'];
+type DiversificationType = 'Aktiva' | 'Typ aktiva' | 'Sektor' | 'Měna' | 'Země';
+const diversificationTypes: DiversificationType[] = [
+  'Aktiva',
+  'Typ aktiva',
+  'Sektor',
+  'Měna',
+  'Země',
+];
 
 export const DiversificationCharts = () => {
-  const [selectedType, setSelectedType] = useState('Aktiva');
+  const [selectedType, setSelectedType] =
+    useState<DiversificationType>('Aktiva');
 
-  const handleTypeChange = (type: string) => {
+  const handleTypeChange = (type: DiversificationType) => {
     setSelectedType(type);
   };
 
