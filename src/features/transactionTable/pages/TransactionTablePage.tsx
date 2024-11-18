@@ -8,7 +8,7 @@ import { columns } from '../components/columns/columns';
 export const TransactionTablePage = () => {
   return (
     <section className="container mx-auto px-4 pb-12">
-      <header className="flex flex-row justify-between py-6">
+      <div className="flex flex-row justify-between py-6">
         <h1 className="text-[34px] font-semibold">Transakce</h1>
         <AddTransactionModal>
           <Button className="!h-[48px] !w-[48px]">
@@ -17,7 +17,7 @@ export const TransactionTablePage = () => {
             </span>
           </Button>
         </AddTransactionModal>
-      </header>
+      </div>
 
       <section>
         <DataTable data={transactionTableData} columns={columns} />
