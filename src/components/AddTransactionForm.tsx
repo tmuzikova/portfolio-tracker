@@ -19,8 +19,8 @@ import { Loader as LoaderIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSymbolListContext } from '@/stores/SymbolListContext';
 import { VirtualizedCombobox } from './VirtualizedCombobox';
+import { useSymbolList } from '@/hooks/useSymbolList';
 
 const schema = z.object({
   transactionType: z.enum(['buy', 'sell'], {
@@ -74,7 +74,7 @@ const schema = z.object({
 type AddTransactionFormFields = z.infer<typeof schema>;
 
 export const AddTransactionForm = () => {
-  const { symbolList, isLoading } = useSymbolListContext();
+  const { data: symbolList, isLoading } = useSymbolList();
 
   const methods = useForm<AddTransactionFormFields>({
     resolver: zodResolver(schema),
@@ -171,7 +171,7 @@ export const AddTransactionForm = () => {
         <FormField
           control={methods.control}
           name="symbol"
-          render={({ field }) => (
+          render={() => (
             <FormItem className="flex flex-col">
               <FormLabel>Ticker symbol</FormLabel>
               <VirtualizedCombobox
