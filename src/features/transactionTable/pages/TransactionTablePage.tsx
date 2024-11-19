@@ -7,7 +7,12 @@ import allTransactionJSON from '@/features/transactionTable/mockData/allTransact
 import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
 
 export const TransactionTablePage = () => {
-  const transactions: TransactionTableData[] = allTransactionJSON;
+  const savedTransactions: TransactionTableData[] = allTransactionJSON;
+  const existingTransactions = JSON.parse(
+    localStorage.getItem('transactions') || '[]',
+  ) as TransactionTableData[];
+
+  const transactions = [...existingTransactions, ...savedTransactions];
   return (
     <section className="container mx-auto px-4 pb-12">
       <div className="flex flex-row justify-between py-6">

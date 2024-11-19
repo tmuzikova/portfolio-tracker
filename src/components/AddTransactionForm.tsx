@@ -21,6 +21,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { VirtualizedCombobox } from './VirtualizedCombobox';
 import { useSymbolList } from '@/hooks/useSymbolList';
+import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
 
 const schema = z.object({
   transactionType: z.enum(['buy', 'sell'], {
@@ -97,13 +98,30 @@ export const AddTransactionForm = () => {
     try {
       const existingTransactions = JSON.parse(
         localStorage.getItem('transactions') || '[]',
-      );
+      ) as TransactionTableData[];
 
-      const updatedTransactions = [...existingTransactions, data];
+      const transactionToSave: TransactionTableData = {
+        transactionType: data.transactionType,
+        holding: {
+          holdingIcon: '',
+          holdingSymbol: data.symbol,
+          holdingName: '',
+        },
+        transactionDate: data.date,
+        numberOfStocks: data.quantity,
+        transactionValue: {
+          total: data.price * data.quantity,
+          perShare: data.price,
+          currency: data.currency,
+        },
+        transactionFee: {
+          total: data.fee,
+          currency: data.currency,
+        },
+      };
 
-      localStorage.setItem('transactions', JSON.stringify(updatedTransactions));
-
-      console.log('Transaction saved successfully!', updatedTransactions);
+      const newTransactions = [...existingTransactions, transactionToSave];
+      localStorage.setItem('transactions', JSON.stringify(newTransactions));
 
       setSuccessMessage('Transakce byla úspěšně odeslána.');
       setErrorMessage(null);
