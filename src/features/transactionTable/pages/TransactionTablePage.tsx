@@ -2,10 +2,12 @@ import { AddTransactionModal } from '@/components/AddTransactionModal';
 import { DataTable } from '@/components/DataTable';
 import { Plus as PlusIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { transactionTableData } from '../mockData/transactionTableData';
 import { columns } from '../components/columns/columns';
+import allTransactionJSON from '@/features/transactionTable/mockData/allTransactions.json';
+import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
 
 export const TransactionTablePage = () => {
+  const transactions: TransactionTableData[] = allTransactionJSON;
   return (
     <section className="container mx-auto px-4 pb-12">
       <div className="flex flex-row justify-between py-6">
@@ -20,7 +22,7 @@ export const TransactionTablePage = () => {
       </div>
 
       <section>
-        <DataTable data={transactionTableData} columns={columns} />
+        <DataTable data={transactions} columns={columns} />
       </section>
     </section>
   );

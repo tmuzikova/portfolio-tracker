@@ -91,7 +91,9 @@ export const AddTransactionForm = () => {
     console.log('Loaded transactions:', existingTransactions);
   }, []);
 
-  const onSubmit: SubmitHandler<AddTransactionFormFields> = (data) => {
+  const onSubmit: SubmitHandler<AddTransactionFormFields> = (
+    data: AddTransactionFormFields,
+  ) => {
     try {
       const existingTransactions = JSON.parse(
         localStorage.getItem('transactions') || '[]',
