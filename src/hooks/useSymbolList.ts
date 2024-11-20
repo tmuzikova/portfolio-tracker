@@ -1,3 +1,4 @@
+import { api } from '@/api/client';
 import { getDataFromDB } from '@/lib/indexDB';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -10,20 +11,14 @@ export type SymbolList = {
   name: string;
 };
 
-const api_FMP_key = import.meta.env.VITE_FMP_API_KEY;
-
 export const fetchSymbolList = async (): Promise<SymbolList[]> => {
-  const response = await fetch(
-    `https://financialmodelingprep.com/api/v3/stock/list?apikey=${api_FMP_key}`,
-  );
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch Symbol List: ${response.statusText}`);
+  try {
+    const response = await api.get('stock/list');
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to fetch symbol list:', error);
+    throw error;
   }
-
-  const data = await response.json();
-
-  return data;
 };
 
 export const useSymbolList = () => {
