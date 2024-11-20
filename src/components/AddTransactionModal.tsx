@@ -7,14 +7,17 @@ import {
   DialogTrigger,
 } from './ui/dialog';
 import { AddTransactionForm } from './AddTransactionForm/AddTransactionForm';
+import { useState } from 'react';
 
 type AddTransactionModalProps = {
   children: React.ReactNode;
 };
 
 export const AddTransactionModal = ({ children }: AddTransactionModalProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent>
@@ -24,7 +27,12 @@ export const AddTransactionModal = ({ children }: AddTransactionModalProps) => {
           </DialogTitle>
           <DialogDescription />
         </DialogHeader>
-        <AddTransactionForm />
+        <AddTransactionForm
+          onClose={() => setIsOpen(false)}
+          onReopen={() => {
+            setIsOpen(true);
+          }}
+        />
       </DialogContent>
     </Dialog>
   );

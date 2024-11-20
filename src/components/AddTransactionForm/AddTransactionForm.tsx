@@ -1,7 +1,6 @@
 import { Button } from '../ui/button';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Loader as LoaderIcon } from 'lucide-react';
-import { useState } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSymbolList } from '@/hooks/useSymbolList';
@@ -14,18 +13,24 @@ import { CurrencyFormField } from './CurrencyFormField';
 import { FeeFormField } from './FeeFormField';
 import { TransactionTypeFormField } from './TransactionTypeField';
 import { SymbolSelectFormField } from './SymbolFormField';
+import { toast } from '@/hooks/use-toast';
 
 export type AddTransactionFormFields = z.infer<typeof schema>;
 
-export const AddTransactionForm = () => {
+type AddTransactionFormProps = {
+  onClose?: () => void;
+  onReopen?: () => void;
+};
+
+export const AddTransactionForm = ({
+  onClose,
+  onReopen,
+}: AddTransactionFormProps) => {
   const { data: symbolList, isLoading } = useSymbolList();
 
   const methods = useForm<AddTransactionFormFields>({
     resolver: zodResolver(schema),
   });
-
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmit: SubmitHandler<AddTransactionFormFields> = (
     data: AddTransactionFormFields,
@@ -58,17 +63,32 @@ export const AddTransactionForm = () => {
       const newTransactions = [...existingTransactions, transactionToSave];
       localStorage.setItem('transactions', JSON.stringify(newTransactions));
 
-      setSuccessMessage('Transakce byla úspěšně odeslána.');
-      setErrorMessage(null);
+      if (onClose) {
+        onClose();
+      }
 
-      setTimeout(() => setSuccessMessage(null), 7000);
+      toast({
+        title: 'Transakce byla úspěšně přidána',
+        duration: 5000,
+        className: 'bg-green-100 border-green-500 text-green-900',
+      });
     } catch (error) {
       console.error('Error saving transaction:', error);
 
-      setErrorMessage('Nastala chyba při ukládání transakce. Zkuste to znovu.');
-      setSuccessMessage(null);
-
-      setTimeout(() => setErrorMessage(null), 7000);
+      toast({
+        variant: 'destructive',
+        title: 'Nastala chyba při ukládání transakce',
+        action: onReopen ? (
+          <Button
+            variant="ghost"
+            onClick={() => {
+              onReopen();
+            }}
+          >
+            Zkusit znovu
+          </Button>
+        ) : undefined,
+      });
     }
   };
 
@@ -86,17 +106,6 @@ export const AddTransactionForm = () => {
         className="mx-auto flex max-w-sm flex-col gap-4 p-4"
         onSubmit={methods.handleSubmit(onSubmit)}
       >
-        {successMessage && (
-          <div className="rounded-md bg-green-100 p-3 text-green-800">
-            {successMessage}
-          </div>
-        )}
-        {errorMessage && (
-          <div className="rounded-md bg-red-100 p-3 text-red-800">
-            {errorMessage}
-          </div>
-        )}
-
         <TransactionTypeFormField methods={methods} />
 
         <SymbolSelectFormField
