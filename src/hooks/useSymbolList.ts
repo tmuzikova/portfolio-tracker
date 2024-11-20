@@ -41,7 +41,6 @@ export const useSymbolList = () => {
           return;
         }
         setDbData(data);
-        console.log('Data from IndexedDB:', data);
       } catch (e) {
         console.error(e);
       } finally {

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import {
   Command,
   CommandEmpty,
@@ -6,14 +6,14 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from './ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Button } from './ui/button';
+} from '../ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Button } from '../ui/button';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Check as CheckIcon, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SymbolList } from '@/stores/fetchSymbolList';
-import { ScrollArea } from './ui/scroll-area';
+import { SymbolList } from '@/hooks/useSymbolList';
+import { ScrollArea } from '../ui/scroll-area';
 
 type VirtualizedComboboxProps = {
   options: SymbolList[];
@@ -23,23 +23,23 @@ type VirtualizedComboboxProps = {
   height?: string;
 };
 
-export const VirtualizedCombobox: React.FC<VirtualizedComboboxProps> = ({
+export function VirtualizedCombobox({
   options,
   placeholder,
   selectedOption,
   onSelect,
   height = '200px',
-}) => {
+}: VirtualizedComboboxProps) {
   const [open, setOpen] = useState(false);
   const [filteredOptions, setFilteredOptions] = useState<SymbolList[]>(options);
   const [parentNode, setParentNode] = useState<HTMLDivElement | null>(null);
 
-  const rowHeight = 80;
+  const ROW_HEIGHT = 80;
 
   const virtualizer = useVirtualizer({
     count: filteredOptions.length,
     getScrollElement: () => parentNode,
-    estimateSize: () => rowHeight,
+    estimateSize: () => ROW_HEIGHT,
     overscan: 5,
   });
 
@@ -106,7 +106,7 @@ export const VirtualizedCombobox: React.FC<VirtualizedComboboxProps> = ({
                           position: 'absolute',
                           top: `${virtualOption.start}px`,
                           width: '100%',
-                          height: `${rowHeight}px`,
+                          height: `${ROW_HEIGHT}px`,
                         }}
                         onSelect={() => {
                           onSelect(option.symbol);
@@ -139,4 +139,4 @@ export const VirtualizedCombobox: React.FC<VirtualizedComboboxProps> = ({
       </PopoverContent>
     </Popover>
   );
-};
+}

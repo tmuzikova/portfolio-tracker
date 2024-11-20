@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from './ui/dialog';
-import { AddTransactionForm } from './AddTransactionForm';
+import { AddTransactionForm } from './AddTransactionForm/AddTransactionForm';
 
 type AddTransactionModalProps = {
   children: React.ReactNode;

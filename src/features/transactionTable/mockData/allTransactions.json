@@ -1,6 +1,6 @@
 [
   {
-    "transactionType": "Buy",
+    "transactionType": "Nákup",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/apple.com",
       "holdingSymbol": "AAPL",
@@ -19,7 +19,7 @@
     }
   },
   {
-    "transactionType": "Buy",
+    "transactionType": "Nákup",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/microsoft.com",
       "holdingSymbol": "MSFT",
@@ -38,7 +38,7 @@
     }
   },
   {
-    "transactionType": "Sell",
+    "transactionType": "Prodej",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/google.com",
       "holdingSymbol": "GOOGL",
@@ -57,7 +57,7 @@
     }
   },
   {
-    "transactionType": "Buy",
+    "transactionType": "Nákup",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/amazon.com",
       "holdingSymbol": "AMZN",
@@ -76,7 +76,7 @@
     }
   },
   {
-    "transactionType": "Sell",
+    "transactionType": "Prodej",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/tesla.com",
       "holdingSymbol": "TSLA",
@@ -95,7 +95,7 @@
     }
   },
   {
-    "transactionType": "Buy",
+    "transactionType": "Nákup",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/nvidia.com",
       "holdingSymbol": "NVDA",
@@ -114,7 +114,7 @@
     }
   },
   {
-    "transactionType": "Sell",
+    "transactionType": "Prodej",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/coca-cola.com",
       "holdingSymbol": "KO",
@@ -133,7 +133,7 @@
     }
   },
   {
-    "transactionType": "Buy",
+    "transactionType": "Nákup",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/jnj.com",
       "holdingSymbol": "JNJ",
