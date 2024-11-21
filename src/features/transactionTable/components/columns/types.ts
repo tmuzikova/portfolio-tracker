@@ -1,5 +1,5 @@
 export type TransactionTableData = {
-  transactionType: string;
+  transactionType: 'Nákup' | 'Prodej';
   holding: {
     holdingIcon: string;
     holdingSymbol: string;
