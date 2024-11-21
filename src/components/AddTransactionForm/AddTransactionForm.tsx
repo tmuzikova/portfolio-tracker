@@ -3,7 +3,7 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Loader as LoaderIcon } from 'lucide-react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSymbolList } from '@/hooks/useSymbolList';
+import { SymbolList, useSymbolList } from '@/hooks/useSymbolList';
 import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
 import { schema } from './zSchema';
 import { QuantityFormField } from './QuantityFormField';
@@ -14,6 +14,7 @@ import { FeeFormField } from './FeeFormField';
 import { TransactionTypeFormField } from './TransactionTypeField';
 import { SymbolSelectFormField } from './SymbolFormField';
 import { toast } from '@/hooks/use-toast';
+import { useState } from 'react';
 
 export type AddTransactionFormFields = z.infer<typeof schema>;
 
@@ -27,6 +28,9 @@ export const AddTransactionForm = ({
   onReopen,
 }: AddTransactionFormProps) => {
   const { data: symbolList, isLoading } = useSymbolList();
+  const [selectedHolding, setselectedHolding] = useState<
+    SymbolList | undefined
+  >();
 
   const methods = useForm<AddTransactionFormFields>({
     resolver: zodResolver(schema),
@@ -45,7 +49,7 @@ export const AddTransactionForm = ({
         holding: {
           holdingIcon: '',
           holdingSymbol: data.symbol,
-          holdingName: '',
+          holdingName: selectedHolding?.name || '',
         },
         transactionDate: data.date,
         numberOfStocks: data.quantity,
@@ -111,6 +115,8 @@ export const AddTransactionForm = ({
         <SymbolSelectFormField
           methods={methods}
           symbolList={symbolList || []}
+          selectedHolding={selectedHolding}
+          setselectedHolding={setselectedHolding}
         />
 
         <div className="flex gap-2">
@@ -120,7 +126,10 @@ export const AddTransactionForm = ({
 
         <div className="flex gap-2">
           <PriceFormField methods={methods} />
-          <CurrencyFormField methods={methods} />
+          <CurrencyFormField
+            methods={methods}
+            selectedHolding={selectedHolding}
+          />
         </div>
 
         <FeeFormField methods={methods} />

@@ -18,8 +18,8 @@ import { ScrollArea } from '../ui/scroll-area';
 type VirtualizedComboboxProps = {
   options: SymbolList[];
   placeholder: string;
-  selectedOption: string;
-  onSelect: (symbol: string) => void;
+  selectedOption: SymbolList | undefined;
+  onSelect: (symbol: SymbolList) => void;
   height?: string;
 };
 
@@ -71,7 +71,7 @@ export function VirtualizedCombobox({
             !selectedOption && 'text-muted-foreground',
           )}
         >
-          {selectedOption || placeholder}
+          {selectedOption?.symbol || placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -109,14 +109,14 @@ export function VirtualizedCombobox({
                           height: `${ROW_HEIGHT}px`,
                         }}
                         onSelect={() => {
-                          onSelect(option.symbol);
+                          onSelect(option);
                           setOpen(false);
                         }}
                       >
                         <CheckIcon
                           className={cn(
                             'mr-2 h-4 w-4',
-                            selectedOption === option.symbol
+                            selectedOption?.symbol === option.symbol
                               ? 'opacity-100'
                               : 'opacity-0',
                           )}

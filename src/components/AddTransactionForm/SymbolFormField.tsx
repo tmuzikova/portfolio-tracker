@@ -5,20 +5,23 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { VirtualizedCombobox } from './VirtualizedCombobox';
-import { useState } from 'react';
 import { SymbolList } from '@/hooks/useSymbolList';
 import { MethodsType } from './methodsType';
 
 interface SymbolSelectFormFieldProps extends MethodsType {
   symbolList: SymbolList[];
+  selectedHolding: SymbolList | undefined;
+  setselectedHolding: React.Dispatch<
+    React.SetStateAction<SymbolList | undefined>
+  >;
 }
 
 export const SymbolSelectFormField = ({
   methods,
   symbolList,
+  selectedHolding,
+  setselectedHolding,
 }: SymbolSelectFormFieldProps) => {
-  const [selectedSymbol, setSelectedSymbol] = useState('');
-
   return (
     <FormField
       control={methods.control}
@@ -29,10 +32,10 @@ export const SymbolSelectFormField = ({
           <VirtualizedCombobox
             options={symbolList}
             placeholder="Hledat dle symbolu či názvu"
-            selectedOption={selectedSymbol}
-            onSelect={(symbol) => {
-              methods.setValue('symbol', symbol);
-              setSelectedSymbol(symbol);
+            selectedOption={selectedHolding}
+            onSelect={(holding) => {
+              methods.setValue('symbol', holding.symbol);
+              setselectedHolding(holding);
             }}
           />
           <FormMessage />
