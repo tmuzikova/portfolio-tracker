@@ -2,20 +2,35 @@ import { api } from '@/api/client';
 import { getDataFromDB } from '@/lib/indexDB';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { z } from 'zod';
 
-export type SymbolList = {
-  symbol: string;
-  exchange: string;
-  exchangeShortName: string;
-  price: string;
-  name: string;
-};
+export const SymbolListSchema = z.object({
+  symbol: z.string().min(1, 'Symbol must not be empty'),
+  exchange: z.string().nullable().default('Unknown'),
+  exchangeShortName: z.string().nullable().default('Unknown'),
+  price: z
+    .number()
+    .nonnegative('Price must be a valid non-negative number')
+    .nullable(),
+  name: z.string().nullable().default('Unknown'),
+});
+
+export type SymbolList = z.infer<typeof SymbolListSchema>;
 
 export const fetchSymbolList = async (): Promise<SymbolList[]> => {
   try {
     const response = await api.get('stock/list');
-    return await response.json();
+    const data = await response.json();
+    const validatedData = z.array(SymbolListSchema).parse(data);
+    return validatedData;
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error(
+        'Symbol List Validation Failed:',
+        error.errors.map((err) => `${err.path.join('.')}: ${err.message}`),
+      );
+      throw new Error('Invalid symbol list data');
+    }
     console.error('Failed to fetch symbol list:', error);
     throw error;
   }
