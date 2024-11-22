@@ -1,6 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { TableColumnHeader } from '@/components/TableColumnHeader';
 import { TransactionTableData } from './types';
+import { Button } from '@/components/ui/button';
 
 export const columns: ColumnDef<TransactionTableData>[] = [
   {
@@ -136,5 +137,12 @@ export const columns: ColumnDef<TransactionTableData>[] = [
         </div>
       );
     },
+  },
+  {
+    accessorKey: 'actions',
+    header: () => (
+      <TableColumnHeader className="text-center">Akce</TableColumnHeader>
+    ),
+    cell: () => {},
   },
 ];

@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 
 type TableColumnHeaderProps = {
   children: ReactNode;
-  toggleColumnSorting: () => void;
+  toggleColumnSorting?: () => void;
   buttonClassName?: string;
   className?: string;
 };
@@ -19,11 +19,15 @@ export const TableColumnHeader = ({
     <div className={className}>
       <Button
         variant="ghost"
-        onClick={toggleColumnSorting}
+        onClick={() => {
+          if (toggleColumnSorting) {
+            toggleColumnSorting();
+          }
+        }}
         className={buttonClassName}
       >
         {children}
-        <ArrowUpDownIcon className="ml-2 h-4 w-4" />
+        {toggleColumnSorting && <ArrowUpDownIcon className="ml-2 h-4 w-4" />}
       </Button>
     </div>
   );
