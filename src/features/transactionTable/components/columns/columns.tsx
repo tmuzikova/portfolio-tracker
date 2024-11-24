@@ -2,6 +2,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { TableColumnHeader } from '@/components/TableColumnHeader';
 import { TransactionTableData } from './types';
 import { Button } from '@/components/ui/button';
+import { Edit as EditIcon, Trash as TrashIcon } from 'lucide-react';
+import { AddTransactionModal } from '@/components/AddTransactionModal';
 
 export const columns: ColumnDef<TransactionTableData>[] = [
   {
@@ -138,11 +140,29 @@ export const columns: ColumnDef<TransactionTableData>[] = [
       );
     },
   },
+
   {
     accessorKey: 'actions',
     header: () => (
       <TableColumnHeader className="text-center">Akce</TableColumnHeader>
     ),
-    cell: () => {},
+    cell: ({ row }) => {
+      const transactionToEdit = row.original;
+
+      const handleDeleteTransaction = () => {};
+
+      return (
+        <div className="flex justify-center space-x-2">
+          <AddTransactionModal transactionToEdit={transactionToEdit}>
+            <Button variant="ghost" size="icon">
+              <EditIcon className="h-4 w-4" />
+            </Button>
+          </AddTransactionModal>
+          <Button variant="ghost" size="icon" onClick={handleDeleteTransaction}>
+            <TrashIcon className="h-4 w-4 text-red-500" />
+          </Button>
+        </div>
+      );
+    },
   },
 ];

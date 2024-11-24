@@ -15,25 +15,49 @@ import { TransactionTypeFormField } from './TransactionTypeField';
 import { SymbolSelectFormField } from './SymbolFormField';
 import { toast } from '@/hooks/use-toast';
 import { useState } from 'react';
+import { v4 } from 'uuid';
 
 export type AddTransactionFormFields = z.infer<typeof schema>;
 
 type AddTransactionFormProps = {
   onClose?: () => void;
   onReopen?: () => void;
+  transactionToEdit?: TransactionTableData;
 };
 
 export const AddTransactionForm = ({
   onClose,
   onReopen,
+  transactionToEdit,
 }: AddTransactionFormProps) => {
   const { data: symbolList, isLoading } = useSymbolList();
   const [selectedHolding, setselectedHolding] = useState<
     SymbolList | undefined
-  >();
+  >(
+    transactionToEdit
+      ? {
+          symbol: transactionToEdit.holding.holdingSymbol,
+          name: transactionToEdit.holding.holdingName || null,
+          price: null,
+          exchange: null,
+          exchangeShortName: null,
+        }
+      : undefined,
+  );
 
   const methods = useForm<AddTransactionFormFields>({
     resolver: zodResolver(schema),
+    defaultValues: transactionToEdit
+      ? ({
+          symbol: transactionToEdit.holding.holdingSymbol,
+          transactionType: transactionToEdit.transactionType,
+          date: transactionToEdit.transactionDate,
+          quantity: transactionToEdit.numberOfStocks,
+          price: transactionToEdit.transactionValue.perShare,
+          currency: transactionToEdit.transactionValue.currency,
+          fee: transactionToEdit.transactionFee?.total || 0,
+        } as AddTransactionFormFields)
+      : undefined,
   });
 
   const onSubmit: SubmitHandler<AddTransactionFormFields> = (
@@ -45,6 +69,7 @@ export const AddTransactionForm = ({
       ) as TransactionTableData[];
 
       const transactionToSave: TransactionTableData = {
+        id: transactionToEdit?.id || v4(),
         transactionType: data.transactionType,
         holding: {
           holdingIcon: '',
@@ -59,12 +84,23 @@ export const AddTransactionForm = ({
           currency: data.currency,
         },
         transactionFee: {
-          total: data.fee,
+          total: data.fee || 0,
           currency: data.currency,
         },
       };
 
-      const newTransactions = [...existingTransactions, transactionToSave];
+      let newTransactions;
+
+      if (transactionToEdit) {
+        newTransactions = existingTransactions.map((transaction) =>
+          transaction.id === transactionToEdit.id
+            ? transactionToSave
+            : transaction,
+        );
+      } else {
+        newTransactions = [...existingTransactions, transactionToSave];
+      }
+
       localStorage.setItem('transactions', JSON.stringify(newTransactions));
 
       if (onClose) {
@@ -72,7 +108,9 @@ export const AddTransactionForm = ({
       }
 
       toast({
-        title: 'Transakce byla úspěšně přidána',
+        title: transactionToEdit
+          ? 'Transakce byla úspěšně upravena'
+          : 'Transakce byla úspěšně přidána',
         duration: 5000,
         className: 'bg-green-100 border-green-500 text-green-900',
       });
@@ -134,7 +172,7 @@ export const AddTransactionForm = ({
 
         <FeeFormField methods={methods} />
 
-        <Button type="submit">Přidat</Button>
+        <Button type="submit">Uložit</Button>
       </form>
     </FormProvider>
   );
