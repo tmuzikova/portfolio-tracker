@@ -9,6 +9,8 @@ import { Plus as PlusIcon } from 'lucide-react';
 import { stockTableData } from '../mockData/stockTableData';
 
 export const Dashboard = () => {
+  const defaultSorting = { id: 'portfolioShare', desc: true };
+
   return (
     <section className="container mx-auto px-4 pb-12">
       <div className="flex flex-row justify-between py-6">
@@ -40,6 +42,7 @@ export const Dashboard = () => {
             data={stockTableData}
             columns={columns}
             headerTitle="Výkon jednotlivých aktiv"
+            defaultSorting={defaultSorting}
           />
         </section>
       </div>

@@ -94,13 +94,8 @@ export const columns: ColumnDef<TransactionTableData>[] = [
   },
   {
     accessorKey: 'transactionValue',
-    header: ({ column }) => (
-      <TableColumnHeader
-        toggleColumnSorting={() =>
-          column.toggleSorting(column.getIsSorted() === 'asc')
-        }
-        className="text-center"
-      >
+    header: () => (
+      <TableColumnHeader className="text-center">
         Hodnota transakce
       </TableColumnHeader>
     ),
@@ -121,15 +116,8 @@ export const columns: ColumnDef<TransactionTableData>[] = [
   },
   {
     accessorKey: 'transactionFee',
-    header: ({ column }) => (
-      <TableColumnHeader
-        toggleColumnSorting={() =>
-          column.toggleSorting(column.getIsSorted() === 'asc')
-        }
-        className="text-center"
-      >
-        Poplatek
-      </TableColumnHeader>
+    header: () => (
+      <TableColumnHeader className="text-center">Poplatek</TableColumnHeader>
     ),
     cell: ({ row }) => {
       const transactionFee =

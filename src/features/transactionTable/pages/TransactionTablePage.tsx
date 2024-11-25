@@ -7,6 +7,8 @@ import allTransactionJSON from '@/features/transactionTable/mockData/allTransact
 import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
 
 export const TransactionTablePage = () => {
+  const defaultSorting = { id: 'transactionDate', desc: true };
+
   const savedTransactions: TransactionTableData[] =
     allTransactionJSON as TransactionTableData[];
   const existingTransactions = JSON.parse(
@@ -28,7 +30,11 @@ export const TransactionTablePage = () => {
       </div>
 
       <section>
-        <DataTable data={transactions} columns={columns} />
+        <DataTable
+          data={transactions}
+          columns={columns}
+          defaultSorting={defaultSorting}
+        />
       </section>
     </section>
   );
