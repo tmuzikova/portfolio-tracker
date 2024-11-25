@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": "1",
     "transactionType": "Nákup",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/apple.com",
@@ -20,7 +20,7 @@
     }
   },
   {
-    "id": 2,
+    "id": "2",
     "transactionType": "Nákup",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/microsoft.com",
@@ -40,7 +40,7 @@
     }
   },
   {
-    "id": 3,
+    "id": "3",
     "transactionType": "Prodej",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/google.com",
@@ -60,7 +60,7 @@
     }
   },
   {
-    "id": 4,
+    "id": "4",
     "transactionType": "Nákup",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/amazon.com",
@@ -80,7 +80,7 @@
     }
   },
   {
-    "id": 5,
+    "id": "5",
     "transactionType": "Prodej",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/tesla.com",
@@ -100,7 +100,7 @@
     }
   },
   {
-    "id": 6,
+    "id": "6",
     "transactionType": "Nákup",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/nvidia.com",
@@ -120,7 +120,7 @@
     }
   },
   {
-    "id": 7,
+    "id": "7",
     "transactionType": "Prodej",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/coca-cola.com",
@@ -140,7 +140,7 @@
     }
   },
   {
-    "id": 8,
+    "id": "8",
     "transactionType": "Nákup",
     "holding": {
       "holdingIcon": "https://logo.clearbit.com/jnj.com",
