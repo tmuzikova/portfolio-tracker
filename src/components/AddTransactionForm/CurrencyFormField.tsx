@@ -7,12 +7,12 @@ import {
 } from '../ui/form';
 import { MethodsType } from './methodsType';
 import { Input } from '../ui/input';
-import { SymbolList } from '@/hooks/useSymbolList';
+import { SymbolItem } from '@/hooks/useSymbolList';
 import { useEffect } from 'react';
 import { EXCHANGES } from './EXCHANGES';
 
 interface CurrencyFormFieldProps extends MethodsType {
-  selectedHolding: SymbolList | undefined;
+  selectedHolding: SymbolItem | undefined;
 }
 
 export function CurrencyFormField({

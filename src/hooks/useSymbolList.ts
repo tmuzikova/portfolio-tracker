@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
-export const SymbolListSchema = z.object({
+export const SymbolItemSchema = z.object({
   symbol: z.string().min(1, 'Symbol must not be empty'),
   exchange: z.string().nullable().default('Unknown'),
   exchangeShortName: z.string().nullable().default('Unknown'),
@@ -15,13 +15,13 @@ export const SymbolListSchema = z.object({
   name: z.string().nullable().default('Unknown'),
 });
 
-export type SymbolList = z.infer<typeof SymbolListSchema>;
+export type SymbolItem = z.infer<typeof SymbolItemSchema>;
 
-export const fetchSymbolList = async (): Promise<SymbolList[]> => {
+export const fetchSymbolList = async (): Promise<SymbolItem[]> => {
   try {
     const response = await api.get('stock/list');
     const data = await response.json();
-    const validatedData = z.array(SymbolListSchema).parse(data);
+    const validatedData = z.array(SymbolItemSchema).parse(data);
     return validatedData;
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -38,7 +38,7 @@ export const fetchSymbolList = async (): Promise<SymbolList[]> => {
 
 export const useSymbolList = () => {
   const [isEnabled, setIsEnabled] = useState(false);
-  const [dbData, setDbData] = useState<SymbolList[]>([]);
+  const [dbData, setDbData] = useState<SymbolItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {

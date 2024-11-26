@@ -5,14 +5,14 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { VirtualizedCombobox } from './VirtualizedCombobox';
-import { SymbolList } from '@/hooks/useSymbolList';
+import { SymbolItem } from '@/hooks/useSymbolList';
 import { MethodsType } from './methodsType';
 
 interface SymbolSelectFormFieldProps extends MethodsType {
-  symbolList: SymbolList[];
-  selectedHolding: SymbolList | undefined;
+  symbolList: SymbolItem[];
+  selectedHolding: SymbolItem | undefined;
   setselectedHolding: React.Dispatch<
-    React.SetStateAction<SymbolList | undefined>
+    React.SetStateAction<SymbolItem | undefined>
   >;
 }
 

@@ -7,7 +7,8 @@ import allTransactionJSON from '@/features/transactionTable/mockData/allTransact
 import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
 
 export const TransactionTablePage = () => {
-  const savedTransactions: TransactionTableData[] = allTransactionJSON;
+  const savedTransactions: TransactionTableData[] =
+    allTransactionJSON as TransactionTableData[];
   const existingTransactions = JSON.parse(
     localStorage.getItem('transactions') || '[]',
   ) as TransactionTableData[];

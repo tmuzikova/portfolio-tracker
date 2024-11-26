@@ -1,4 +1,4 @@
-import { SymbolList } from '@/hooks/useSymbolList';
+import { SymbolItem } from '@/hooks/useSymbolList';
 import { openDB } from 'idb';
 
 const initDB = async () => {
@@ -13,7 +13,7 @@ const initDB = async () => {
   return db;
 };
 
-export const saveDataToDB = async (fetchedData: SymbolList[]) => {
+export const saveDataToDB = async (fetchedData: SymbolItem[]) => {
   const db = await initDB();
   const tx = db.transaction('symbols', 'readwrite');
   const store = tx.objectStore('symbols');
@@ -23,8 +23,8 @@ export const saveDataToDB = async (fetchedData: SymbolList[]) => {
   await tx.done;
 };
 
-export const getDataFromDB = async (): Promise<SymbolList[]> => {
+export const getDataFromDB = async (): Promise<SymbolItem[]> => {
   const db = await initDB();
-  const databaseData = (await db.getAll('symbols')) as SymbolList[];
+  const databaseData = (await db.getAll('symbols')) as SymbolItem[];
   return databaseData;
 };

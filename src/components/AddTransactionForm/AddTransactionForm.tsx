@@ -3,7 +3,7 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Loader as LoaderIcon } from 'lucide-react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SymbolList, useSymbolList } from '@/hooks/useSymbolList';
+import { SymbolItem, useSymbolList } from '@/hooks/useSymbolList';
 import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
 import { schema } from './zSchema';
 import { QuantityFormField } from './QuantityFormField';
@@ -13,14 +13,14 @@ import { CurrencyFormField } from './CurrencyFormField';
 import { FeeFormField } from './FeeFormField';
 import { TransactionTypeFormField } from './TransactionTypeField';
 import { SymbolSelectFormField } from './SymbolFormField';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/hooks/useToast';
 import { useState } from 'react';
 
 export type AddTransactionFormFields = z.infer<typeof schema>;
 
 type AddTransactionFormProps = {
-  onClose?: () => void;
-  onReopen?: () => void;
+  onClose: () => void;
+  onReopen: () => void;
 };
 
 export const AddTransactionForm = ({
@@ -29,7 +29,7 @@ export const AddTransactionForm = ({
 }: AddTransactionFormProps) => {
   const { data: symbolList, isLoading } = useSymbolList();
   const [selectedHolding, setselectedHolding] = useState<
-    SymbolList | undefined
+    SymbolItem | undefined
   >();
 
   const methods = useForm<AddTransactionFormFields>({
@@ -67,9 +67,7 @@ export const AddTransactionForm = ({
       const newTransactions = [...existingTransactions, transactionToSave];
       localStorage.setItem('transactions', JSON.stringify(newTransactions));
 
-      if (onClose) {
-        onClose();
-      }
+      onClose();
 
       toast({
         title: 'Transakce byla úspěšně přidána',
@@ -82,7 +80,7 @@ export const AddTransactionForm = ({
       toast({
         variant: 'destructive',
         title: 'Nastala chyba při ukládání transakce',
-        action: onReopen ? (
+        action: onReopen && (
           <Button
             variant="ghost"
             onClick={() => {
@@ -91,7 +89,7 @@ export const AddTransactionForm = ({
           >
             Zkusit znovu
           </Button>
-        ) : undefined,
+        ),
       });
     }
   };

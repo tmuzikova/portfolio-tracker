@@ -12,14 +12,14 @@ import { Button } from '../ui/button';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Check as CheckIcon, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SymbolList } from '@/hooks/useSymbolList';
+import { SymbolItem } from '@/hooks/useSymbolList';
 import { ScrollArea } from '../ui/scroll-area';
 
 type VirtualizedComboboxProps = {
-  options: SymbolList[];
+  options: SymbolItem[];
   placeholder: string;
-  selectedOption: SymbolList | undefined;
-  onSelect: (symbol: SymbolList) => void;
+  selectedOption: SymbolItem | undefined;
+  onSelect: (symbol: SymbolItem) => void;
   height?: string;
 };
 
@@ -31,7 +31,7 @@ export function VirtualizedCombobox({
   height = '200px',
 }: VirtualizedComboboxProps) {
   const [open, setOpen] = useState(false);
-  const [filteredOptions, setFilteredOptions] = useState<SymbolList[]>(options);
+  const [filteredOptions, setFilteredOptions] = useState<SymbolItem[]>(options);
   const [parentNode, setParentNode] = useState<HTMLDivElement | null>(null);
 
   const ROW_HEIGHT = 80;
