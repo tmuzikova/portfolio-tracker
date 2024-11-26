@@ -1,5 +1,5 @@
 import { api } from '@/api/client';
-import { getDataFromDB } from '@/lib/indexDB';
+import { getDataFromDB, saveDataToDB } from '@/lib/indexDB';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
@@ -68,6 +68,21 @@ export const useSymbolList = () => {
     gcTime: Infinity,
     enabled: isEnabled,
   });
+
+  useEffect(() => {
+    const saveToDB = async () => {
+      if (response.isSuccess && response.data) {
+        try {
+          await saveDataToDB(response.data);
+          setDbData(response.data);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    };
+
+    void saveToDB();
+  }, [response.isSuccess, response.data]);
 
   return {
     data: response.data || dbData,

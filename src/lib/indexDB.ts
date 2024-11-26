@@ -13,7 +13,17 @@ const initDB = async () => {
   return db;
 };
 
-export const getDataFromDB = async () => {
+export const saveDataToDB = async (fetchedData: SymbolList[]) => {
+  const db = await initDB();
+  const tx = db.transaction('symbols', 'readwrite');
+  const store = tx.objectStore('symbols');
+
+  await store.clear();
+  await Promise.all(fetchedData.map((item) => store.put(item)));
+  await tx.done;
+};
+
+export const getDataFromDB = async (): Promise<SymbolList[]> => {
   const db = await initDB();
   const databaseData = (await db.getAll('symbols')) as SymbolList[];
   return databaseData;
