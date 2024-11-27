@@ -7,21 +7,30 @@ import {
 import { VirtualizedCombobox } from './VirtualizedCombobox';
 import { SymbolItem } from '@/hooks/useSymbolList';
 import { MethodsType } from './methodsType';
+import { EXCHANGES } from '@/components/AddTransactionForm/EXCHANGES';
 
 interface SymbolSelectFormFieldProps extends MethodsType {
   symbolList: SymbolItem[];
-  selectedHolding: SymbolItem | undefined;
-  setselectedHolding: React.Dispatch<
-    React.SetStateAction<SymbolItem | undefined>
-  >;
 }
 
 export const SymbolSelectFormField = ({
   methods,
   symbolList,
-  selectedHolding,
-  setselectedHolding,
 }: SymbolSelectFormFieldProps) => {
+  const selectedSymbol = methods.watch('symbol');
+  const selectedHolding = symbolList.find(
+    (symbol) => symbol.symbol === selectedSymbol,
+  );
+
+  const onSelectHandler = (holding: SymbolItem) => {
+    methods.setValue('symbol', holding.symbol);
+    const selectedCurrency = EXCHANGES.find(
+      (exchange) => exchange.name === holding.exchange,
+    )?.currency;
+
+    methods.setValue('currency', selectedCurrency ?? '');
+  };
+
   return (
     <FormField
       control={methods.control}
@@ -33,10 +42,7 @@ export const SymbolSelectFormField = ({
             options={symbolList}
             placeholder="Hledat dle symbolu či názvu"
             selectedOption={selectedHolding}
-            onSelect={(holding) => {
-              methods.setValue('symbol', holding.symbol);
-              setselectedHolding(holding);
-            }}
+            onSelect={onSelectHandler}
           />
           <FormMessage />
         </FormItem>
