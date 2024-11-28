@@ -22,7 +22,9 @@ export function FeeFormField({ methods }: MethodsType) {
               type="number"
               placeholder="Poplatky"
               min="0"
+              step="0.001"
               value={field.value || ''}
+              className="no-arrows"
             />
           </FormControl>
           <FormMessage />

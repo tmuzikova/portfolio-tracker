@@ -24,6 +24,7 @@ export function PriceFormField({ methods }: MethodsType) {
               min="0.01"
               step="0.001"
               value={field.value || ''}
+              className="no-arrows"
             />
           </FormControl>
           <FormMessage />
