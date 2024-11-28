@@ -45,8 +45,7 @@ export const AddTransactionForm = ({
         holding: {
           holdingIcon: '',
           holdingSymbol: data.symbol,
-          // TODO: Add holding name to the form and save it here
-          holdingName: '',
+          holdingName: data.name,
         },
         transactionDate: data.date,
         numberOfStocks: data.quantity,

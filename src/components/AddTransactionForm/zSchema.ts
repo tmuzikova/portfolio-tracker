@@ -5,6 +5,7 @@ export const schema = z.object({
     required_error: 'Prosím zadejte typ transakce',
   }),
   symbol: z.string({ required_error: 'Prosím zadejte ticker symbol' }),
+  name: z.string(),
   quantity: z
     .string({ required_error: 'Prosím zadejte počet kusů' })
     .transform((val) => parseInt(val, 10))
