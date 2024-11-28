@@ -8,9 +8,7 @@ import {
 import { MethodsType } from './methodsType';
 import { Input } from '../ui/input';
 
-type CurrencyFormFieldProps = MethodsType & {};
-
-export function CurrencyFormField({ methods }: CurrencyFormFieldProps) {
+export function CurrencyFormField({ methods }: MethodsType) {
   return (
     <FormField
       control={methods.control}
@@ -27,7 +25,6 @@ export function CurrencyFormField({ methods }: CurrencyFormFieldProps) {
               readOnly
             />
           </FormControl>
-
           <FormMessage />
         </FormItem>
       )}

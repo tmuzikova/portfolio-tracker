@@ -9,9 +9,9 @@ import { SymbolItem } from '@/hooks/useSymbolList';
 import { MethodsType } from './methodsType';
 import { EXCHANGES } from '@/components/AddTransactionForm/EXCHANGES';
 
-interface SymbolSelectFormFieldProps extends MethodsType {
+type SymbolSelectFormFieldProps = MethodsType & {
   symbolList: SymbolItem[];
-}
+};
 
 export const SymbolSelectFormField = ({
   methods,
