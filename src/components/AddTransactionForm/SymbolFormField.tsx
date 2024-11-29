@@ -27,7 +27,7 @@ export const SymbolSelectFormField = ({
     const selectedCurrency = EXCHANGES.find(
       (exchange) => exchange.name === holding.exchange,
     )?.currency;
-    console.log(holding.name);
+
     methods.setValue('currency', selectedCurrency ?? '');
     methods.setValue('name', holding.name ?? '');
   };

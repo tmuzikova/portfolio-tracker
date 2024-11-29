@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const schema = z.object({
+export const formFieldsSchema = z.object({
   transactionType: z.enum(['Nákup', 'Prodej'], {
     required_error: 'Prosím zadejte typ transakce',
   }),

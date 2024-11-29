@@ -4,8 +4,7 @@ import { Loader as LoaderIcon } from 'lucide-react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSymbolList } from '@/hooks/useSymbolList';
-import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
-import { schema } from './zSchema';
+import { formFieldsSchema } from './formFieldsSchema';
 import { QuantityFormField } from './QuantityFormField';
 import { DateFormField } from './DateFormField';
 import { PriceFormField } from './PriceFormField';
@@ -14,8 +13,10 @@ import { FeeFormField } from './FeeFormField';
 import { TransactionTypeFormField } from './TransactionTypeField';
 import { SymbolSelectFormField } from './SymbolFormField';
 import { toast } from '@/hooks/useToast';
+import { transactionTableDataSchema } from './transactionTableDataSchema';
 
-export type AddTransactionFormFields = z.infer<typeof schema>;
+export type AddTransactionFormFields = z.infer<typeof formFieldsSchema>;
+export type TransactionTableData = z.infer<typeof transactionTableDataSchema>;
 
 type AddTransactionFormProps = {
   onClose: () => void;
@@ -29,7 +30,7 @@ export const AddTransactionForm = ({
   const { data: symbolList, isLoading } = useSymbolList();
 
   const methods = useForm<AddTransactionFormFields>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(formFieldsSchema),
   });
 
   const onSubmit: SubmitHandler<AddTransactionFormFields> = (
