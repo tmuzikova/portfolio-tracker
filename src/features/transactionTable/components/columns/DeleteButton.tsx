@@ -13,23 +13,20 @@ import { Button } from '@/components/ui/button';
 import { Trash as TrashIcon } from 'lucide-react';
 import { TransactionTableData } from './types';
 import { toast } from '@/hooks/use-toast';
+import { useTransactionStore } from '@/stores/TransactionStore';
 
 type DeleteButtonProps = {
   transactionToEdit: TransactionTableData;
 };
 
 export const DeleteButton = ({ transactionToEdit }: DeleteButtonProps) => {
+  const deleteTransaction = useTransactionStore(
+    (state) => state.deleteTransaction,
+  );
+
   const handleDeleteTransaction = () => {
     try {
-      const existingTransactions = JSON.parse(
-        localStorage.getItem('transactions') || '[]',
-      ) as TransactionTableData[];
-
-      const updatedTransactions = existingTransactions.filter(
-        (transaction) => transaction.id !== transactionToEdit.id,
-      );
-
-      localStorage.setItem('transactions', JSON.stringify(updatedTransactions));
+      deleteTransaction(transactionToEdit.id);
 
       toast({
         title: 'Transakce byla úspěšně smazána',

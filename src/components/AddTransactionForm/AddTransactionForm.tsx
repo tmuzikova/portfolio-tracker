@@ -16,6 +16,7 @@ import { SymbolSelectFormField } from './SymbolFormField';
 import { toast } from '@/hooks/use-toast';
 import { useState } from 'react';
 import { v4 } from 'uuid';
+import { useTransactionStore } from '@/stores/TransactionStore';
 
 export type AddTransactionFormFields = z.infer<typeof schema>;
 
@@ -31,6 +32,8 @@ export const AddTransactionForm = ({
   transactionToEdit,
 }: AddTransactionFormProps) => {
   const { data: symbolList, isLoading } = useSymbolList();
+  const addTransaction = useTransactionStore((state) => state.addTransaction);
+  const editTransaction = useTransactionStore((state) => state.editTransaction);
   const [selectedHolding, setselectedHolding] = useState<
     SymbolList | undefined
   >(
@@ -64,10 +67,6 @@ export const AddTransactionForm = ({
     data: AddTransactionFormFields,
   ) => {
     try {
-      const existingTransactions = JSON.parse(
-        localStorage.getItem('transactions') || '[]',
-      ) as TransactionTableData[];
-
       const transactionToSave: TransactionTableData = {
         id: transactionToEdit?.id || v4(),
         transactionType: data.transactionType,
@@ -89,19 +88,11 @@ export const AddTransactionForm = ({
         },
       };
 
-      let newTransactions;
-
       if (transactionToEdit) {
-        newTransactions = existingTransactions.map((transaction) =>
-          transaction.id === transactionToEdit.id
-            ? transactionToSave
-            : transaction,
-        );
+        editTransaction(transactionToSave);
       } else {
-        newTransactions = [...existingTransactions, transactionToSave];
+        addTransaction(transactionToSave);
       }
-
-      localStorage.setItem('transactions', JSON.stringify(newTransactions));
 
       if (onClose) {
         onClose();

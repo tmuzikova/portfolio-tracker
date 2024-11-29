@@ -5,15 +5,17 @@ import { Button } from '@/components/ui/button';
 import { columns } from '../components/columns/columns';
 import allTransactionJSON from '@/features/transactionTable/mockData/allTransactions.json';
 import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
+import { useTransactionStore } from '@/stores/TransactionStore';
 
 export const TransactionTablePage = () => {
   const defaultSorting = { id: 'transactionDate', desc: true };
 
   const savedTransactions: TransactionTableData[] =
     allTransactionJSON as TransactionTableData[];
-  const existingTransactions = JSON.parse(
-    localStorage.getItem('transactions') || '[]',
-  ) as TransactionTableData[];
+
+  const existingTransactions = useTransactionStore(
+    (state) => state.transactions,
+  );
 
   const transactions = [...existingTransactions, ...savedTransactions];
   return (
