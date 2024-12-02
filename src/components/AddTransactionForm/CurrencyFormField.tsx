@@ -22,6 +22,7 @@ export function CurrencyFormField({ methods }: MethodsType) {
               type="text"
               placeholder="Měna"
               value={field.value || ''}
+              readOnly
             />
           </FormControl>
           <FormMessage />

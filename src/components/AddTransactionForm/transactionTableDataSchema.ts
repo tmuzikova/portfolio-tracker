@@ -1,0 +1,25 @@
+import { z } from 'zod';
+
+export const transactionTableDataSchema = z.object({
+  transactionType: z.enum(['Nákup', 'Prodej'], {
+    required_error: 'Transaction type must be "Nákup" or "Prodej".',
+  }),
+  holding: z.object({
+    holdingIcon: z.string(),
+    holdingSymbol: z.string(),
+    holdingName: z.string(),
+  }),
+  transactionDate: z.string(),
+  numberOfStocks: z.number(),
+  transactionValue: z.object({
+    total: z.number(),
+    perShare: z.number(),
+    currency: z.string(),
+  }),
+  transactionFee: z
+    .object({
+      total: z.number(),
+      currency: z.string(),
+    })
+    .optional(),
+});
