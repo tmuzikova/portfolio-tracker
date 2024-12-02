@@ -31,7 +31,7 @@ export const StatCard = (props: StatCardProps) => {
 
       <div>
         <CardContent className="text-[28px] font-semibold">
-          {props.data.value}
+          {props.data.value} CZK
           {props.children}
         </CardContent>
       </div>

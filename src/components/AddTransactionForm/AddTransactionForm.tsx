@@ -3,9 +3,8 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Loader as LoaderIcon } from 'lucide-react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SymbolList, useSymbolList } from '@/hooks/useSymbolList';
-import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
-import { schema } from './zSchema';
+import { useSymbolList } from '@/hooks/useSymbolList';
+import { formFieldsSchema } from './formFieldsSchema';
 import { QuantityFormField } from './QuantityFormField';
 import { DateFormField } from './DateFormField';
 import { PriceFormField } from './PriceFormField';
@@ -13,16 +12,17 @@ import { CurrencyFormField } from './CurrencyFormField';
 import { FeeFormField } from './FeeFormField';
 import { TransactionTypeFormField } from './TransactionTypeField';
 import { SymbolSelectFormField } from './SymbolFormField';
-import { toast } from '@/hooks/use-toast';
-import { useState } from 'react';
 import { v4 } from 'uuid';
 import { useTransactionStore } from '@/stores/TransactionStore';
+import { toast } from '@/hooks/useToast';
+import { transactionTableDataSchema } from './transactionTableDataSchema';
 
-export type AddTransactionFormFields = z.infer<typeof schema>;
+export type AddTransactionFormFields = z.infer<typeof formFieldsSchema>;
+export type TransactionTableData = z.infer<typeof transactionTableDataSchema>;
 
 type AddTransactionFormProps = {
-  onClose?: () => void;
-  onReopen?: () => void;
+  onClose: () => void;
+  onReopen: () => void;
   transactionToEdit?: TransactionTableData;
 };
 
@@ -34,27 +34,15 @@ export const AddTransactionForm = ({
   const { data: symbolList, isLoading } = useSymbolList();
   const addTransaction = useTransactionStore((state) => state.addTransaction);
   const editTransaction = useTransactionStore((state) => state.editTransaction);
-  const [selectedHolding, setselectedHolding] = useState<
-    SymbolList | undefined
-  >(
-    transactionToEdit
-      ? {
-          symbol: transactionToEdit.holding.holdingSymbol,
-          name: transactionToEdit.holding.holdingName || null,
-          price: null,
-          exchange: null,
-          exchangeShortName: null,
-        }
-      : undefined,
-  );
 
   const methods = useForm<AddTransactionFormFields>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(formFieldsSchema),
     defaultValues: transactionToEdit
       ? ({
           symbol: transactionToEdit.holding.holdingSymbol,
           transactionType: transactionToEdit.transactionType,
           date: transactionToEdit.transactionDate,
+          name: transactionToEdit.holding.holdingName,
           quantity: transactionToEdit.numberOfStocks,
           price: transactionToEdit.transactionValue.perShare,
           currency: transactionToEdit.transactionValue.currency,
@@ -73,7 +61,7 @@ export const AddTransactionForm = ({
         holding: {
           holdingIcon: '',
           holdingSymbol: data.symbol,
-          holdingName: selectedHolding?.name || '',
+          holdingName: data.name,
         },
         transactionDate: data.date,
         numberOfStocks: data.quantity,
@@ -94,9 +82,7 @@ export const AddTransactionForm = ({
         addTransaction(transactionToSave);
       }
 
-      if (onClose) {
-        onClose();
-      }
+      onClose();
 
       toast({
         title: transactionToEdit
@@ -111,7 +97,7 @@ export const AddTransactionForm = ({
       toast({
         variant: 'destructive',
         title: 'Nastala chyba při ukládání transakce',
-        action: onReopen ? (
+        action: onReopen && (
           <Button
             variant="ghost"
             onClick={() => {
@@ -120,7 +106,7 @@ export const AddTransactionForm = ({
           >
             Zkusit znovu
           </Button>
-        ) : undefined,
+        ),
       });
     }
   };
@@ -144,8 +130,6 @@ export const AddTransactionForm = ({
         <SymbolSelectFormField
           methods={methods}
           symbolList={symbolList || []}
-          selectedHolding={selectedHolding}
-          setselectedHolding={setselectedHolding}
         />
 
         <div className="flex gap-2">
@@ -155,10 +139,7 @@ export const AddTransactionForm = ({
 
         <div className="flex gap-2">
           <PriceFormField methods={methods} />
-          <CurrencyFormField
-            methods={methods}
-            selectedHolding={selectedHolding}
-          />
+          <CurrencyFormField methods={methods} />
         </div>
 
         <FeeFormField methods={methods} />

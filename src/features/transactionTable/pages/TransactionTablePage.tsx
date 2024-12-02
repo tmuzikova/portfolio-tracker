@@ -4,20 +4,34 @@ import { Plus as PlusIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { columns } from '../components/columns/columns';
 import allTransactionJSON from '@/features/transactionTable/mockData/allTransactions.json';
-import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
+import { TransactionTableData } from '@/components/AddTransactionForm/AddTransactionForm';
+import { transactionTableDataSchema } from '@/components/AddTransactionForm/transactionTableDataSchema';
 import { useTransactionStore } from '@/stores/TransactionStore';
 
 export const TransactionTablePage = () => {
   const defaultSorting = { id: 'transactionDate', desc: true };
 
-  const savedTransactions: TransactionTableData[] =
-    allTransactionJSON as TransactionTableData[];
+  const savedTransactions = allTransactionJSON
+    .map((transaction) => {
+      const parsedTransactions =
+        transactionTableDataSchema.safeParse(transaction);
+      if (parsedTransactions.success) {
+        return parsedTransactions.data;
+      } else {
+        console.error(parsedTransactions.error);
+        return null;
+      }
+    })
+    .filter(
+      (transaction): transaction is TransactionTableData => !!transaction,
+    );
 
   const existingTransactions = useTransactionStore(
     (state) => state.transactions,
   );
 
   const transactions = [...existingTransactions, ...savedTransactions];
+
   return (
     <section className="container mx-auto px-4 pb-12">
       <div className="flex flex-row justify-between py-6">

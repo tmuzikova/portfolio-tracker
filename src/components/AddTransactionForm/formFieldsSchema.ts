@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const schema = z.object({
+export const formFieldsSchema = z.object({
   transactionType: z.enum(['Nákup', 'Prodej'], {
     required_error: 'Prosím zadejte typ transakce',
   }),
@@ -9,6 +9,7 @@ export const schema = z.object({
     .number({ required_error: 'Prosím zadejte počet kusů' })
     .int()
     .min(1, { message: 'Počet kusů musí být alespoň 1 a celé číslo.' }),
+  name: z.string(),
   date: z
     .string({
       required_error: 'Prosím zadejte datum provedení transakce',

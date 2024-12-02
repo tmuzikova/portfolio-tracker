@@ -1,4 +1,4 @@
-import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
+import { TransactionTableData } from '@/components/AddTransactionForm/AddTransactionForm';
 import { create } from 'zustand';
 
 type TransactionStore = {

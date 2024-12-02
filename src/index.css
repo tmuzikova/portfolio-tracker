@@ -80,6 +80,16 @@
     @apply bg-background text-foreground;
   }
 }
+@layer utilities {
+  .no-arrows::-webkit-inner-spin-button,
+  .no-arrows::-webkit-outer-spin-button {
+    @apply appearance-none;
+  }
+
+  .no-arrows {
+    @apply appearance-none;
+  }
+}
 
 * {
   margin: 0;

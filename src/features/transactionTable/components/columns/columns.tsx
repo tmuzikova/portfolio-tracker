@@ -1,6 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { TableColumnHeader } from '@/components/TableColumnHeader';
-import { TransactionTableData } from './types';
+import { TransactionTableData } from '@/components/AddTransactionForm/AddTransactionForm';
 import { Button } from '@/components/ui/button';
 import { Edit as EditIcon } from 'lucide-react';
 import { AddTransactionModal } from '@/components/AddTransactionModal';

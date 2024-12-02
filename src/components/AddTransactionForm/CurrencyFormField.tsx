@@ -7,30 +7,8 @@ import {
 } from '../ui/form';
 import { MethodsType } from './methodsType';
 import { Input } from '../ui/input';
-import { SymbolList } from '@/hooks/useSymbolList';
-import { useEffect } from 'react';
-import { EXCHANGES } from './EXCHANGES';
 
-interface CurrencyFormFieldProps extends MethodsType {
-  selectedHolding: SymbolList | undefined;
-}
-
-export function CurrencyFormField({
-  methods,
-  selectedHolding,
-}: CurrencyFormFieldProps) {
-  useEffect(() => {
-    if (selectedHolding) {
-      const matchedExchange = EXCHANGES.find(
-        (exchange) => exchange.name === selectedHolding.exchange,
-      );
-
-      if (matchedExchange) {
-        methods.setValue('currency', matchedExchange.currency || '');
-      }
-    }
-  }, [selectedHolding, methods]);
-
+export function CurrencyFormField({ methods }: MethodsType) {
   return (
     <FormField
       control={methods.control}
@@ -47,7 +25,6 @@ export function CurrencyFormField({
               readOnly
             />
           </FormControl>
-
           <FormMessage />
         </FormItem>
       )}

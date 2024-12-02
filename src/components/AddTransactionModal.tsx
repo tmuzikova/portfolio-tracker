@@ -8,7 +8,7 @@ import {
 } from './ui/dialog';
 import { AddTransactionForm } from './AddTransactionForm/AddTransactionForm';
 import { useState } from 'react';
-import { TransactionTableData } from '@/features/transactionTable/components/columns/types';
+import { TransactionTableData } from './AddTransactionForm/AddTransactionForm';
 
 type AddTransactionModalProps = {
   children: React.ReactNode;

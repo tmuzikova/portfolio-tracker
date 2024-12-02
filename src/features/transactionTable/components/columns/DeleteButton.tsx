@@ -11,8 +11,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Trash as TrashIcon } from 'lucide-react';
-import { TransactionTableData } from './types';
-import { toast } from '@/hooks/use-toast';
+import { TransactionTableData } from '@/components/AddTransactionForm/AddTransactionForm';
+import { toast } from '@/hooks/useToast';
 import { useTransactionStore } from '@/stores/TransactionStore';
 
 type DeleteButtonProps = {
