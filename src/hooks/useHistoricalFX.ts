@@ -1,6 +1,7 @@
 import { api } from '@/api/client';
+import { getDataFromDB, saveDataToDB } from '@/lib/historicalFxIDB';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
 const HistoricalFxEntrySchema = z.object({
@@ -54,7 +55,7 @@ export const fetchHistoricalFxData = async (
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.error(
-        `FX data for ${transactionCurrency}CZK Validation Failed:`,
+        `Historical FX data for ${transactionCurrency}CZK Validation Failed:`,
         error.errors.map((err) => `${err.path.join('.')}: ${err.message}`),
       );
       throw new Error(
@@ -73,7 +74,44 @@ export const useHistoricalFxData = (
   transactionCurrency: string,
   date: string,
 ) => {
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [dbData, setDbData] = useState<HistoricalFxData | undefined>(undefined);
+  const [transactionDateFxEntry, setTransactionDateFxEntry] = useState<
+    HistoricalFxEntry | undefined
+  >(undefined);
+
+  useEffect(() => {
+    const getData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getDataFromDB(`${transactionCurrency}CZK`);
+
+        if (data.historical.length === 0) {
+          setIsEnabled(true);
+          return;
+        }
+        const entryDataClose = data.historical.find(
+          (entry: HistoricalFxEntry) => entry.date === date && entry.close,
+        );
+
+        if (entryDataClose) {
+          setTransactionDateFxEntry(entryDataClose);
+        } else {
+          setIsEnabled(true);
+        }
+
+        setDbData(data);
+      } catch (e) {
+        console.error(e);
+        setIsEnabled(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    void getData();
+  }, [transactionCurrency, date]);
 
   const response = useQuery({
     queryKey: ['historicalFxData', transactionCurrency, date],
@@ -83,9 +121,35 @@ export const useHistoricalFxData = (
     enabled: isEnabled,
   });
 
+  useEffect(() => {
+    const saveToDB = async () => {
+      if (response.isSuccess && response.data) {
+        try {
+          await saveDataToDB(response.data?.historicalFxData);
+
+          const entryDataClose = response.data.historicalFxData.historical.find(
+            (entry) => entry.date === date,
+          );
+
+          if (entryDataClose) {
+            setTransactionDateFxEntry(entryDataClose);
+          }
+
+          setDbData(response.data?.historicalFxData);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    };
+
+    void saveToDB();
+  }, [response.isSuccess, response.data, date]);
+
   return {
-    entryDataClose: response.data?.historicalFxEntry?.close,
-    fullHistory: response.data?.historicalFxData.historical,
-    isLoading: response.isLoading,
+    entryDataClose:
+      response.data?.historicalFxEntry?.close || transactionDateFxEntry?.close,
+    fullHistory:
+      response.data?.historicalFxData.historical || dbData?.historical,
+    isLoading: response.isLoading || isLoading,
   };
 };
