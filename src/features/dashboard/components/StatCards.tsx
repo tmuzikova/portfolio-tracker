@@ -2,6 +2,7 @@ import { formatNumber } from '@/utils/formatNumber';
 import { CardData, StatCard } from './StatCard';
 import {
   calculateInvestedAmount,
+  calculateRealizedProfit,
   calculateTotalFees,
 } from '@/utils/portolioCalculations';
 
@@ -10,7 +11,7 @@ export const StatCards = () => {
     portfolioValue: 1000000,
     totalValue: 1200000,
     unrealizedProfit: 300000,
-    realizedProfit: 200000,
+    realizedProfit: calculateRealizedProfit(),
     investedAmount: calculateInvestedAmount(),
     dividends: 150000,
     fees: calculateTotalFees(),
