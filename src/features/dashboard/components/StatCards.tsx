@@ -1,53 +1,57 @@
+import { formatNumber } from '@/utils/formatNumber';
 import { CardData, StatCard } from './StatCard';
+import {
+  calculateInvestedAmount,
+  calculateTotalFees,
+} from '@/utils/portolioCalculations';
 
 export const StatCards = () => {
-  //to be replaced with real data
   const data = {
     portfolioValue: 1000000,
     totalValue: 1200000,
     unrealizedProfit: 300000,
     realizedProfit: 200000,
-    investedAmount: 500000,
+    investedAmount: calculateInvestedAmount(),
     dividends: 150000,
-    fees: 1300,
+    fees: calculateTotalFees(),
   };
 
   const cardData: { [key: string]: CardData } = {
     portfolioValue: {
-      value: data.portfolioValue,
+      value: formatNumber(data.portfolioValue),
       tooltip:
         'Hodnota aktuálního portfolia bez realizovaného zisku, poplatků a dividend.',
       title: 'Hodnota portfolia',
     },
     totalValue: {
-      value: data.totalValue,
+      value: formatNumber(data.totalValue),
       tooltip:
         'Celková hodnota portfolia se započítaným realizovaným ziskem a poplatky.',
       title: 'Celková hodnota portfolia',
     },
     unrealizedProfit: {
-      value: data.unrealizedProfit,
+      value: formatNumber(data.unrealizedProfit),
       tooltip:
         'Rozdíl mezi nákupní a současnou cenou aktuálně vlastněných aktiv.',
       title: 'Nerealizovaný zisk',
     },
     realizedProfit: {
-      value: data.realizedProfit,
+      value: formatNumber(data.realizedProfit),
       tooltip: 'Realizovaný zisk z prodeje aktiv.',
       title: 'Realizovaný zisk',
     },
     investedAmount: {
-      value: data.investedAmount,
-      tooltip: 'Celková investovaná částka bez započítaných poplatků.',
+      value: formatNumber(data.investedAmount),
+      tooltip: 'Celková investovaná částka se započítanými poplatky.',
       title: 'Investovaná částka',
     },
     dividends: {
-      value: data.dividends,
+      value: formatNumber(data.dividends),
       tooltip: 'Dividendy počítány dle složení aktuálního portfolia.',
       title: 'Dividendy',
     },
     fees: {
-      value: data.fees,
+      value: formatNumber(data.fees),
       tooltip: 'Poplatky za obchodování.',
       title: 'Poplatky',
     },

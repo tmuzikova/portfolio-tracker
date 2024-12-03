@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { QuestionMarkTooltip } from './QuestionMarkTooltip';
 
 export type CardData = {
-  value: number;
+  value: string;
   tooltip?: string;
   title: string;
 };
