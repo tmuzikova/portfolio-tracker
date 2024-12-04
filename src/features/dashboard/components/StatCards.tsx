@@ -8,8 +8,6 @@ import {
 
 export const StatCards = () => {
   const data = {
-    portfolioValue: 1000000,
-    totalValue: 1200000,
     unrealizedProfit: 300000,
     realizedProfit: calculateRealizedProfit(),
     investedAmount: calculateInvestedAmount(),
@@ -17,15 +15,31 @@ export const StatCards = () => {
     fees: calculateTotalFees(),
   };
 
+  const portfolioValue = data.unrealizedProfit + data.investedAmount.noFees;
+  const totalValue = data.realizedProfit + portfolioValue - data.fees;
+  const unrealizedProfitPercentage = (
+    (data.unrealizedProfit / portfolioValue) *
+    100
+  ).toFixed(2);
+  const dividendYield = ((data.dividends / portfolioValue) * 100).toFixed(2);
+  const dividendYieldOnCost = (
+    (data.dividends / data.investedAmount.withFees) *
+    100
+  ).toFixed(2);
+  const feesPercentageOfInvestment = (
+    (data.fees / data.investedAmount.withFees) *
+    100
+  ).toFixed(2);
+
   const cardData: { [key: string]: CardData } = {
     portfolioValue: {
-      value: formatNumber(data.portfolioValue),
+      value: formatNumber(portfolioValue),
       tooltip:
         'Hodnota aktuálního portfolia bez realizovaného zisku, poplatků a dividend.',
       title: 'Hodnota portfolia',
     },
     totalValue: {
-      value: formatNumber(data.totalValue),
+      value: formatNumber(totalValue),
       tooltip:
         'Celková hodnota portfolia se započítaným realizovaným ziskem a poplatky.',
       title: 'Celková hodnota portfolia',
@@ -42,8 +56,8 @@ export const StatCards = () => {
       title: 'Realizovaný zisk',
     },
     investedAmount: {
-      value: formatNumber(data.investedAmount),
-      tooltip: 'Celková investovaná částka se započítanými poplatky.',
+      value: formatNumber(data.investedAmount.noFees),
+      tooltip: 'Celková investovaná částka bez zahrnutých poplatků.',
       title: 'Investovaná částka',
     },
     dividends: {
@@ -57,24 +71,6 @@ export const StatCards = () => {
       title: 'Poplatky',
     },
   };
-
-  const unrealizedProfitPercentage = (
-    (data.unrealizedProfit / data.portfolioValue) *
-    100
-  ).toFixed(2);
-
-  const dividendYield = ((data.dividends / data.portfolioValue) * 100).toFixed(
-    2,
-  );
-
-  const dividendYieldOnCost = (
-    (data.dividends / data.investedAmount) *
-    100
-  ).toFixed(2);
-  const feesPercentageOfInvestment = (
-    (data.fees / data.investedAmount) *
-    100
-  ).toFixed(2);
 
   return (
     <>

@@ -28,12 +28,21 @@ export const calculateInvestedAmount = () => {
     (tx) => tx.transactionType === 'Nákup',
   );
 
-  const totalInvestedAmount = purchaseTransactions.reduce((sum, tx) => {
+  const totalInvestedAmountWithFees = purchaseTransactions.reduce((sum, tx) => {
     const totalInvestment = tx.numberOfStocks * tx.transactionValue.perShare;
     return sum + (totalInvestment + (tx.transactionFee?.total || 0)) * FX_RATE;
   }, 0);
+  const totalInvestedAmountNoFees = purchaseTransactions.reduce((sum, tx) => {
+    const totalInvestment = tx.numberOfStocks * tx.transactionValue.perShare;
+    return sum + totalInvestment * FX_RATE;
+  }, 0);
 
-  return totalInvestedAmount;
+  const investedAmount = {
+    withFees: totalInvestedAmountWithFees,
+    noFees: totalInvestedAmountNoFees,
+  };
+
+  return investedAmount;
 };
 
 export const calculateTotalFees = () => {
