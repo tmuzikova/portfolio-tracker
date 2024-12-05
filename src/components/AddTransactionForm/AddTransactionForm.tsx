@@ -12,10 +12,9 @@ import { CurrencyFormField } from './CurrencyFormField';
 import { FeeFormField } from './FeeFormField';
 import { TransactionTypeFormField } from './TransactionTypeField';
 import { SymbolSelectFormField } from './SymbolFormField';
-import { v4 } from 'uuid';
 import { useTransactionStore } from '@/stores/TransactionStore';
-import { toast } from '@/hooks/useToast';
 import { transactionTableDataSchema } from './transactionTableDataSchema';
+import { showErrorToast, showSuccessToast } from '@/utils/showToast';
 
 export type AddTransactionFormFields = z.infer<typeof formFieldsSchema>;
 export type TransactionTableData = z.infer<typeof transactionTableDataSchema>;
@@ -47,7 +46,7 @@ export const AddTransactionForm = ({
           price: transactionToEdit.transactionValue.perShare,
           currency: transactionToEdit.transactionValue.currency,
           fee: transactionToEdit.transactionFee?.total || 0,
-        } as AddTransactionFormFields)
+        } satisfies AddTransactionFormFields)
       : undefined,
   });
 
@@ -56,7 +55,7 @@ export const AddTransactionForm = ({
   ) => {
     try {
       const transactionToSave: TransactionTableData = {
-        id: transactionToEdit?.id || v4(),
+        id: transactionToEdit?.id ?? crypto.randomUUID(),
         transactionType: data.transactionType,
         holding: {
           holdingIcon: '',
@@ -84,20 +83,17 @@ export const AddTransactionForm = ({
 
       onClose();
 
-      toast({
-        title: transactionToEdit
+      showSuccessToast(
+        transactionToEdit
           ? 'Transakce byla úspěšně upravena'
           : 'Transakce byla úspěšně přidána',
-        duration: 5000,
-        className: 'bg-green-100 border-green-500 text-green-900',
-      });
+      );
     } catch (error) {
       console.error('Error saving transaction:', error);
 
-      toast({
-        variant: 'destructive',
-        title: 'Nastala chyba při ukládání transakce',
-        action: onReopen && (
+      showErrorToast(
+        'Nastala chyba při ukládání transakce',
+        onReopen && (
           <Button
             variant="ghost"
             onClick={() => {
@@ -107,7 +103,7 @@ export const AddTransactionForm = ({
             Zkusit znovu
           </Button>
         ),
-      });
+      );
     }
   };
 

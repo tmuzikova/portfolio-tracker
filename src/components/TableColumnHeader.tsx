@@ -20,9 +20,7 @@ export const TableColumnHeader = ({
       <Button
         variant="ghost"
         onClick={() => {
-          if (toggleColumnSorting) {
-            toggleColumnSorting();
-          }
+          toggleColumnSorting?.();
         }}
         className={buttonClassName}
       >

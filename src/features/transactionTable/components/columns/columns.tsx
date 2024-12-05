@@ -146,7 +146,7 @@ export const columns: ColumnDef<TransactionTableData>[] = [
             </Button>
           </AddTransactionModal>
 
-          <DeleteButton transactionToEdit={transactionToEdit} />
+          <DeleteButton transactionId={transactionToEdit.id} />
         </div>
       );
     },

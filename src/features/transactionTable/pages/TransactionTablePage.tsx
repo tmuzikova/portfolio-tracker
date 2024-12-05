@@ -1,5 +1,5 @@
 import { AddTransactionModal } from '@/components/AddTransactionModal';
-import { DataTable } from '@/components/DataTable';
+import { ColumnSort, DataTable } from '@/components/DataTable';
 import { Plus as PlusIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { columns } from '../components/columns/columns';
@@ -9,7 +9,7 @@ import { transactionTableDataSchema } from '@/components/AddTransactionForm/tran
 import { useTransactionStore } from '@/stores/TransactionStore';
 
 export const TransactionTablePage = () => {
-  const defaultSorting = { id: 'transactionDate', desc: true };
+  const defaultSorting: ColumnSort = { id: 'transactionDate', desc: true };
 
   const savedTransactions = allTransactionJSON
     .map((transaction) => {
