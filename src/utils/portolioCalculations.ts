@@ -29,12 +29,13 @@ export const calculateInvestedAmount = () => {
   );
 
   const totalInvestedAmountWithFees = purchaseTransactions.reduce((sum, tx) => {
-    const totalInvestment = tx.numberOfStocks * tx.transactionValue.perShare;
-    return sum + (totalInvestment + (tx.transactionFee?.total || 0)) * FX_RATE;
+    return (
+      sum +
+      (tx.transactionValue.total + (tx.transactionFee?.total || 0)) * FX_RATE
+    );
   }, 0);
   const totalInvestedAmountNoFees = purchaseTransactions.reduce((sum, tx) => {
-    const totalInvestment = tx.numberOfStocks * tx.transactionValue.perShare;
-    return sum + totalInvestment * FX_RATE;
+    return sum + tx.transactionValue.total * FX_RATE;
   }, 0);
 
   const investedAmount = {
