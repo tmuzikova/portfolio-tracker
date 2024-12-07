@@ -31,18 +31,21 @@ export const useTransactionStore = create<TransactionStore>((set) => ({
     }),
 
   deleteTransaction: (id) => {
-    try {
-      set((state) => {
-        const newTransactions = state.transactions.filter(
-          (transaction) => transaction.id !== id,
-        );
+    set((state) => {
+      const newTransactions = state.transactions.filter(
+        (transaction) => transaction.id !== id,
+      );
+
+      try {
         localStorage.setItem('transactions', JSON.stringify(newTransactions));
-        return { transactions: newTransactions };
-      });
+      } catch (error) {
+        console.error('Error deleting transaction from localStorage:', error);
+        showErrorToast('Nastala chyba při mazání transakce');
+        return { transactions: state.transactions };
+      }
+
       showSuccessToast('Transakce byla úspěšně smazána');
-    } catch (error) {
-      console.error('Error deleting transaction:', error);
-      showErrorToast('Nastala chyba při mazání transakce');
-    }
+      return { transactions: newTransactions };
+    });
   },
 }));
