@@ -1,27 +1,16 @@
 import { TransactionTableData } from '@/components/AddTransactionForm/AddTransactionForm';
-import { transactionTableDataSchema } from '@/components/AddTransactionForm/transactionTableDataSchema';
-import allTransactionJSON from '@/features/transactionTable/mockData/allTransactions.json';
-import { useTransactionStore } from '@/stores/TransactionStore';
 
 const FX_RATE = 25;
 
-const savedTransactions = allTransactionJSON
-  .map((transaction) => {
-    const parsedTransactions =
-      transactionTableDataSchema.safeParse(transaction);
-    if (parsedTransactions.success) {
-      return parsedTransactions.data;
-    } else {
-      console.error(parsedTransactions.error);
-      return null;
-    }
-  })
-  .filter((transaction): transaction is TransactionTableData => !!transaction);
+type calculationParams = {
+  existingTransactions: TransactionTableData[];
+  savedTransactions: TransactionTableData[];
+};
 
-export const calculateInvestedAmount = () => {
-  const existingTransactions = useTransactionStore(
-    (state) => state.transactions,
-  );
+export const calculateInvestedAmount = ({
+  existingTransactions,
+  savedTransactions,
+}: calculationParams) => {
   const transactions = [...existingTransactions, ...savedTransactions];
 
   const purchaseTransactions = transactions.filter(
@@ -46,10 +35,10 @@ export const calculateInvestedAmount = () => {
   return investedAmount;
 };
 
-export const calculateTotalFees = () => {
-  const existingTransactions = useTransactionStore(
-    (state) => state.transactions,
-  );
+export const calculateTotalFees = ({
+  existingTransactions,
+  savedTransactions,
+}: calculationParams) => {
   const transactions = [...existingTransactions, ...savedTransactions];
 
   const totalFees = transactions.reduce((sum, tx) => {
@@ -59,10 +48,10 @@ export const calculateTotalFees = () => {
   return totalFees;
 };
 
-export const calculateRealizedProfit = () => {
-  const existingTransactions = useTransactionStore(
-    (state) => state.transactions,
-  );
+export const calculateRealizedProfit = ({
+  existingTransactions,
+  savedTransactions,
+}: calculationParams) => {
   const transactions = [...existingTransactions, ...savedTransactions];
 
   // sort transactions by date to ensure FIFO (first in-first out) logic

@@ -5,14 +5,30 @@ import {
   calculateRealizedProfit,
   calculateTotalFees,
 } from '@/utils/portolioCalculations';
+import { useTransactionStore } from '@/stores/TransactionStore';
+import { getSavedTransactions } from '@/utils/getSavedTransactions';
 
 export const StatCards = () => {
+  const savedTransactions = getSavedTransactions();
+  const existingTransactions = useTransactionStore(
+    (state) => state.transactions,
+  );
+
   const data = {
     unrealizedProfit: 300000,
-    realizedProfit: calculateRealizedProfit(),
-    investedAmount: calculateInvestedAmount(),
+    realizedProfit: calculateRealizedProfit({
+      existingTransactions,
+      savedTransactions,
+    }),
+    investedAmount: calculateInvestedAmount({
+      existingTransactions,
+      savedTransactions,
+    }),
     dividends: 150000,
-    fees: calculateTotalFees(),
+    fees: calculateTotalFees({
+      existingTransactions,
+      savedTransactions,
+    }),
   };
 
   const portfolioValue = data.unrealizedProfit + data.investedAmount.noFees;
