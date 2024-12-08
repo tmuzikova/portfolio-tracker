@@ -1,6 +1,10 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { TableColumnHeader } from '@/components/TableColumnHeader';
-import { TransactionTableData } from './types';
+import { TransactionTableData } from '@/components/AddTransactionForm/AddTransactionForm';
+import { Button } from '@/components/ui/button';
+import { Edit as EditIcon } from 'lucide-react';
+import { AddTransactionModal } from '@/components/AddTransactionModal';
+import { DeleteButton } from './DeleteButton';
 
 export const columns: ColumnDef<TransactionTableData>[] = [
   {
@@ -90,13 +94,8 @@ export const columns: ColumnDef<TransactionTableData>[] = [
   },
   {
     accessorKey: 'transactionValue',
-    header: ({ column }) => (
-      <TableColumnHeader
-        toggleColumnSorting={() =>
-          column.toggleSorting(column.getIsSorted() === 'asc')
-        }
-        className="text-center"
-      >
+    header: () => (
+      <TableColumnHeader className="text-center">
         Hodnota transakce
       </TableColumnHeader>
     ),
@@ -117,15 +116,8 @@ export const columns: ColumnDef<TransactionTableData>[] = [
   },
   {
     accessorKey: 'transactionFee',
-    header: ({ column }) => (
-      <TableColumnHeader
-        toggleColumnSorting={() =>
-          column.toggleSorting(column.getIsSorted() === 'asc')
-        }
-        className="text-center"
-      >
-        Poplatek
-      </TableColumnHeader>
+    header: () => (
+      <TableColumnHeader className="text-center">Poplatek</TableColumnHeader>
     ),
     cell: ({ row }) => {
       const transactionFee =
@@ -133,6 +125,28 @@ export const columns: ColumnDef<TransactionTableData>[] = [
       return (
         <div className="text-center font-medium">
           {transactionFee?.total} {transactionFee?.currency}
+        </div>
+      );
+    },
+  },
+
+  {
+    accessorKey: 'actions',
+    header: () => (
+      <TableColumnHeader className="text-center">Akce</TableColumnHeader>
+    ),
+    cell: ({ row }) => {
+      const transactionToEdit = row.original;
+
+      return (
+        <div className="flex justify-center space-x-2">
+          <AddTransactionModal transactionToEdit={transactionToEdit}>
+            <Button variant="ghost" size="icon">
+              <EditIcon className="h-4 w-4" />
+            </Button>
+          </AddTransactionModal>
+
+          <DeleteButton transactionId={transactionToEdit.id} />
         </div>
       );
     },
