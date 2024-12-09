@@ -1,12 +1,10 @@
 import { formatNumber } from '@/utils/formatNumber';
 import { CardData, StatCard } from './StatCard';
-import {
-  calculateInvestedAmount,
-  calculateRealizedProfit,
-  calculateTotalFees,
-} from '@/utils/portolioCalculations';
 import { useTransactionStore } from '@/stores/TransactionStore';
 import { getSavedTransactions } from '@/utils/getSavedTransactions';
+import { calculateInvestedAmount } from '@/utils/portfolioCalculations/calculateInvestedAmount';
+import { calculateTotalFees } from '@/utils/portfolioCalculations/calculateFees';
+import { calculateRealizedProfit } from '@/utils/portfolioCalculations/calculateRealizedProfit';
 
 export const StatCards = () => {
   const savedTransactions = getSavedTransactions();
