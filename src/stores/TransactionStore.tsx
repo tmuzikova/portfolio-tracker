@@ -1,4 +1,5 @@
 import { TransactionTableData } from '@/components/AddTransactionForm/AddTransactionForm';
+import { showErrorToast, showSuccessToast } from '@/utils/showToast';
 import { create } from 'zustand';
 
 type TransactionStore = {
@@ -29,12 +30,22 @@ export const useTransactionStore = create<TransactionStore>((set) => ({
       return { transactions: newTransactions };
     }),
 
-  deleteTransaction: (id) =>
+  deleteTransaction: (id) => {
     set((state) => {
       const newTransactions = state.transactions.filter(
         (transaction) => transaction.id !== id,
       );
-      localStorage.setItem('transactions', JSON.stringify(newTransactions));
+
+      try {
+        localStorage.setItem('transactions', JSON.stringify(newTransactions));
+      } catch (error) {
+        console.error('Error deleting transaction from localStorage:', error);
+        showErrorToast('Nastala chyba při mazání transakce');
+        return { transactions: state.transactions };
+      }
+
+      showSuccessToast('Transakce byla úspěšně smazána');
       return { transactions: newTransactions };
-    }),
+    });
+  },
 }));

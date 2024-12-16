@@ -12,36 +12,16 @@ import {
 import { Button } from '@/components/ui/button';
 import { Trash as TrashIcon } from 'lucide-react';
 import { TransactionTableData } from '@/components/AddTransactionForm/AddTransactionForm';
-import { toast } from '@/hooks/useToast';
 import { useTransactionStore } from '@/stores/TransactionStore';
 
-type DeleteButtonProps = {
-  transactionToEdit: TransactionTableData;
+type Props = {
+  transactionId: TransactionTableData['id'];
 };
 
-export const DeleteButton = ({ transactionToEdit }: DeleteButtonProps) => {
+export const DeleteButton = ({ transactionId }: Props) => {
   const deleteTransaction = useTransactionStore(
     (state) => state.deleteTransaction,
   );
-
-  const handleDeleteTransaction = () => {
-    try {
-      deleteTransaction(transactionToEdit.id);
-
-      toast({
-        title: 'Transakce byla úspěšně smazána',
-        duration: 5000,
-        className: 'bg-green-100 border-green-500 text-green-900',
-      });
-    } catch (error) {
-      console.error('Error deleting transaction:', error);
-
-      toast({
-        variant: 'destructive',
-        title: 'Nastala chyba při mazání transakce',
-      });
-    }
-  };
 
   return (
     <AlertDialog>
@@ -61,7 +41,7 @@ export const DeleteButton = ({ transactionToEdit }: DeleteButtonProps) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Zrušit</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDeleteTransaction}>
+          <AlertDialogAction onClick={() => deleteTransaction(transactionId)}>
             Smazat
           </AlertDialogAction>
         </AlertDialogFooter>
