@@ -7,6 +7,8 @@ import { calculateTotalFees } from '@/utils/portfolioCalculations/calculateFees'
 import { calculateRealizedProfit } from '@/utils/portfolioCalculations/calculateRealizedProfit';
 import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';
 import { useHistoricalStockPrices } from '@/hooks/useHistoricalStockPrices';
+import { calculateUnrealizedProfit } from '@/utils/portfolioCalculations/calculateUnrealizedProfit';
+import { Loader as LoaderIcon } from 'lucide-react';
 
 export const StatCards = () => {
   const savedTransactions = getSavedTransactions();
@@ -19,10 +21,15 @@ export const StatCards = () => {
     savedTransactions,
   });
 
-  const { data, isLoading, error } = useHistoricalStockPrices(currentPortfolio);
+  const { data, isLoading } = useHistoricalStockPrices(currentPortfolio);
 
   const statData = {
-    unrealizedProfit: 300000,
+    unrealizedProfit: isLoading
+      ? 0
+      : calculateUnrealizedProfit({
+          currentPortfolio,
+          historicalPrices: data ?? [],
+        }),
     realizedProfit: calculateRealizedProfit({
       existingTransactions,
       savedTransactions,
@@ -41,10 +48,10 @@ export const StatCards = () => {
   const portfolioValue =
     statData.unrealizedProfit + statData.investedAmount.noFees;
   const totalValue = statData.realizedProfit + portfolioValue - statData.fees;
-  const unrealizedProfitPercentage = (
-    (statData.unrealizedProfit / portfolioValue) *
-    100
-  ).toFixed(2);
+  const unrealizedProfitRelativeToPortfolioValue =
+    statData.unrealizedProfit > 0
+      ? ((statData.unrealizedProfit / portfolioValue) * 100).toFixed(2)
+      : null;
   const dividendYield = ((statData.dividends / portfolioValue) * 100).toFixed(
     2,
   );
@@ -98,6 +105,14 @@ export const StatCards = () => {
     },
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-64 w-full items-center justify-center">
+        <LoaderIcon className="h-8 w-8 animate-spin text-gray-500" />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="flex w-full flex-wrap gap-5 lg:flex-nowrap">
@@ -108,9 +123,11 @@ export const StatCards = () => {
 
         <div className="flex w-full flex-col gap-5">
           <StatCard data={cardData.unrealizedProfit}>
-            <div className="text-[14px] font-normal text-muted-foreground">
-              {unrealizedProfitPercentage} % z hodnoty portfolia
-            </div>
+            {unrealizedProfitRelativeToPortfolioValue && (
+              <div className="text-[14px] font-normal text-muted-foreground">
+                {unrealizedProfitRelativeToPortfolioValue} % z hodnoty portfolia
+              </div>
+            )}
           </StatCard>
 
           <StatCard data={cardData.realizedProfit} />

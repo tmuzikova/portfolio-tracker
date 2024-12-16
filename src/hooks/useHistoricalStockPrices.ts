@@ -74,7 +74,6 @@ export const useHistoricalStockPrices = (
     queryKey: ['currentPortfolioPrices', symbols],
     queryFn: async () => {
       if (!symbols.length) {
-        console.log('No symbols to fetch');
         return [];
       }
 
@@ -88,9 +87,6 @@ export const useHistoricalStockPrices = (
               !dbData.historical ||
               dbData.historical.length === 0
             ) {
-              console.log(
-                `No data for ${symbol}, fetching data from ${fiveYearsAgo} to ${today}`,
-              );
               const fetchedData = await fetchPriceDataForSymbol(
                 symbol,
                 fiveYearsAgo,
@@ -104,9 +100,6 @@ export const useHistoricalStockPrices = (
 
             if (latestDateInDB && latestDateInDB < today) {
               const missingFromDate = addOneDay(latestDateInDB);
-              console.log(
-                `Data for ${symbol} missing from ${missingFromDate} to ${today}`,
-              );
               const missingData = await fetchPriceDataForSymbol(
                 symbol,
                 missingFromDate,
@@ -132,7 +125,6 @@ export const useHistoricalStockPrices = (
           }),
         );
 
-        console.log('Fetched results:', results);
         return results;
       } catch (e) {
         console.error('Error in useCurrentPortfolioPrices:', e);

@@ -15,7 +15,7 @@
       "currency": "USD"
     },
     "transactionFee": {
-      "total": 5,
+      "total": 0,
       "currency": "USD"
     }
   },
@@ -30,12 +30,12 @@
     "transactionDate": "2024-10-02",
     "numberOfStocks": 5,
     "transactionValue": {
-      "total": 5000,
-      "perShare": 1000,
+      "total": 2000,
+      "perShare": 400,
       "currency": "USD"
     },
     "transactionFee": {
-      "total": 7,
+      "total": 0,
       "currency": "USD"
     }
   }
