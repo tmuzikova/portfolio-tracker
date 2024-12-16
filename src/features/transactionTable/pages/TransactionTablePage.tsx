@@ -1,13 +1,16 @@
 import { AddTransactionModal } from '@/components/AddTransactionModal';
-import { DataTable } from '@/components/DataTable';
+import { ColumnSort, DataTable } from '@/components/DataTable';
 import { Plus as PlusIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { columns } from '../components/columns/columns';
 import allTransactionJSON from '@/features/transactionTable/mockData/allTransactions.json';
 import { TransactionTableData } from '@/components/AddTransactionForm/AddTransactionForm';
 import { transactionTableDataSchema } from '@/components/AddTransactionForm/transactionTableDataSchema';
+import { useTransactionStore } from '@/stores/TransactionStore';
 
 export const TransactionTablePage = () => {
+  const defaultSorting: ColumnSort = { id: 'transactionDate', desc: true };
+
   const savedTransactions = allTransactionJSON
     .map((transaction) => {
       const parsedTransactions =
@@ -23,9 +26,9 @@ export const TransactionTablePage = () => {
       (transaction): transaction is TransactionTableData => !!transaction,
     );
 
-  const existingTransactions = JSON.parse(
-    localStorage.getItem('transactions') || '[]',
-  ) as TransactionTableData[];
+  const existingTransactions = useTransactionStore(
+    (state) => state.transactions,
+  );
 
   const transactions = [...existingTransactions, ...savedTransactions];
 
@@ -43,7 +46,11 @@ export const TransactionTablePage = () => {
       </div>
 
       <section>
-        <DataTable data={transactions} columns={columns} />
+        <DataTable
+          data={transactions}
+          columns={columns}
+          defaultSorting={defaultSorting}
+        />
       </section>
     </section>
   );

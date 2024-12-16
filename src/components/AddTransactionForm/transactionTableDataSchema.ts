@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const transactionTableDataSchema = z.object({
+  id: z.string(),
   transactionType: z.enum(['Nákup', 'Prodej'], {
     required_error: 'Transaction type must be "Nákup" or "Prodej".',
   }),

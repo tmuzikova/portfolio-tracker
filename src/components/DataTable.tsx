@@ -20,18 +20,22 @@ import { useState } from 'react';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { TablePagination } from '@/components/TablePagination';
 
+export type ColumnSort = { id: string; desc: boolean };
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   headerTitle?: string;
+  defaultSorting: ColumnSort;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   headerTitle,
+  defaultSorting,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([defaultSorting]);
 
   const dataTable = useReactTable({
     data,

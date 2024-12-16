@@ -12,8 +12,9 @@ import { CurrencyFormField } from './CurrencyFormField';
 import { FeeFormField } from './FeeFormField';
 import { TransactionTypeFormField } from './TransactionTypeField';
 import { SymbolSelectFormField } from './SymbolFormField';
-import { toast } from '@/hooks/useToast';
+import { useTransactionStore } from '@/stores/TransactionStore';
 import { transactionTableDataSchema } from './transactionTableDataSchema';
+import { showErrorToast, showSuccessToast } from '@/utils/showToast';
 
 export type AddTransactionFormFields = z.infer<typeof formFieldsSchema>;
 export type TransactionTableData = z.infer<typeof transactionTableDataSchema>;
@@ -21,27 +22,40 @@ export type TransactionTableData = z.infer<typeof transactionTableDataSchema>;
 type AddTransactionFormProps = {
   onClose: () => void;
   onReopen: () => void;
+  transactionToEdit?: TransactionTableData;
 };
 
 export const AddTransactionForm = ({
   onClose,
   onReopen,
+  transactionToEdit,
 }: AddTransactionFormProps) => {
   const { data: symbolList, isLoading } = useSymbolList();
+  const addTransaction = useTransactionStore((state) => state.addTransaction);
+  const editTransaction = useTransactionStore((state) => state.editTransaction);
 
   const methods = useForm<AddTransactionFormFields>({
     resolver: zodResolver(formFieldsSchema),
+    defaultValues: transactionToEdit
+      ? ({
+          symbol: transactionToEdit.holding.holdingSymbol,
+          transactionType: transactionToEdit.transactionType,
+          date: transactionToEdit.transactionDate,
+          name: transactionToEdit.holding.holdingName,
+          quantity: transactionToEdit.numberOfStocks,
+          price: transactionToEdit.transactionValue.perShare,
+          currency: transactionToEdit.transactionValue.currency,
+          fee: transactionToEdit.transactionFee?.total || 0,
+        } satisfies AddTransactionFormFields)
+      : undefined,
   });
 
   const onSubmit: SubmitHandler<AddTransactionFormFields> = (
     data: AddTransactionFormFields,
   ) => {
     try {
-      const existingTransactions = JSON.parse(
-        localStorage.getItem('transactions') || '[]',
-      ) as TransactionTableData[];
-
       const transactionToSave: TransactionTableData = {
+        id: transactionToEdit?.id ?? crypto.randomUUID(),
         transactionType: data.transactionType,
         holding: {
           holdingIcon: '',
@@ -56,28 +70,30 @@ export const AddTransactionForm = ({
           currency: data.currency,
         },
         transactionFee: {
-          total: data.fee,
+          total: data.fee || 0,
           currency: data.currency,
         },
       };
 
-      const newTransactions = [...existingTransactions, transactionToSave];
-      localStorage.setItem('transactions', JSON.stringify(newTransactions));
+      if (transactionToEdit) {
+        editTransaction(transactionToSave);
+      } else {
+        addTransaction(transactionToSave);
+      }
 
       onClose();
 
-      toast({
-        title: 'Transakce byla úspěšně přidána',
-        duration: 5000,
-        className: 'bg-green-100 border-green-500 text-green-900',
-      });
+      showSuccessToast(
+        transactionToEdit
+          ? 'Transakce byla úspěšně upravena'
+          : 'Transakce byla úspěšně přidána',
+      );
     } catch (error) {
       console.error('Error saving transaction:', error);
 
-      toast({
-        variant: 'destructive',
-        title: 'Nastala chyba při ukládání transakce',
-        action: onReopen && (
+      showErrorToast(
+        'Nastala chyba při ukládání transakce',
+        onReopen && (
           <Button
             variant="ghost"
             onClick={() => {
@@ -87,7 +103,7 @@ export const AddTransactionForm = ({
             Zkusit znovu
           </Button>
         ),
-      });
+      );
     }
   };
 
@@ -124,7 +140,7 @@ export const AddTransactionForm = ({
 
         <FeeFormField methods={methods} />
 
-        <Button type="submit">Přidat</Button>
+        <Button type="submit">Uložit</Button>
       </form>
     </FormProvider>
   );
