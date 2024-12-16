@@ -60,7 +60,7 @@ const fetchPriceDataForSymbol = async (
   }
 };
 
-export const useCurrentPortfolioPrices = (
+export const useHistoricalStockPrices = (
   currentPortfolio: CurrentPortfolioItem[],
 ) => {
   const symbols = currentPortfolio.map((item) => item.holding.holdingSymbol);
@@ -134,9 +134,9 @@ export const useCurrentPortfolioPrices = (
 
         console.log('Fetched results:', results);
         return results;
-      } catch (err) {
-        console.error('Error in useCurrentPortfolioPrices:', err);
-        throw err;
+      } catch (e) {
+        console.error('Error in useCurrentPortfolioPrices:', e);
+        throw e;
       }
     },
     staleTime: 1000 * 60 * 60 * 24,

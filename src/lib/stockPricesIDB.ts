@@ -1,7 +1,7 @@
 import {
   HistoricalPriceData,
   HistoricalPriceEntry,
-} from '@/hooks/useCurrentPortfolioHistoricalPrices';
+} from '@/hooks/useHistoricalStockPrices';
 import { openDB } from 'idb';
 
 const DB_NAME = 'StockPriceDB';
@@ -24,29 +24,24 @@ export const saveDataToDB = async (
 ) => {
   const db = await openDB(DB_NAME, 1);
 
-  // Check if the symbol already exists in the database
   const existingData = await db.get(STORE_NAME, symbol);
 
   if (existingData) {
-    // If data exists, merge the new data with existing data
     const mergedHistorical = [
       ...data.historical,
       ...(existingData.historical || []),
     ]
-      // Remove duplicates and sort by date (most recent first)
       .filter(
         (entry, index, self) =>
           index === self.findIndex((t) => t.date === entry.date),
       )
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    // Update the database with merged and deduplicated data
     await db.put(STORE_NAME, {
       symbol,
       historical: mergedHistorical,
     });
   } else {
-    // If no existing data, simply add the new data
     await db.put(STORE_NAME, data);
   }
 };
@@ -56,7 +51,6 @@ export const getLatestDateFromData = (
 ) => {
   if (!data || data.length === 0) return null;
 
-  // Sort the data by date in descending order and get the first (most recent) entry's date
   const sortedData = [...data].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );

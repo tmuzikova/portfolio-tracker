@@ -7,27 +7,9 @@ import { DataTable } from '@/components/DataTable';
 import { Button } from '@/components/ui/button';
 import { Plus as PlusIcon } from 'lucide-react';
 import { stockTableData } from '../mockData/stockTableData';
-import { useTransactionStore } from '@/stores/TransactionStore';
-import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';
-import { getSavedTransactions } from '@/utils/getSavedTransactions';
-import { useCurrentPortfolioPrices } from '@/hooks/useCurrentPortfolioHistoricalPrices';
 
 export const Dashboard = () => {
   const defaultSorting = { id: 'portfolioShare', desc: true };
-
-  const savedTransactions = getSavedTransactions();
-  const existingTransactions = useTransactionStore(
-    (state) => state.transactions,
-  );
-
-  const currentPortfolio = getCurrentPortfolio({
-    existingTransactions,
-    savedTransactions,
-  });
-
-  const { data, isLoading, error } =
-    useCurrentPortfolioPrices(currentPortfolio);
-  console.log(data, isLoading, error);
 
   return (
     <section className="container mx-auto px-4 pb-12">

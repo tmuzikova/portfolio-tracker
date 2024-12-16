@@ -5,6 +5,8 @@ import { getSavedTransactions } from '@/utils/getSavedTransactions';
 import { calculateInvestedAmount } from '@/utils/portfolioCalculations/calculateInvestedAmount';
 import { calculateTotalFees } from '@/utils/portfolioCalculations/calculateFees';
 import { calculateRealizedProfit } from '@/utils/portfolioCalculations/calculateRealizedProfit';
+import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';
+import { useHistoricalStockPrices } from '@/hooks/useHistoricalStockPrices';
 
 export const StatCards = () => {
   const savedTransactions = getSavedTransactions();
@@ -12,7 +14,14 @@ export const StatCards = () => {
     (state) => state.transactions,
   );
 
-  const data = {
+  const currentPortfolio = getCurrentPortfolio({
+    existingTransactions,
+    savedTransactions,
+  });
+
+  const { data, isLoading, error } = useHistoricalStockPrices(currentPortfolio);
+
+  const statData = {
     unrealizedProfit: 300000,
     realizedProfit: calculateRealizedProfit({
       existingTransactions,
@@ -29,19 +38,22 @@ export const StatCards = () => {
     }),
   };
 
-  const portfolioValue = data.unrealizedProfit + data.investedAmount.noFees;
-  const totalValue = data.realizedProfit + portfolioValue - data.fees;
+  const portfolioValue =
+    statData.unrealizedProfit + statData.investedAmount.noFees;
+  const totalValue = statData.realizedProfit + portfolioValue - statData.fees;
   const unrealizedProfitPercentage = (
-    (data.unrealizedProfit / portfolioValue) *
+    (statData.unrealizedProfit / portfolioValue) *
     100
   ).toFixed(2);
-  const dividendYield = ((data.dividends / portfolioValue) * 100).toFixed(2);
+  const dividendYield = ((statData.dividends / portfolioValue) * 100).toFixed(
+    2,
+  );
   const dividendYieldOnCost = (
-    (data.dividends / data.investedAmount.withFees) *
+    (statData.dividends / statData.investedAmount.withFees) *
     100
   ).toFixed(2);
   const feesPercentageOfInvestment = (
-    (data.fees / data.investedAmount.withFees) *
+    (statData.fees / statData.investedAmount.withFees) *
     100
   ).toFixed(2);
 
@@ -59,28 +71,28 @@ export const StatCards = () => {
       title: 'Celková hodnota portfolia',
     },
     unrealizedProfit: {
-      value: formatNumber(data.unrealizedProfit),
+      value: formatNumber(statData.unrealizedProfit),
       tooltip:
         'Rozdíl mezi nákupní a současnou cenou aktuálně vlastněných aktiv.',
       title: 'Nerealizovaný zisk',
     },
     realizedProfit: {
-      value: formatNumber(data.realizedProfit),
+      value: formatNumber(statData.realizedProfit),
       tooltip: 'Realizovaný zisk z prodeje aktiv.',
       title: 'Realizovaný zisk',
     },
     investedAmount: {
-      value: formatNumber(data.investedAmount.noFees),
+      value: formatNumber(statData.investedAmount.noFees),
       tooltip: 'Celková investovaná částka bez zahrnutých poplatků.',
       title: 'Investovaná částka',
     },
     dividends: {
-      value: formatNumber(data.dividends),
+      value: formatNumber(statData.dividends),
       tooltip: 'Dividendy počítány dle složení aktuálního portfolia.',
       title: 'Dividendy',
     },
     fees: {
-      value: formatNumber(data.fees),
+      value: formatNumber(statData.fees),
       tooltip: 'Poplatky za obchodování.',
       title: 'Poplatky',
     },
@@ -119,7 +131,7 @@ export const StatCards = () => {
               Predikce na tento rok
             </div>
 
-            <div>{data.dividends} CZK</div>
+            <div>{statData.dividends} CZK</div>
           </StatCard>
 
           <StatCard data={cardData.fees}>
