@@ -1,4 +1,7 @@
-import { calculationParams, CurrentPortfolioTransaction } from '@/types/types';
+import {
+  calculationParams,
+  CurrentPortfolioTransaction,
+} from '@/types/calculations';
 import {
   getSortedPurchaseTransactions,
   getSortedSaleTransactions,

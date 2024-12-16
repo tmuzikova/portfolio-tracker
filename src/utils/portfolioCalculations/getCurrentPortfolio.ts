@@ -6,7 +6,7 @@ import {
   calculationParams,
   CurrentPortfolioItem,
   CurrentPortfolioTransaction,
-} from '../../types/types';
+} from '../../types/calculations';
 
 export const getCurrentPortfolio = ({
   existingTransactions,

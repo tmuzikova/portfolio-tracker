@@ -1,5 +1,5 @@
 import { HistoricalPriceData } from '@/hooks/useHistoricalStockPrices';
-import { CurrentPortfolioItem } from '@/types/types';
+import { CurrentPortfolioItem } from '@/types/calculations';
 import { FX_RATE } from './const/FX_RATE';
 
 export const calculateUnrealizedProfit = ({

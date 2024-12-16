@@ -6,7 +6,7 @@ import {
   getLatestDateFromData,
   addOneDay,
 } from '../lib/stockPricesIDB';
-import { CurrentPortfolioItem } from '../types/types';
+import { CurrentPortfolioItem } from '../types/calculations';
 import { z } from 'zod';
 
 export const HistoricalPriceEntrySchema = z.object({

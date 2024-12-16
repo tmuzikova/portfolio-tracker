@@ -1,5 +1,5 @@
 import { FX_RATE } from './const/FX_RATE';
-import { calculationParams } from '../../types/types';
+import { calculationParams } from '../../types/calculations';
 
 export const calculateInvestedAmount = ({
   existingTransactions,
