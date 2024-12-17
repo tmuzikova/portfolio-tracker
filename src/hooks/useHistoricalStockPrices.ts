@@ -60,15 +60,23 @@ const fetchPriceDataForSymbol = async (
   }
 };
 
+const getPreviousTradingDay = () => {
+  const date = new Date();
+  const dayOfWeek = date.getDay();
+  if (dayOfWeek === 0)
+    date.setDate(date.getDate() - 2); // Sunday => Friday
+  else if (dayOfWeek === 6)
+    date.setDate(date.getDate() - 1); // Saturday => Friday
+  else date.setDate(date.getDate() - 1); // regular weekday => Previous day
+  return date.toISOString().split('T')[0];
+};
+
 export const useHistoricalStockPrices = (
   currentPortfolio: CurrentPortfolioItem[],
 ) => {
   const symbols = currentPortfolio.map((item) => item.holding.holdingSymbol);
 
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayDate = yesterday.toISOString().split('T')[0];
-
+  const yesterdayDate = getPreviousTradingDay();
   const date = new Date();
   date.setFullYear(date.getFullYear() - 5);
   const fiveYearsAgo = date.toISOString().split('T')[0];
