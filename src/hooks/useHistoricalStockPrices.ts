@@ -65,7 +65,10 @@ export const useHistoricalStockPrices = (
 ) => {
   const symbols = currentPortfolio.map((item) => item.holding.holdingSymbol);
 
-  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayDate = yesterday.toISOString().split('T')[0];
+
   const date = new Date();
   date.setFullYear(date.getFullYear() - 5);
   const fiveYearsAgo = date.toISOString().split('T')[0];
@@ -90,7 +93,7 @@ export const useHistoricalStockPrices = (
               const fetchedData = await fetchPriceDataForSymbol(
                 symbol,
                 fiveYearsAgo,
-                today,
+                yesterdayDate,
               );
               await saveDataToDB(symbol, fetchedData);
               return fetchedData;
@@ -98,12 +101,12 @@ export const useHistoricalStockPrices = (
 
             const latestDateInDB = getLatestDateFromData(dbData.historical);
 
-            if (latestDateInDB && latestDateInDB < today) {
+            if (latestDateInDB && latestDateInDB < yesterdayDate) {
               const missingFromDate = addOneDay(latestDateInDB);
               const missingData = await fetchPriceDataForSymbol(
                 symbol,
                 missingFromDate,
-                today,
+                yesterdayDate,
               );
 
               const mergedData: HistoricalPriceData = {
