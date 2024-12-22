@@ -11,7 +11,7 @@ export const CompanyProfileSchema = z.object({
   changes: z.number(),
   companyName: z.string(),
   currency: z.string(),
-  cik: z.string(),
+  cik: z.string().nullable(),
   isin: z.string().nullable(),
   cusip: z.string().nullable(),
   exchange: z.string(),
@@ -45,3 +45,5 @@ export const CompanyProfileSchema = z.object({
 });
 
 export const CompanyProfileArraySchema = z.array(CompanyProfileSchema);
+
+export type CompanyProfile = z.infer<typeof CompanyProfileSchema>;

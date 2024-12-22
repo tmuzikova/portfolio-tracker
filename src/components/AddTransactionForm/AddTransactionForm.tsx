@@ -15,16 +15,11 @@ import { SymbolSelectFormField } from './SymbolFormField';
 import { useTransactionStore } from '@/stores/TransactionStore';
 import { transactionTableDataSchema } from './transactionTableDataSchema';
 import { showErrorToast, showSuccessToast } from '@/utils/showToast';
-import { api } from '@/api/client';
-import {
-  CompanyProfileArraySchema,
-  CompanyProfileSchema,
-} from './companyProfileSchema';
 import { useState } from 'react';
+import { getCompanyProfile } from './getCompanyProfile';
 
 export type AddTransactionFormFields = z.infer<typeof formFieldsSchema>;
 export type TransactionTableData = z.infer<typeof transactionTableDataSchema>;
-export type CompanyProfile = z.infer<typeof CompanyProfileSchema>;
 
 type AddTransactionFormProps = {
   onClose: () => void;
@@ -58,36 +53,19 @@ export const AddTransactionForm = ({
       : undefined,
   });
 
-  const fetchCompanyProfile = async (
-    symbol: string,
-  ): Promise<CompanyProfile> => {
-    try {
-      const data = await api.get(`profile/${symbol}`).json();
-      const companyProfileArray = CompanyProfileArraySchema.parse(data);
-      if (!companyProfileArray.length) {
-        throw new Error(`No company profile data found for symbol: ${symbol}`);
-      }
-      const companyProfile = companyProfileArray[0];
-      return companyProfile;
-    } catch (error) {
-      console.error(`Error fetching company profile for ${symbol}:`, error);
-      throw error;
-    }
-  };
-
   const onSubmit: SubmitHandler<AddTransactionFormFields> = async (
     data: AddTransactionFormFields,
   ) => {
     try {
       setIsSubmitting(true);
 
-      const companyProfile = await fetchCompanyProfile(data.symbol);
+      const companyProfile = await getCompanyProfile(data.symbol);
 
       const transactionToSave: TransactionTableData = {
         id: transactionToEdit?.id ?? crypto.randomUUID(),
         transactionType: data.transactionType,
         holding: {
-          holdingIcon: companyProfile.image || '',
+          holdingIcon: companyProfile?.image || '',
           holdingSymbol: data.symbol,
           holdingName: data.name,
         },
