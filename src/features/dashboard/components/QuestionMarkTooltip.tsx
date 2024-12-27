@@ -6,9 +6,9 @@ import {
 } from '@/components/ui/tooltip';
 import { HelpCircle } from 'lucide-react';
 
-interface QuestionMarkTooltipProps {
+type QuestionMarkTooltipProps = {
   children: React.ReactNode;
-}
+};
 
 export const QuestionMarkTooltip: React.FC<QuestionMarkTooltipProps> = ({
   children,
