@@ -14,10 +14,10 @@ export const CompanyProfileSchema = z.object({
   cik: z.string().nullable(),
   isin: z.string().nullable(),
   cusip: z.string().nullable(),
-  exchange: z.string(),
-  exchangeShortName: z.string(),
+  exchange: z.string().nullable(),
+  exchangeShortName: z.string().nullable(),
   industry: z.string().nullable(),
-  website: z.string().url(),
+  website: z.string().url().nullable(),
   description: z.string().nullable(),
   ceo: z.string().nullable(),
   sector: z.string().nullable(),
@@ -30,14 +30,9 @@ export const CompanyProfileSchema = z.object({
   zip: z.string().nullable(),
   dcfDiff: z.number().nullable(),
   dcf: z.number().nullable(),
-  image: z.string().url(),
-  ipoDate: z
-    .string()
-    .refine((val) => !isNaN(Date.parse(val)), {
-      message: 'Invalid date format, must be YYYY-MM-DD',
-    })
-    .nullable(),
-  defaultImage: z.boolean(),
+  image: z.string().url().nullable(),
+  ipoDate: z.string().nullable(),
+  defaultImage: z.boolean().nullable(),
   isEtf: z.boolean(),
   isActivelyTrading: z.boolean(),
   isAdr: z.boolean(),

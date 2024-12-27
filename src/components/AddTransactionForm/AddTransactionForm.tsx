@@ -36,7 +36,7 @@ export const AddTransactionForm = ({
   const addTransaction = useTransactionStore((state) => state.addTransaction);
   const editTransaction = useTransactionStore((state) => state.editTransaction);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const FALLBACK_LOGO = '@/assets/fallback_logo.png';
+  const FALLBACK_LOGO = 'src/assets/fallback_logo.png';
 
   const methods = useForm<AddTransactionFormFields>({
     resolver: zodResolver(formFieldsSchema),
