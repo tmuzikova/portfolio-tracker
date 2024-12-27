@@ -1,7 +1,7 @@
 import {
   HistoricalPriceData,
   HistoricalPriceEntry,
-} from '@/hooks/useHistoricalStockPrices';
+} from '@/types/historicalPrices';
 import { openDB } from 'idb';
 
 const DB_NAME = 'StockPriceDB';

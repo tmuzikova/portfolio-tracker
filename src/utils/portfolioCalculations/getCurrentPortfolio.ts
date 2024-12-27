@@ -1,12 +1,12 @@
+import { formatCurrentPortfolio } from './formatCurrentPortfolio';
 import {
   getSortedPurchaseTransactions,
   getSortedSaleTransactions,
 } from './getSortedTransactions';
 import {
   calculationParams,
-  CurrentPortfolioItem,
   CurrentPortfolioTransaction,
-} from '../../types/calculations';
+} from '@/types/calculations';
 
 export const getCurrentPortfolio = ({
   existingTransactions,
@@ -26,78 +26,35 @@ export const getCurrentPortfolio = ({
     }),
   );
 
-  saleTransactions.forEach((saleTx) => {
-    let remainingNumberOfStocksToSell = saleTx.remainingNumberOfStocksToSell;
+  const updatedPurchaseTransactions = saleTransactions.reduce(
+    (updatedPurchases, saleTx) => {
+      let remainingNumberOfStocksToSell = saleTx.remainingNumberOfStocksToSell;
 
-    purchaseTransactions.forEach((purchaseTx) => {
-      if (remainingNumberOfStocksToSell <= 0) return;
-      if (purchaseTx.holding.holdingSymbol !== saleTx.holding.holdingSymbol)
-        return;
+      return updatedPurchases.map((purchaseTx) => {
+        if (remainingNumberOfStocksToSell <= 0) return purchaseTx;
+        if (purchaseTx.holding.holdingSymbol !== saleTx.holding.holdingSymbol)
+          return purchaseTx;
 
-      const stocksToSell = Math.min(
-        remainingNumberOfStocksToSell,
-        purchaseTx.remainingNumberOfStocksOwned,
-      );
+        const stocksToSell = Math.min(
+          remainingNumberOfStocksToSell,
+          purchaseTx.remainingNumberOfStocksOwned,
+        );
 
-      purchaseTx.remainingNumberOfStocksOwned -= stocksToSell;
-      remainingNumberOfStocksToSell -= stocksToSell;
-    });
-  });
+        remainingNumberOfStocksToSell -= stocksToSell;
 
-  const currentPortfolio = purchaseTransactions.filter(
+        return {
+          ...purchaseTx,
+          remainingNumberOfStocksOwned:
+            purchaseTx.remainingNumberOfStocksOwned - stocksToSell,
+        };
+      });
+    },
+    purchaseTransactions,
+  );
+
+  const currentPortfolio = updatedPurchaseTransactions.filter(
     (tx) => tx.remainingNumberOfStocksOwned > 0,
   );
 
-  const formattedPortfolio = formatCurrentPortfolio(currentPortfolio);
-
-  return formattedPortfolio;
-};
-
-const formatCurrentPortfolio = (
-  currentPortfolio: CurrentPortfolioTransaction[],
-): CurrentPortfolioItem[] => {
-  const portfolioMap = currentPortfolio.reduce(
-    (acc, tx) => {
-      const { holdingSymbol, holdingIcon, holdingName } = tx.holding;
-
-      if (!acc[holdingSymbol]) {
-        acc[holdingSymbol] = {
-          id: crypto.randomUUID(),
-          holding: {
-            holdingIcon: holdingIcon || '',
-            holdingSymbol: holdingSymbol,
-            holdingName: holdingName || '',
-          },
-          totalNumberOfStocks: 0,
-          totalFees: 0,
-          value: {
-            total: 0,
-            avgPricePerShare: 0,
-            currency: tx.transactionValue.currency,
-          },
-        };
-      }
-
-      acc[holdingSymbol].totalNumberOfStocks += tx.remainingNumberOfStocksOwned;
-      acc[holdingSymbol].totalFees += tx.transactionFee?.total || 0;
-      acc[holdingSymbol].value.total +=
-        tx.remainingNumberOfStocksOwned * tx.transactionValue.perShare;
-
-      return acc;
-    },
-    {} as Record<string, CurrentPortfolioItem>,
-  );
-
-  const formattedPortfolio = Object.values(portfolioMap).map((item) => ({
-    ...item,
-    value: {
-      ...item.value,
-      avgPricePerShare:
-        item.totalNumberOfStocks > 0
-          ? item.value.total / item.totalNumberOfStocks
-          : 0,
-    },
-  }));
-
-  return formattedPortfolio;
+  return formatCurrentPortfolio(currentPortfolio);
 };
