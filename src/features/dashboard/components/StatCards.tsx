@@ -1,75 +1,59 @@
+import { formatNumber } from '@/utils/formatNumber';
 import { CardData, StatCard } from './StatCard';
+import { Loader as LoaderIcon } from 'lucide-react';
+import { useStatCardData } from '@/hooks/useStatData';
 
 export const StatCards = () => {
-  //to be replaced with real data
-  const data = {
-    portfolioValue: 1000000,
-    totalValue: 1200000,
-    unrealizedProfit: 300000,
-    realizedProfit: 200000,
-    investedAmount: 500000,
-    dividends: 150000,
-    fees: 1300,
-  };
+  const { isLoading, statData, calculatedValues } = useStatCardData();
 
   const cardData: { [key: string]: CardData } = {
     portfolioValue: {
-      value: data.portfolioValue,
+      value: formatNumber(calculatedValues.portfolioValue),
       tooltip:
         'Hodnota aktuálního portfolia bez realizovaného zisku, poplatků a dividend.',
       title: 'Hodnota portfolia',
     },
     totalValue: {
-      value: data.totalValue,
+      value: formatNumber(calculatedValues.totalValue),
       tooltip:
         'Celková hodnota portfolia se započítaným realizovaným ziskem a poplatky.',
       title: 'Celková hodnota portfolia',
     },
     unrealizedProfit: {
-      value: data.unrealizedProfit,
+      value: formatNumber(statData.unrealizedProfit),
       tooltip:
         'Rozdíl mezi nákupní a současnou cenou aktuálně vlastněných aktiv.',
       title: 'Nerealizovaný zisk',
     },
     realizedProfit: {
-      value: data.realizedProfit,
+      value: formatNumber(statData.realizedProfit),
       tooltip: 'Realizovaný zisk z prodeje aktiv.',
       title: 'Realizovaný zisk',
     },
     investedAmount: {
-      value: data.investedAmount,
-      tooltip: 'Celková investovaná částka bez započítaných poplatků.',
+      value: formatNumber(statData.investedAmount.noFees),
+      tooltip: 'Celková investovaná částka bez zahrnutých poplatků.',
       title: 'Investovaná částka',
     },
     dividends: {
-      value: data.dividends,
+      value: formatNumber(statData.dividends),
       tooltip: 'Dividendy počítány dle složení aktuálního portfolia.',
       title: 'Dividendy',
     },
     fees: {
-      value: data.fees,
+      value: formatNumber(statData.fees),
       tooltip: 'Poplatky za obchodování.',
       title: 'Poplatky',
     },
   };
 
-  const unrealizedProfitPercentage = (
-    (data.unrealizedProfit / data.portfolioValue) *
-    100
-  ).toFixed(2);
-
-  const dividendYield = ((data.dividends / data.portfolioValue) * 100).toFixed(
-    2,
-  );
-
-  const dividendYieldOnCost = (
-    (data.dividends / data.investedAmount) *
-    100
-  ).toFixed(2);
-  const feesPercentageOfInvestment = (
-    (data.fees / data.investedAmount) *
-    100
-  ).toFixed(2);
+  if (isLoading) {
+    return (
+      <div className="flex h-64 w-full items-center justify-center">
+        <LoaderIcon className="h-8 w-8 animate-spin text-gray-500" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -81,9 +65,12 @@ export const StatCards = () => {
 
         <div className="flex w-full flex-col gap-5">
           <StatCard data={cardData.unrealizedProfit}>
-            <div className="text-[14px] font-normal text-muted-foreground">
-              {unrealizedProfitPercentage} % z hodnoty portfolia
-            </div>
+            {calculatedValues.unrealizedProfitRelativeToPortfolioValue && (
+              <div className="text-[14px] font-normal text-muted-foreground">
+                {calculatedValues.unrealizedProfitRelativeToPortfolioValue} % z
+                hodnoty portfolia
+              </div>
+            )}
           </StatCard>
 
           <StatCard data={cardData.realizedProfit} />
@@ -95,21 +82,22 @@ export const StatCards = () => {
             <div className="text-[14px] font-normal text-muted-foreground">
               Dividendový výnos
             </div>
-            <div>{dividendYield} %</div>
+            <div>{calculatedValues.dividendYield} %</div>
             <div className="text-[14px] font-normal text-muted-foreground">
               Dividendový výnos vzhledem k nákladům
             </div>
-            <div>{dividendYieldOnCost} %</div>
+            <div>{calculatedValues.dividendYieldOnCost} %</div>
             <div className="text-[14px] font-normal text-muted-foreground">
               Predikce na tento rok
             </div>
 
-            <div>{data.dividends} CZK</div>
+            <div>{statData.dividends} CZK</div>
           </StatCard>
 
           <StatCard data={cardData.fees}>
             <div className="text-[14px] font-normal text-muted-foreground">
-              {feesPercentageOfInvestment} % z investované částky
+              {calculatedValues.feesPercentageOfInvestment} % z investované
+              částky
             </div>
           </StatCard>
         </div>
