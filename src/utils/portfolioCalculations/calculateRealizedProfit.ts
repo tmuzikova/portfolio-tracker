@@ -26,34 +26,44 @@ export const calculateRealizedProfit = ({
     }),
   );
 
-  let realizedProfit = 0;
+  const { realizedProfit } = saleTransactions.reduce(
+    (result, saleTx) => {
+      let remainingNumberOfStocksToSell = saleTx.remainingNumberOfStocksToSell;
 
-  saleTransactions.forEach((saleTx) => {
-    let remainingNumberOfStocksToSell = saleTx.remainingNumberOfStocksToSell;
+      const updatedPurchases = result.purchaseTransactions.map((purchaseTx) => {
+        if (remainingNumberOfStocksToSell <= 0) return purchaseTx;
+        if (purchaseTx.holding.holdingSymbol !== saleTx.holding.holdingSymbol)
+          return purchaseTx;
 
-    purchaseTransactions.forEach((purchaseTx) => {
-      if (remainingNumberOfStocksToSell <= 0) return;
-      if (purchaseTx.holding.holdingSymbol !== saleTx.holding.holdingSymbol)
-        return;
+        const stocksToSell = Math.min(
+          remainingNumberOfStocksToSell,
+          purchaseTx.remainingNumberOfStocksOwned,
+        );
 
-      const stocksToSell = Math.min(
-        remainingNumberOfStocksToSell,
-        purchaseTx.remainingNumberOfStocksOwned,
-      );
+        const purchaseCost =
+          (stocksToSell * purchaseTx.transactionValue.perShare +
+            (purchaseTx.transactionFee?.total || 0)) *
+          FX_RATE;
+        const saleRevenue =
+          stocksToSell * saleTx.transactionValue.perShare * FX_RATE;
+        const saleFee = (saleTx.transactionFee?.total || 0) * FX_RATE;
 
-      const purchaseCost =
-        (stocksToSell * purchaseTx.transactionValue.perShare +
-          (purchaseTx.transactionFee?.total || 0)) *
-        FX_RATE;
-      const saleRevenue =
-        stocksToSell * saleTx.transactionValue.perShare * FX_RATE;
-      const saleFee = (saleTx.transactionFee?.total || 0) * FX_RATE;
-      realizedProfit += saleRevenue - purchaseCost - saleFee;
+        result.realizedProfit += saleRevenue - purchaseCost - saleFee;
 
-      purchaseTx.remainingNumberOfStocksOwned -= stocksToSell;
-      remainingNumberOfStocksToSell -= stocksToSell;
-    });
-  });
+        remainingNumberOfStocksToSell -= stocksToSell;
+
+        return {
+          ...purchaseTx,
+          remainingNumberOfStocksOwned:
+            purchaseTx.remainingNumberOfStocksOwned - stocksToSell,
+        };
+      });
+
+      result.purchaseTransactions = updatedPurchases;
+      return result;
+    },
+    { realizedProfit: 0, purchaseTransactions },
+  );
 
   return realizedProfit;
 };

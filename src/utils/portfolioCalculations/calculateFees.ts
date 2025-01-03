@@ -1,4 +1,4 @@
-import { calculationParams } from '../../types/calculations';
+import { calculationParams } from '@/types/calculations';
 import { FX_RATE } from './const/FX_RATE';
 
 export const calculateTotalFees = ({

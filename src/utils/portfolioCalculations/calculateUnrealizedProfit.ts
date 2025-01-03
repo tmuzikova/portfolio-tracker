@@ -1,4 +1,4 @@
-import { HistoricalPriceData } from '@/hooks/useHistoricalStockPrices';
+import { HistoricalPriceData } from '@/types/historicalPrices';
 import { CurrentPortfolioItem } from '@/types/calculations';
 import { FX_RATE } from './const/FX_RATE';
 
