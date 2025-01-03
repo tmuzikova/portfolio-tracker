@@ -42,12 +42,17 @@ export const columns: ColumnDef<TransactionTableData>[] = [
       const holding = row.getValue<TransactionTableData['holding']>('holding');
 
       return (
-        <div className="flex items-center space-x-3 text-left">
-          <img
-            src={holding.holdingIcon}
-            alt={holding.holdingSymbol}
-            className="h-8 w-8 rounded-full"
-          />
+        <div className="flex items-center space-x-4 text-left">
+          <div
+            className="flex items-center justify-center rounded-full bg-primary"
+            style={{ width: '3rem', height: '3rem', flexShrink: 0 }}
+          >
+            <img
+              src={holding.holdingIcon}
+              alt={holding.holdingSymbol}
+              className="h-8 w-8 object-cover"
+            />
+          </div>
           <div>
             <div className="font-medium">{holding.holdingSymbol}</div>
             <div>{holding.holdingName}</div>

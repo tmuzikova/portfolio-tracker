@@ -3,7 +3,7 @@
     "id": "1",
     "transactionType": "Nákup",
     "holding": {
-      "holdingIcon": "https://logo.clearbit.com/apple.com",
+      "holdingIcon": "https://images.financialmodelingprep.com/symbol/AAPL.png",
       "holdingSymbol": "AAPL",
       "holdingName": "Apple Inc."
     },
@@ -23,7 +23,7 @@
     "id": "2",
     "transactionType": "Nákup",
     "holding": {
-      "holdingIcon": "https://logo.clearbit.com/microsoft.com",
+      "holdingIcon": "https://images.financialmodelingprep.com/symbol/MSFT.png",
       "holdingSymbol": "MSFT",
       "holdingName": "Microsoft Corporation"
     },
