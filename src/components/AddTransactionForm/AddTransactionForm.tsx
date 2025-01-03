@@ -16,7 +16,7 @@ import { useTransactionStore } from '@/stores/TransactionStore';
 import { transactionTableDataSchema } from './transactionTableDataSchema';
 import { showErrorToast, showSuccessToast } from '@/utils/showToast';
 import { useState } from 'react';
-import { getCompanyProfile } from './getCompanyProfile';
+import { useCompanyProfile } from '@/hooks/useCompanyProfile';
 
 export type AddTransactionFormFields = z.infer<typeof formFieldsSchema>;
 export type TransactionTableData = z.infer<typeof transactionTableDataSchema>;
@@ -54,19 +54,21 @@ export const AddTransactionForm = ({
       : undefined,
   });
 
+  const { refetch } = useCompanyProfile(methods.watch('symbol'));
+
   const onSubmit: SubmitHandler<AddTransactionFormFields> = async (
     data: AddTransactionFormFields,
   ) => {
     try {
       setIsSubmitting(true);
 
-      const companyProfile = await getCompanyProfile(data.symbol);
+      const companyProfile = await refetch();
 
       const transactionToSave: TransactionTableData = {
         id: transactionToEdit?.id ?? crypto.randomUUID(),
         transactionType: data.transactionType,
         holding: {
-          holdingIcon: companyProfile?.image || FALLBACK_LOGO,
+          holdingIcon: companyProfile.data?.image || FALLBACK_LOGO,
           holdingSymbol: data.symbol,
           holdingName: data.name,
         },
