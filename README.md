@@ -36,8 +36,9 @@ Make sure you have the following installed on your local machine:
 2. Open the app in your browser: Navigate to http://localhost:5173 (or as specified in your terminal).
 
 
-## Icon used 
-The following icon was used in the project:
-Source: <a target="_blank" href="https://icons8.com/icon/BOpyuffqH8uW/investment">Investment</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+
+## Icons used 
+The following icons were used in the project:
+1. <a target="_blank" href="https://icons8.com/icon/BOpyuffqH8uW/investment">Investment</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 
 
