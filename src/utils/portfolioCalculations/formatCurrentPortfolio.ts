@@ -9,6 +9,12 @@ export const formatCurrentPortfolio = (
   return Object.values(
     currentPortfolio.reduce<Record<string, CurrentPortfolioItem>>((acc, tx) => {
       const { holdingSymbol, holdingIcon, holdingName } = tx.holding;
+
+      if (!tx.type) {
+        console.warn(
+          `Missing type property for transaction with symbol: ${holdingSymbol}`,
+        );
+      }
       const existingHolding = acc[holdingSymbol];
       const newNumberOfStocks =
         (existingHolding?.totalNumberOfStocks || 0) +
@@ -28,6 +34,11 @@ export const formatCurrentPortfolio = (
             holdingIcon: holdingIcon || '',
             holdingSymbol,
             holdingName: holdingName || '',
+          },
+          sector: tx.sector || 'Neznámý',
+          type: {
+            isFund: tx.type?.isFund || false,
+            isEtf: tx.type?.isEtf || false,
           },
           totalNumberOfStocks: newNumberOfStocks,
           totalFees: newTotalFees,

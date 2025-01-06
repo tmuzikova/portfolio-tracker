@@ -7,6 +7,11 @@
       "holdingSymbol": "AAPL",
       "holdingName": "Apple Inc."
     },
+    "sector": "Technology",
+    "type": {
+      "isFund": false,
+      "isEtf": false
+    },
     "transactionDate": "2024-10-01",
     "numberOfStocks": 10,
     "transactionValue": {
@@ -26,6 +31,11 @@
       "holdingIcon": "https://images.financialmodelingprep.com/symbol/MSFT.png",
       "holdingSymbol": "MSFT",
       "holdingName": "Microsoft Corporation"
+    },
+    "sector": "Technology",
+    "type": {
+      "isFund": false,
+      "isEtf": false
     },
     "transactionDate": "2024-10-02",
     "numberOfStocks": 5,
