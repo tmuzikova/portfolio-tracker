@@ -18,7 +18,7 @@ const calculateTotalPortfolioValue = (
       item.holding.holdingSymbol,
       priceData,
     );
-    return sum + latestPrice * item.totalNumberOfStocks * FX_RATE;
+    return sum + latestPrice * item.totalNumberOfStocks;
   }, 0);
 };
 
