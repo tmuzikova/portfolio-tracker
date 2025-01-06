@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Edit as EditIcon } from 'lucide-react';
 import { AddTransactionModal } from '@/components/AddTransactionModal';
 import { DeleteButton } from './DeleteButton';
+import { formatNumber } from '@/utils/formatNumber';
 
 export const columns: ColumnDef<TransactionTableData>[] = [
   {
@@ -73,11 +74,13 @@ export const columns: ColumnDef<TransactionTableData>[] = [
         Datum
       </TableColumnHeader>
     ),
-    cell: ({ row }) => (
-      <div className="text-center font-medium">
-        {row.getValue('transactionDate')}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const transactionDate = row.getValue<string>('transactionDate');
+      const formattedDate = new Intl.DateTimeFormat('en-GB').format(
+        new Date(transactionDate),
+      );
+      return <div className="text-center font-medium">{formattedDate}</div>;
+    },
   },
   {
     accessorKey: 'numberOfStocks',
@@ -93,7 +96,7 @@ export const columns: ColumnDef<TransactionTableData>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-center font-medium">
-        {row.getValue('numberOfStocks')}
+        {formatNumber(row.getValue('numberOfStocks'))}
       </div>
     ),
   },
@@ -112,9 +115,10 @@ export const columns: ColumnDef<TransactionTableData>[] = [
       return (
         <div className="flex flex-col items-center">
           <div className="font-medium">
-            {Math.round(transactionValue.total)} {transactionValue.currency}
+            {formatNumber(Math.round(transactionValue.total))}{' '}
+            {transactionValue.currency}
           </div>
-          <div>{`${Math.round(transactionValue.perShare)} ${transactionValue.currency}/akcie`}</div>
+          <div>{`${formatNumber(Math.round(transactionValue.perShare))} ${transactionValue.currency}/akcie`}</div>
         </div>
       );
     },
