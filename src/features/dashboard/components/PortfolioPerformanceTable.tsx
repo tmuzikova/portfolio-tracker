@@ -7,7 +7,6 @@ export const PortfolioPerformanceTable = () => {
   const defaultSorting: ColumnSort = { id: 'portfolioShare', desc: true };
 
   const { currentPortfolioWithPrices, isLoading } = useCurrentPortfolioData();
-  console.log(currentPortfolioWithPrices);
 
   if (isLoading) {
     return (
