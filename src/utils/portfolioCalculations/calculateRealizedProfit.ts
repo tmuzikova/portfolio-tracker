@@ -1,12 +1,10 @@
-import {
-  calculationParams,
-  CurrentPortfolioTransaction,
-} from '@/types/calculations';
+import { calculationParams } from '@/types/calculations';
 import {
   getSortedPurchaseTransactions,
   getSortedSaleTransactions,
 } from './getSortedTransactions';
 import { FX_RATE } from './const/FX_RATE';
+import { CurrentPortfolioTransaction } from '@/types/currentPortfolio';
 
 export const calculateRealizedProfit = ({
   existingTransactions,

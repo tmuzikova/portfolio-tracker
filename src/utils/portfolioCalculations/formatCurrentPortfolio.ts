@@ -1,7 +1,7 @@
 import {
   CurrentPortfolioItem,
   CurrentPortfolioTransaction,
-} from '@/types/calculations';
+} from '@/types/currentPortfolio';
 
 export const formatCurrentPortfolio = (
   currentPortfolio: CurrentPortfolioTransaction[],
