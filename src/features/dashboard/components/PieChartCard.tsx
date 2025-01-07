@@ -6,21 +6,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { usePieChartsData } from '@/hooks/usePieChartsData';
+import { Loader as LoaderIcon } from 'lucide-react';
 
-//to be replaced with real data
-const chartData = [
-  { stock: 'AAPL', portfolioShare: 10, fill: '#007aff' },
-  { stock: 'MSFT', portfolioShare: 12, fill: '#00a1f1' },
-  { stock: 'GOOGL', portfolioShare: 15, fill: '#ea4335' },
-  { stock: 'AMZN', portfolioShare: 8, fill: '#ff9900' },
-  { stock: 'TSLA', portfolioShare: 20, fill: '#cc0000' },
-  { stock: 'NVDA', portfolioShare: 10, fill: '#76b900' },
-  { stock: 'KO', portfolioShare: 5, fill: '#f40009' },
-  { stock: 'JNJ', portfolioShare: 12, fill: '#6a737b' },
-];
 const chartConfig = {
   AAPL: { label: 'Apple Inc. (AAPL)', color: '#007aff' },
   MSFT: { label: 'Microsoft Corporation (MSFT)', color: '#00a1f1' },
@@ -32,22 +22,33 @@ const chartConfig = {
   JNJ: { label: 'Johnson & Johnson (JNJ)', color: '#6a737b' },
 } satisfies ChartConfig;
 
-type DiversificationType = 'Aktiva' | 'Typ aktiva' | 'Sektor' | 'Měna' | 'Země';
+type DiversificationType = 'Aktiva' | 'Typ aktiva' | 'Sektor' | 'Dividendy';
 const diversificationTypes: DiversificationType[] = [
   'Aktiva',
   'Typ aktiva',
   'Sektor',
-  'Měna',
-  'Země',
+  'Dividendy',
 ];
 
-export const DiversificationCharts = () => {
+export const PieChartCard = () => {
   const [selectedType, setSelectedType] =
     useState<DiversificationType>('Aktiva');
+  const { holdingData, sectorData, typeData, isLoading } = usePieChartsData();
 
-  const handleTypeChange = (type: DiversificationType) => {
-    setSelectedType(type);
-  };
+  const chartData =
+    selectedType === 'Sektor'
+      ? sectorData
+      : selectedType === 'Typ aktiva'
+        ? typeData
+        : holdingData;
+
+  if (isLoading) {
+    return (
+      <div className="flex h-64 w-full items-center justify-center">
+        <LoaderIcon className="h-8 w-8 animate-spin text-gray-500" />
+      </div>
+    );
+  }
 
   return (
     <Card className="flex flex-col">
@@ -58,7 +59,7 @@ export const DiversificationCharts = () => {
           {diversificationTypes.map((type) => (
             <Button
               key={type}
-              onClick={() => handleTypeChange(type)}
+              onClick={() => setSelectedType(type)}
               className={`rounded-md px-4 py-2 text-sm ${
                 selectedType === type
                   ? 'text-white'
@@ -77,11 +78,13 @@ export const DiversificationCharts = () => {
           className="mx-auto aspect-square max-h-[450px] pb-0 [&_.recharts-pie-label-text]:fill-foreground"
         >
           <PieChart>
-            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+            <ChartTooltip content={<ChartTooltipContent />} />
             <Pie
               data={chartData}
               dataKey="portfolioShare"
-              label
+              label={({ name, percent }) =>
+                `${name} (${(percent * 100).toFixed(1)}%)`
+              }
               nameKey="stock"
             />
           </PieChart>
