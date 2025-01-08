@@ -1,8 +1,10 @@
-import { Pie, PieChart } from 'recharts';
+import { LabelList, Pie, PieChart } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
@@ -10,17 +12,17 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { usePieChartsData } from '@/hooks/usePieChartsData';
 import { Loader as LoaderIcon } from 'lucide-react';
+import { PieChartDataType } from '@/types/PieCharts';
 
-const chartConfig = {
-  AAPL: { label: 'Apple Inc. (AAPL)', color: '#007aff' },
-  MSFT: { label: 'Microsoft Corporation (MSFT)', color: '#00a1f1' },
-  GOOGL: { label: 'Alphabet Inc. (GOOGL)', color: '#ea4335' },
-  AMZN: { label: 'Amazon.com, Inc. (AMZN)', color: '#ff9900' },
-  TSLA: { label: 'Tesla, Inc. (TSLA)', color: '#cc0000' },
-  NVDA: { label: 'NVIDIA Corporation (NVDA)', color: '#76b900' },
-  KO: { label: 'The Coca-Cola Company (KO)', color: '#f40009' },
-  JNJ: { label: 'Johnson & Johnson (JNJ)', color: '#6a737b' },
-} satisfies ChartConfig;
+const generateChartConfig = (data: PieChartDataType[]) => {
+  return data.reduce<ChartConfig>((config, item) => {
+    config[item.groupProperty] = {
+      label: item.holdingName || item.groupProperty,
+      color: item.fill,
+    };
+    return config;
+  }, {});
+};
 
 type DiversificationType = 'Aktiva' | 'Typ aktiva' | 'Sektor' | 'Dividendy';
 const diversificationTypes: DiversificationType[] = [
@@ -41,6 +43,8 @@ export const PieChartCard = () => {
       : selectedType === 'Typ aktiva'
         ? typeData
         : holdingData;
+
+  const chartConfig = generateChartConfig(chartData);
 
   if (isLoading) {
     return (
@@ -75,17 +79,26 @@ export const PieChartCard = () => {
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[450px] pb-0 [&_.recharts-pie-label-text]:fill-foreground"
+          className="mx-auto aspect-square max-h-[450px] w-full pb-2 [&_.recharts-pie-label-text]:fill-foreground"
         >
           <PieChart>
-            <ChartTooltip content={<ChartTooltipContent />} />
             <Pie
               data={chartData}
               dataKey="portfolioShare"
               label={({ name, percent }) =>
                 `${name} (${(percent * 100).toFixed(1)}%)`
               }
-              nameKey="stock"
+              nameKey="groupProperty"
+            />
+            <ChartLegend
+              content={
+                <ChartLegendContent
+                  payload={chartData.map((item) => ({
+                    value: item.holdingName || item.groupProperty,
+                    color: item.fill,
+                  }))}
+                />
+              }
             />
           </PieChart>
         </ChartContainer>
