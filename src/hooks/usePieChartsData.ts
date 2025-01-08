@@ -3,6 +3,7 @@ import { getSavedTransactions } from '@/utils/getSavedTransactions';
 import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';
 import { useHistoricalStockPrices } from './useHistoricalStockPrices';
 import { calculateTotalPortfolioValue } from '@/utils/portfolioCalculations/calculateTotalPortfolioValue';
+import { PieChartDataType } from '@/types/PieCharts';
 
 export const usePieChartsData = () => {
   const existingTransactions = useTransactionStore(
@@ -25,19 +26,31 @@ export const usePieChartsData = () => {
     priceData,
   );
 
-  type Accumulator = Record<
-    string,
-    { stock: string; portfolioShare: number; fill: string }
-  >;
+  const COLORS = [
+    '#9E0142',
+    '#D53E4F',
+    '#F46D43',
+    '#FDAE61',
+    '#FEE08B',
+    '#FFFFBF',
+    '#E6F598',
+    '#ABDDA4',
+    '#66C2A5',
+    '#3288BD',
+    '#5E4FA2', //Others
+  ];
 
-  const groupTopTenAndOthers = (
-    data: Accumulator,
-  ): { stock: string; portfolioShare: number; fill: string }[] => {
+  type Accumulator = Record<string, PieChartDataType>;
+
+  const groupTopTenAndOthers = (data: Accumulator): PieChartDataType[] => {
     const sortedData = Object.values(data).sort(
       (a, b) => b.portfolioShare - a.portfolioShare,
     );
 
-    const topItems = sortedData.slice(0, 10);
+    const topItems = sortedData.slice(0, 10).map((item, index) => ({
+      ...item,
+      fill: COLORS[index],
+    }));
     const others = sortedData.slice(10);
 
     if (others.length > 0) {
@@ -47,9 +60,9 @@ export const usePieChartsData = () => {
       );
 
       topItems.push({
-        stock: 'Ostatní',
+        groupProperty: 'Ostatní',
         portfolioShare: othersTotal,
-        fill: '#cccccc',
+        fill: COLORS[10],
       });
     }
 
@@ -62,16 +75,17 @@ export const usePieChartsData = () => {
 
       return {
         ...acc,
-        [item.holding.holdingName]: acc[item.holding.holdingName]
+        [item.holding.holdingSymbol]: acc[item.holding.holdingSymbol]
           ? {
-              ...acc[item.holding.holdingName],
+              ...acc[item.holding.holdingSymbol],
               portfolioShare:
-                acc[item.holding.holdingName].portfolioShare + portfolioShare,
+                acc[item.holding.holdingSymbol].portfolioShare + portfolioShare,
             }
           : {
-              stock: item.holding.holdingName,
+              groupProperty: item.holding.holdingSymbol,
+              holdingName: item.holding.holdingName,
               portfolioShare,
-              fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+              fill: '',
             },
       };
     }, {}),
@@ -90,15 +104,15 @@ export const usePieChartsData = () => {
               portfolioShare: acc[sector].portfolioShare + portfolioShare,
             }
           : {
-              stock: sector,
+              groupProperty: sector,
               portfolioShare,
-              fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+              fill: '',
             },
       };
     }, {}),
   );
 
-  const groupByType = Object.values(
+  const groupByType = groupTopTenAndOthers(
     currentPortfolio.reduce<Accumulator>((acc, item) => {
       const type = item.type.isEtf
         ? 'ETF'
@@ -115,9 +129,9 @@ export const usePieChartsData = () => {
               portfolioShare: acc[type].portfolioShare + portfolioShare,
             }
           : {
-              stock: type,
+              groupProperty: type,
               portfolioShare,
-              fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+              fill: '',
             },
       };
     }, {}),
