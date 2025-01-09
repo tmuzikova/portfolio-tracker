@@ -1,13 +1,6 @@
-import { LabelList, Pie, PieChart } from 'recharts';
+import { Pie, PieChart } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@/components/ui/chart';
+import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { usePieChartsData } from '@/hooks/usePieChartsData';
@@ -56,10 +49,10 @@ export const PieChartCard = () => {
 
   return (
     <Card className="flex flex-col">
-      <CardHeader className="pb-0">
+      <CardHeader className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-between lg:pb-0">
         <CardTitle>Diverzifikace portfolia</CardTitle>
 
-        <div className="flex gap-2 sm:py-6">
+        <div className="flex gap-2 pb-2 pt-6 lg:pt-0">
           {diversificationTypes.map((type) => (
             <Button
               key={type}
@@ -76,10 +69,10 @@ export const PieChartCard = () => {
         </div>
       </CardHeader>
 
-      <CardContent className="flex-1 pb-0">
+      <CardContent className="flex pb-2">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[450px] w-full pb-2 [&_.recharts-pie-label-text]:fill-foreground"
+          className="max-h-[450px] w-full [&_.recharts-pie-label-text]:fill-muted-foreground [&_.recharts-pie-label-text]:text-sm [&_.recharts-pie-label-text]:font-medium"
         >
           <PieChart>
             <Pie
@@ -89,16 +82,6 @@ export const PieChartCard = () => {
                 `${name} (${(percent * 100).toFixed(1)}%)`
               }
               nameKey="groupProperty"
-            />
-            <ChartLegend
-              content={
-                <ChartLegendContent
-                  payload={chartData.map((item) => ({
-                    value: item.holdingName || item.groupProperty,
-                    color: item.fill,
-                  }))}
-                />
-              }
             />
           </PieChart>
         </ChartContainer>
