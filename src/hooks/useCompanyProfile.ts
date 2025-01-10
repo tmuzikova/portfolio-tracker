@@ -8,23 +8,16 @@ import {
   saveCompanyProfileToDB,
 } from '@/lib/companyProfileIDB';
 import { api } from '@/api/client';
+import FallbackLogo from '@/assets/fallback_logo.svg';
 
-const FALLBACK_LOGO = 'src/assets/fallback_logo.png';
-
-const validateImageUrl = async (url: string | null): Promise<string> => {
+const validateImageUrl = async (url: string): Promise<boolean> => {
   try {
-    if (!url) {
-      return FALLBACK_LOGO;
-    }
     const response = await fetch(url, { method: 'HEAD' });
-    if (response.ok) {
-      return url;
-    }
-    console.warn(`Invalid image URL: ${url}`);
+    return response.ok;
   } catch (error) {
     console.error(`Error validating image URL: ${url}`, error);
+    return false;
   }
-  return FALLBACK_LOGO;
 };
 
 const fetchCompanyProfile = async (symbol: string): Promise<CompanyProfile> => {
@@ -33,8 +26,15 @@ const fetchCompanyProfile = async (symbol: string): Promise<CompanyProfile> => {
   if (!companyProfileArray.length) {
     throw new Error(`No company profile data found for symbol: ${symbol}`);
   }
-  const companyProfile = companyProfileArray[0];
-  companyProfile.image = await validateImageUrl(companyProfile.image);
+
+  const imageUrl = companyProfileArray[0].image;
+
+  const companyProfile = {
+    ...companyProfileArray[0],
+    image:
+      imageUrl && (await validateImageUrl(imageUrl)) ? imageUrl : FallbackLogo,
+  };
+
   return companyProfile;
 };
 
