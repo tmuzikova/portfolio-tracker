@@ -3,7 +3,7 @@ import { StatCards } from '../components/StatCards';
 import { PortfolioHistoryChart } from '../components/PortfolioHistoryChart';
 import { DiversificationCharts } from '../components/DiversificationCharts';
 import { columns } from '../components/columns/columns';
-import { ColumnSort, DataTable } from '@/components/DataTable';
+import { ColumnSort, DataTable } from '@/components/DataTables/DataTable';
 import { Button } from '@/components/ui/button';
 import { Plus as PlusIcon } from 'lucide-react';
 import { stockTableData } from '../mockData/stockTableData';

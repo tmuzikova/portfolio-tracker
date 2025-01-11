@@ -36,7 +36,6 @@ export const AddTransactionForm = ({
   const addTransaction = useTransactionStore((state) => state.addTransaction);
   const editTransaction = useTransactionStore((state) => state.editTransaction);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const FALLBACK_LOGO = 'src/assets/fallback_logo.png';
 
   const methods = useForm<AddTransactionFormFields>({
     resolver: zodResolver(formFieldsSchema),
@@ -68,7 +67,7 @@ export const AddTransactionForm = ({
         id: transactionToEdit?.id ?? crypto.randomUUID(),
         transactionType: data.transactionType,
         holding: {
-          holdingIcon: companyProfile.data?.image || FALLBACK_LOGO,
+          holdingIcon: companyProfile.data?.image || null,
           holdingSymbol: data.symbol,
           holdingName: data.name,
         },

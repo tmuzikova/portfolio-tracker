@@ -11,7 +11,11 @@ export type CurrentPortfolioTransaction = TransactionTableData & {
 
 export type CurrentPortfolioItem = {
   id: string;
-  holding: { holdingIcon: string; holdingSymbol: string; holdingName: string };
+  holding: {
+    holdingIcon: string | null;
+    holdingSymbol: string;
+    holdingName: string;
+  };
   totalNumberOfStocks: number;
   value: {
     total: number;
