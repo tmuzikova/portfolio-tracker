@@ -61,7 +61,7 @@ export const AddTransactionForm = ({
     try {
       setIsSubmitting(true);
 
-      const companyProfile = await refetch();
+      const companyProfile = await refetch({ throwOnError: true });
 
       const transactionToSave: TransactionTableData = {
         id: transactionToEdit?.id ?? crypto.randomUUID(),

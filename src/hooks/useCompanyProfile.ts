@@ -24,28 +24,13 @@ const fetchCompanyProfile = async (symbol: string): Promise<CompanyProfile> => {
 const companyProfileQueryFn = async (
   symbol: string,
 ): Promise<CompanyProfile> => {
-  try {
-    const dbData = await getCompanyProfileFromDB(symbol);
-    if (dbData) {
-      return dbData;
-    }
-  } catch (e) {
-    console.error(
-      `Error getting company profile from DB for symbol: ${symbol}`,
-      e,
-    );
+  const dbData = await getCompanyProfileFromDB(symbol);
+  if (dbData) {
+    return dbData;
   }
 
   const profileData = await fetchCompanyProfile(symbol);
-
-  try {
-    await saveCompanyProfileToDB(profileData);
-  } catch (e) {
-    console.error(
-      `Error saving company profile to DB for symbol: ${symbol}`,
-      e,
-    );
-  }
+  await saveCompanyProfileToDB(profileData);
 
   return profileData;
 };
