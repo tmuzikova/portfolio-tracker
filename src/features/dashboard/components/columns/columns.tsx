@@ -23,8 +23,8 @@ export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
       return (
         <div className="flex items-center space-x-4 text-left">
           <div
-            className="flex items-center justify-center rounded-full bg-primary"
-            style={{ width: '3rem', height: '3rem', flexShrink: 0 }}
+            className="flex items-center justify-center rounded-full bg-gray-600"
+            style={{ width: '4rem', height: '4rem', flexShrink: 0 }}
           >
             <img
               src={holding.holdingIcon}
@@ -38,6 +38,17 @@ export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
           </div>
         </div>
       );
+    },
+    sortingFn: (rowA, rowB) => {
+      const a =
+        rowA.getValue<CurrentPortfolioItemWithPriceData['holding']>(
+          'holding',
+        ).holdingSymbol;
+      const b =
+        rowB.getValue<CurrentPortfolioItemWithPriceData['holding']>(
+          'holding',
+        ).holdingSymbol;
+      return a.localeCompare(b);
     },
   },
   {
@@ -82,6 +93,17 @@ export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
         </div>
       );
     },
+    sortingFn: (rowA, rowB) => {
+      const a =
+        rowA.getValue<CurrentPortfolioItemWithPriceData['purchaseValue']>(
+          'purchaseValue',
+        ).total;
+      const b =
+        rowB.getValue<CurrentPortfolioItemWithPriceData['purchaseValue']>(
+          'purchaseValue',
+        ).total;
+      return a - b;
+    },
   },
   {
     accessorKey: 'currentValue',
@@ -106,6 +128,17 @@ export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
           <div>{`${formatNumber(Math.round(currentValue.pricePerShare))} CZK/akcie`}</div>
         </div>
       );
+    },
+    sortingFn: (rowA, rowB) => {
+      const a =
+        rowA.getValue<CurrentPortfolioItemWithPriceData['currentValue']>(
+          'currentValue',
+        ).total;
+      const b =
+        rowB.getValue<CurrentPortfolioItemWithPriceData['currentValue']>(
+          'currentValue',
+        ).total;
+      return a - b;
     },
   },
   {
@@ -133,6 +166,17 @@ export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
         </div>
       );
     },
+    sortingFn: (rowA, rowB) => {
+      const a =
+        rowA.getValue<CurrentPortfolioItemWithPriceData['profit']>(
+          'profit',
+        ).absolute;
+      const b =
+        rowB.getValue<CurrentPortfolioItemWithPriceData['profit']>(
+          'profit',
+        ).absolute;
+      return a - b;
+    },
   },
   {
     accessorKey: 'portfolioShare',
@@ -150,6 +194,11 @@ export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
       const portfolioShare = parseFloat(row.getValue('portfolioShare'));
       const formatted = `${portfolioShare.toFixed(2)} %`;
       return <div className="text-center font-medium">{formatted}</div>;
+    },
+    sortingFn: (rowA, rowB) => {
+      const a = parseFloat(rowA.getValue('portfolioShare'));
+      const b = parseFloat(rowB.getValue('portfolioShare'));
+      return a - b;
     },
   },
 ];
