@@ -23,8 +23,8 @@ export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
       return (
         <div className="flex items-center space-x-4 text-left">
           <div
-            className="flex items-center justify-center rounded-full bg-primary"
-            style={{ width: '3rem', height: '3rem', flexShrink: 0 }}
+            className="flex items-center justify-center rounded-full bg-gray-600"
+            style={{ width: '4rem', height: '4rem', flexShrink: 0 }}
           >
             <img
               src={holding.holdingIcon}
