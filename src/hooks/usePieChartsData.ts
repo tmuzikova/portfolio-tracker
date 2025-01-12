@@ -3,7 +3,8 @@ import { getSavedTransactions } from '@/utils/getSavedTransactions';
 import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';
 import { useHistoricalStockPrices } from './useHistoricalStockPrices';
 import { calculateTotalPortfolioValue } from '@/utils/portfolioCalculations/calculateTotalPortfolioValue';
-import { PieChartDataType } from '@/types/PieCharts';
+import { PieChartDataType } from '@/types/pieCharts';
+import { sectorsTranslation } from '@/utils/sectorsTranslation';
 
 export const usePieChartsData = () => {
   const existingTransactions = useTransactionStore(
@@ -37,7 +38,7 @@ export const usePieChartsData = () => {
     '#ABDDA4',
     '#66C2A5',
     '#3288BD',
-    '#5E4FA2', //Others
+    '#5E4FA2',
   ];
 
   type Accumulator = Record<string, PieChartDataType>;
@@ -69,6 +70,10 @@ export const usePieChartsData = () => {
     return topItems;
   };
 
+  const translateSector = (sector: string): string => {
+    return sector ? sectorsTranslation[sector] : 'Nezařazeno';
+  };
+
   const groupByHoldings = groupTopTenAndOthers(
     currentPortfolio.reduce<Accumulator>((acc, item) => {
       const portfolioShare = (item.value.total / totalPortfolioValue) * 100;
@@ -93,18 +98,20 @@ export const usePieChartsData = () => {
 
   const groupBySector = groupTopTenAndOthers(
     currentPortfolio.reduce<Accumulator>((acc, item) => {
-      const sector = item.sector || 'Neznámý';
+      const sector = item.sector || '';
+      const translatedSector = translateSector(sector);
       const portfolioShare = (item.value.total / totalPortfolioValue) * 100;
 
       return {
         ...acc,
-        [sector]: acc[sector]
+        [translatedSector]: acc[translatedSector]
           ? {
-              ...acc[sector],
-              portfolioShare: acc[sector].portfolioShare + portfolioShare,
+              ...acc[translatedSector],
+              portfolioShare:
+                acc[translatedSector].portfolioShare + portfolioShare,
             }
           : {
-              groupProperty: sector,
+              groupProperty: translatedSector,
               portfolioShare,
               fill: '',
             },
