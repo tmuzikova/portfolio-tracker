@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { usePieChartsData } from '@/hooks/usePieChartsData';
 import { Loader as LoaderIcon } from 'lucide-react';
-import { PieChartDataType } from '@/types/PieCharts';
+import { PieChartDataType } from '@/types/pieCharts';
 
 const generateChartConfig = (data: PieChartDataType[]) => {
   return data.reduce<ChartConfig>((config, item) => {
