@@ -60,11 +60,14 @@ export const usePieChartsData = () => {
         0,
       );
 
-      topItems.push({
-        groupProperty: 'Ostatní',
-        portfolioShare: othersTotal,
-        fill: COLORS[10],
-      });
+      return [
+        ...topItems,
+        {
+          groupProperty: 'Ostatní',
+          portfolioShare: othersTotal,
+          fill: COLORS[10],
+        },
+      ];
     }
 
     return topItems;
