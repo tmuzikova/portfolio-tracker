@@ -21,3 +21,8 @@ export type HistoricalDividendData = z.infer<
 export type HistoricalDividendEntry = z.infer<
   typeof historicalDividendEntrySchema
 >;
+
+export type HistoricalDividendDataWithLastUpdated = HistoricalDividendData & {
+  lastUpdated: string;
+  hasDividends: boolean;
+};
