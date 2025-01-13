@@ -1,5 +1,6 @@
 import {
   HistoricalDividendData,
+  HistoricalDividendDataWithLastUpdated,
   HistoricalDividendEntry,
 } from '@/types/historicalDividends';
 import { openDB } from 'idb';
@@ -7,7 +8,9 @@ import { openDB } from 'idb';
 const DB_NAME = 'HistoricalDividendsDB';
 const STORE_NAME = 'dividendsData';
 
-export const getDataFromDB = async (symbol: string) => {
+export const getDataFromDB = async (
+  symbol: string,
+): Promise<HistoricalDividendDataWithLastUpdated | null> => {
   const db = await openDB(DB_NAME, 1, {
     upgrade(db) {
       if (!db.objectStoreNames.contains(STORE_NAME)) {
@@ -22,33 +25,15 @@ export const saveDataToDB = async (
   symbol: string,
   data: HistoricalDividendData,
 ) => {
+  const hasDividends = data.historical.length > 0;
+
   const db = await openDB(DB_NAME, 1);
-
-  const existingData = await db.get(STORE_NAME, symbol);
-
-  if (existingData) {
-    const mergedHistorical = [
-      ...data.historical,
-      ...(existingData.historical || []),
-    ]
-      .filter(
-        (entry, index, self) =>
-          index === self.findIndex((t) => t.date === entry.date),
-      )
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-    await db.put(STORE_NAME, {
-      symbol,
-      historical: mergedHistorical,
-      lastUpdated: new Date().toISOString(),
-    });
-  } else {
-    await db.put(STORE_NAME, {
-      symbol,
-      historical: data.historical,
-      lastUpdated: new Date().toISOString(),
-    });
-  }
+  await db.put(STORE_NAME, {
+    symbol,
+    historical: data.historical,
+    lastUpdated: new Date().toISOString(),
+    hasDividends,
+  });
 };
 
 export const getLatestDateFromData = (
