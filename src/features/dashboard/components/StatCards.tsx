@@ -37,7 +37,7 @@ export const StatCards = () => {
     },
     dividends: {
       value: formatNumber(statData.dividends),
-      tooltip: 'Dividendy počítány dle složení aktuálního portfolia.',
+      tooltip: 'Celková suma vyplacených dividend za dobu existence portfolia.',
       title: 'Dividendy',
     },
     fees: {
@@ -87,11 +87,6 @@ export const StatCards = () => {
               Dividendový výnos vzhledem k nákladům
             </div>
             <div>{calculatedValues.dividendYieldOnCost} %</div>
-            <div className="text-[14px] font-normal text-muted-foreground">
-              Predikce na tento rok
-            </div>
-
-            <div>{statData.dividends} CZK</div>
           </StatCard>
 
           <StatCard data={cardData.fees}>

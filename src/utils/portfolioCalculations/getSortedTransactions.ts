@@ -23,3 +23,11 @@ export const getSortedSaleTransactions = (
         new Date(b.transactionDate).getTime(),
     );
 };
+
+export const getSortedTransactions = (transactions: TransactionTableData[]) => {
+  return transactions.sort(
+    (a, b) =>
+      new Date(a.transactionDate).getTime() -
+      new Date(b.transactionDate).getTime(),
+  );
+};

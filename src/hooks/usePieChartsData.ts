@@ -5,6 +5,9 @@ import { useHistoricalStockPrices } from './useHistoricalStockPrices';
 import { calculateTotalPortfolioValue } from '@/utils/portfolioCalculations/calculateTotalPortfolioValue';
 import { PieChartDataType } from '@/types/pieCharts';
 import { sectorsTranslation } from '@/utils/sectorsTranslation';
+import { CurrentPortfolioItem } from '@/types/currentPortfolio';
+import { HistoricalDividendDataWithLastUpdated } from '@/types/historicalDividends';
+import { useHistoricalDividends } from './useHistoricalDividends';
 
 export const usePieChartsData = () => {
   const existingTransactions = useTransactionStore(
@@ -18,9 +21,15 @@ export const usePieChartsData = () => {
 
   const {
     data: priceData,
-    isLoading,
-    error,
+    isLoading: isPriceDataLoading,
+    error: priceDataError,
   } = useHistoricalStockPrices(currentPortfolio);
+
+  const {
+    data: dividendData,
+    isLoading: isDividendDataLoading,
+    error: dividendDataError,
+  } = useHistoricalDividends();
 
   const totalPortfolioValue = calculateTotalPortfolioValue(
     currentPortfolio,
@@ -147,11 +156,56 @@ export const usePieChartsData = () => {
     }, {}),
   );
 
+  const groupByDividends = (
+    portfolio: CurrentPortfolioItem[],
+    dividendData: HistoricalDividendDataWithLastUpdated[],
+    totalPortfolioValue: number,
+  ): Record<string, PieChartDataType> => {
+    const dividendSymbols = new Set(
+      dividendData
+        .filter((data) => data.hasDividends)
+        .map((data) => data.symbol),
+    );
+
+    return portfolio.reduce<Record<string, PieChartDataType>>((acc, item) => {
+      const portfolioShare = (item.value.total / totalPortfolioValue) * 100;
+      const groupKey = dividendSymbols.has(item.holding.holdingSymbol)
+        ? 'Vyplácí dividendy'
+        : 'Nevyplácí dividendy';
+
+      return {
+        ...acc,
+        [groupKey]: acc[groupKey]
+          ? {
+              ...acc[groupKey],
+              portfolioShare: acc[groupKey].portfolioShare + portfolioShare,
+            }
+          : {
+              groupProperty: groupKey,
+              portfolioShare,
+              fill: '',
+            },
+      };
+    }, {});
+  };
+
+  const groupedDividendData = dividendData
+    ? groupByDividends(currentPortfolio, dividendData, totalPortfolioValue)
+    : {};
+
+  const dividendDataForChart = Object.values(groupedDividendData).map(
+    (item, index) => ({
+      ...item,
+      fill: COLORS[index],
+    }),
+  );
+
   return {
     holdingData: groupByHoldings,
     sectorData: groupBySector,
     typeData: groupByType,
-    isLoading,
-    error,
+    dividendData: dividendDataForChart,
+    isLoading: isPriceDataLoading || isDividendDataLoading,
+    error: priceDataError || dividendDataError,
   };
 };

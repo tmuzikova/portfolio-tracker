@@ -6,6 +6,8 @@ import { calculateUnrealizedProfit } from '@/utils/portfolioCalculations/calcula
 import { calculateRealizedProfit } from '@/utils/portfolioCalculations/calculateRealizedProfit';
 import { calculateInvestedAmount } from '@/utils/portfolioCalculations/calculateInvestedAmount';
 import { calculateTotalFees } from '@/utils/portfolioCalculations/calculateFees';
+import { useDividendCalculator } from './useDividendCalculator';
+import { FX_RATE } from '@/utils/portfolioCalculations/const/FX_RATE';
 
 export const useStatCardData = () => {
   const savedTransactions = getSavedTransactions();
@@ -19,6 +21,9 @@ export const useStatCardData = () => {
   });
   const { data: historicalPrices, isLoading } =
     useHistoricalStockPrices(currentPortfolio);
+
+  const { totalPortfolioDividends } = useDividendCalculator();
+  const dividends = totalPortfolioDividends * FX_RATE;
 
   const statData = {
     unrealizedProfit: isLoading
@@ -35,7 +40,7 @@ export const useStatCardData = () => {
       existingTransactions,
       savedTransactions,
     }),
-    dividends: 150000,
+    dividends: dividends,
     fees: calculateTotalFees({ existingTransactions, savedTransactions }),
   };
 
