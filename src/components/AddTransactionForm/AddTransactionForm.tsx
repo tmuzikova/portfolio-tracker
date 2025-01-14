@@ -15,6 +15,8 @@ import { SymbolSelectFormField } from './SymbolFormField';
 import { useTransactionStore } from '@/stores/TransactionStore';
 import { transactionTableDataSchema } from './transactionTableDataSchema';
 import { showErrorToast, showSuccessToast } from '@/utils/showToast';
+import { useState } from 'react';
+import { useCompanyProfile } from '@/hooks/useCompanyProfile';
 
 export type AddTransactionFormFields = z.infer<typeof formFieldsSchema>;
 export type TransactionTableData = z.infer<typeof transactionTableDataSchema>;
@@ -33,6 +35,7 @@ export const AddTransactionForm = ({
   const { data: symbolList, isLoading } = useSymbolList();
   const addTransaction = useTransactionStore((state) => state.addTransaction);
   const editTransaction = useTransactionStore((state) => state.editTransaction);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const methods = useForm<AddTransactionFormFields>({
     resolver: zodResolver(formFieldsSchema),
@@ -50,15 +53,21 @@ export const AddTransactionForm = ({
       : undefined,
   });
 
-  const onSubmit: SubmitHandler<AddTransactionFormFields> = (
+  const { refetch } = useCompanyProfile(methods.watch('symbol'));
+
+  const onSubmit: SubmitHandler<AddTransactionFormFields> = async (
     data: AddTransactionFormFields,
   ) => {
     try {
+      setIsSubmitting(true);
+
+      const companyProfile = await refetch({ throwOnError: true });
+
       const transactionToSave: TransactionTableData = {
         id: transactionToEdit?.id ?? crypto.randomUUID(),
         transactionType: data.transactionType,
         holding: {
-          holdingIcon: '',
+          holdingIcon: companyProfile.data?.image || null,
           holdingSymbol: data.symbol,
           holdingName: data.name,
         },
@@ -104,6 +113,8 @@ export const AddTransactionForm = ({
           </Button>
         ),
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -140,7 +151,13 @@ export const AddTransactionForm = ({
 
         <FeeFormField methods={methods} />
 
-        <Button type="submit">Uložit</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <LoaderIcon className="h-4 w-4 animate-spin" />
+          ) : (
+            'Uložit'
+          )}
+        </Button>
       </form>
     </FormProvider>
   );

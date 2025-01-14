@@ -1,6 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { TableColumnHeader } from '@/components/TableColumnHeader';
+import { TableColumnHeader } from '@/components/DataTables/TableColumnHeader';
 import { StockTableData } from './types';
+import { HoldingCell } from '@/components/DataTables/HoldingCell';
 
 export const columns: ColumnDef<StockTableData>[] = [
   {
@@ -18,19 +19,7 @@ export const columns: ColumnDef<StockTableData>[] = [
     ),
     cell: ({ row }) => {
       const holding = row.getValue<StockTableData['holding']>('holding');
-      return (
-        <div className="flex items-center space-x-3 text-left">
-          <img
-            src={holding.holdingIcon}
-            alt={holding.holdingSymbol}
-            className="h-8 w-8 rounded-full"
-          />
-          <div>
-            <div className="font-medium">{holding.holdingSymbol}</div>
-            <div>{holding.holdingName}</div>
-          </div>
-        </div>
-      );
+      return <HoldingCell holding={holding} />;
     },
   },
   {
