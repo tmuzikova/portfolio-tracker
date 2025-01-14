@@ -18,7 +18,7 @@ import {
 
 import { useState } from 'react';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import { TablePagination } from '@/components/TablePagination';
+import { TablePagination } from '@/components/DataTables/TablePagination';
 
 export type ColumnSort = { id: string; desc: boolean };
 

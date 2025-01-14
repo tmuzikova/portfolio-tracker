@@ -1,11 +1,12 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { TableColumnHeader } from '@/components/TableColumnHeader';
+import { TableColumnHeader } from '@/components/DataTables/TableColumnHeader';
 import { TransactionTableData } from '@/components/AddTransactionForm/AddTransactionForm';
 import { Button } from '@/components/ui/button';
 import { Edit as EditIcon } from 'lucide-react';
 import { AddTransactionModal } from '@/components/AddTransactionModal';
 import { DeleteButton } from './DeleteButton';
 import { formatNumber } from '@/utils/formatNumber';
+import { HoldingCell } from '@/components/DataTables/HoldingCell';
 
 export const columns: ColumnDef<TransactionTableData>[] = [
   {
@@ -53,24 +54,7 @@ export const columns: ColumnDef<TransactionTableData>[] = [
     cell: ({ row }) => {
       const holding = row.getValue<TransactionTableData['holding']>('holding');
 
-      return (
-        <div className="flex items-center space-x-4 text-left">
-          <div
-            className="flex items-center justify-center rounded-full bg-gray-600"
-            style={{ width: '4rem', height: '4rem', flexShrink: 0 }}
-          >
-            <img
-              src={holding.holdingIcon}
-              alt={holding.holdingSymbol}
-              className="h-8 w-8 object-cover"
-            />
-          </div>
-          <div>
-            <div className="font-medium">{holding.holdingSymbol}</div>
-            <div>{holding.holdingName}</div>
-          </div>
-        </div>
-      );
+      return <HoldingCell holding={holding} />;
     },
     sortingFn: (rowA, rowB) => {
       const a =
