@@ -62,7 +62,7 @@ const fetchAndSaveData = async (
 
 const fetchPortfolioDividends = async (
   symbols: string[],
-): Promise<HistoricalDividendData[]> => {
+): Promise<HistoricalDividendDataWithLastUpdated[]> => {
   if (!symbols.length) return [];
 
   return Promise.all(
@@ -84,7 +84,9 @@ export const useHistoricalDividends = () => {
     savedTransactions,
   });
 
-  const { data, isLoading, error } = useQuery<HistoricalDividendData[]>({
+  const { data, isLoading, error } = useQuery<
+    HistoricalDividendDataWithLastUpdated[]
+  >({
     queryKey: ['historicalDividends', symbols],
     queryFn: () => fetchPortfolioDividends(symbols),
     staleTime: 1000 * 60 * 60 * 24 * 7, // 7 days

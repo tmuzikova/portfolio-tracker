@@ -5,7 +5,7 @@ export const historicalDividendEntrySchema = z.object({
   label: z.string(),
   adjDividend: z.number(),
   dividend: z.number(),
-  recordDate: z.string().optional(),
+  recordDate: z.string(),
   paymentDate: z.string().optional(),
   declarationDate: z.string().optional(),
 });
