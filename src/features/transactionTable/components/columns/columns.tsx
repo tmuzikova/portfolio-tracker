@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Edit as EditIcon } from 'lucide-react';
 import { AddTransactionModal } from '@/components/AddTransactionModal';
 import { DeleteButton } from './DeleteButton';
+import { formatNumber } from '@/utils/formatNumber';
 import { HoldingCell } from '@/components/DataTables/HoldingCell';
 
 export const columns: ColumnDef<TransactionTableData>[] = [
@@ -25,6 +26,17 @@ export const columns: ColumnDef<TransactionTableData>[] = [
         {row.getValue('transactionType')}
       </div>
     ),
+    sortingFn: (rowA, rowB) => {
+      const a =
+        rowA.getValue<TransactionTableData['transactionType']>(
+          'transactionType',
+        );
+      const b =
+        rowB.getValue<TransactionTableData['transactionType']>(
+          'transactionType',
+        );
+      return a.localeCompare(b);
+    },
   },
   {
     accessorKey: 'holding',
@@ -44,6 +56,13 @@ export const columns: ColumnDef<TransactionTableData>[] = [
 
       return <HoldingCell holding={holding} />;
     },
+    sortingFn: (rowA, rowB) => {
+      const a =
+        rowA.getValue<TransactionTableData['holding']>('holding').holdingSymbol;
+      const b =
+        rowB.getValue<TransactionTableData['holding']>('holding').holdingSymbol;
+      return a.localeCompare(b);
+    },
   },
   {
     accessorKey: 'transactionDate',
@@ -57,11 +76,18 @@ export const columns: ColumnDef<TransactionTableData>[] = [
         Datum
       </TableColumnHeader>
     ),
-    cell: ({ row }) => (
-      <div className="text-center font-medium">
-        {row.getValue('transactionDate')}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const transactionDate = row.getValue<string>('transactionDate');
+      const formattedDate = new Intl.DateTimeFormat('en-GB').format(
+        new Date(transactionDate),
+      );
+      return <div className="text-center font-medium">{formattedDate}</div>;
+    },
+    sortingFn: (rowA, rowB) => {
+      const a = new Date(rowA.getValue('transactionDate')).getTime();
+      const b = new Date(rowB.getValue('transactionDate')).getTime();
+      return a - b;
+    },
   },
   {
     accessorKey: 'numberOfStocks',
@@ -77,14 +103,24 @@ export const columns: ColumnDef<TransactionTableData>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-center font-medium">
-        {row.getValue('numberOfStocks')}
+        {formatNumber(row.getValue('numberOfStocks'))}
       </div>
     ),
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.getValue<number>('numberOfStocks');
+      const b = rowB.getValue<number>('numberOfStocks');
+      return a - b;
+    },
   },
   {
     accessorKey: 'transactionValue',
-    header: () => (
-      <TableColumnHeader className="text-center">
+    header: ({ column }) => (
+      <TableColumnHeader
+        className="text-center"
+        toggleColumnSorting={() =>
+          column.toggleSorting(column.getIsSorted() === 'asc')
+        }
+      >
         Hodnota transakce
       </TableColumnHeader>
     ),
@@ -96,17 +132,36 @@ export const columns: ColumnDef<TransactionTableData>[] = [
       return (
         <div className="flex flex-col items-center">
           <div className="font-medium">
-            {Math.round(transactionValue.total)} {transactionValue.currency}
+            {formatNumber(Math.round(transactionValue.total))}{' '}
+            {transactionValue.currency}
           </div>
-          <div>{`${Math.round(transactionValue.perShare)} ${transactionValue.currency}/akcie`}</div>
+          <div>{`${formatNumber(Math.round(transactionValue.perShare))} ${transactionValue.currency}/akcie`}</div>
         </div>
       );
+    },
+    sortingFn: (rowA, rowB) => {
+      const a =
+        rowA.getValue<TransactionTableData['transactionValue']>(
+          'transactionValue',
+        ).total;
+      const b =
+        rowB.getValue<TransactionTableData['transactionValue']>(
+          'transactionValue',
+        ).total;
+      return a - b;
     },
   },
   {
     accessorKey: 'transactionFee',
-    header: () => (
-      <TableColumnHeader className="text-center">Poplatek</TableColumnHeader>
+    header: ({ column }) => (
+      <TableColumnHeader
+        className="text-center"
+        toggleColumnSorting={() =>
+          column.toggleSorting(column.getIsSorted() === 'asc')
+        }
+      >
+        Poplatek
+      </TableColumnHeader>
     ),
     cell: ({ row }) => {
       const transactionFee =
@@ -117,8 +172,16 @@ export const columns: ColumnDef<TransactionTableData>[] = [
         </div>
       );
     },
+    sortingFn: (rowA, rowB) => {
+      const aFee =
+        rowA.getValue<TransactionTableData['transactionFee']>('transactionFee')
+          ?.total || 0;
+      const bFee =
+        rowB.getValue<TransactionTableData['transactionFee']>('transactionFee')
+          ?.total || 0;
+      return aFee - bFee;
+    },
   },
-
   {
     accessorKey: 'actions',
     header: () => (

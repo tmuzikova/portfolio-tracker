@@ -6,12 +6,12 @@ import {
   getLatestDateFromData,
   addOneDay,
 } from '@/lib/stockPricesIDB';
-import { CurrentPortfolioItem } from '@/types/calculations';
 import { getPreviousTradingDay } from '@/utils/portfolioCalculations/getPreviousTradingDay';
 import {
   HistoricalPriceData,
   HistoricalPriceDataSchema,
 } from '@/types/historicalPrices';
+import { CurrentPortfolioItem } from '@/types/currentPortfolio';
 
 const fetchPriceDataForSymbol = async (
   symbol: string,

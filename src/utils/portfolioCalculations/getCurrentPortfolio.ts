@@ -1,12 +1,10 @@
+import { CurrentPortfolioTransaction } from '@/types/currentPortfolio';
 import { formatCurrentPortfolio } from './formatCurrentPortfolio';
 import {
   getSortedPurchaseTransactions,
   getSortedSaleTransactions,
 } from './getSortedTransactions';
-import {
-  calculationParams,
-  CurrentPortfolioTransaction,
-} from '@/types/calculations';
+import { calculationParams } from '@/types/calculations';
 
 export const getCurrentPortfolio = ({
   existingTransactions,

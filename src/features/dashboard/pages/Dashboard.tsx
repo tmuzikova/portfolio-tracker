@@ -2,15 +2,11 @@ import { AddTransactionModal } from '@/components/AddTransactionModal';
 import { StatCards } from '../components/StatCards';
 import { PortfolioHistoryChart } from '../components/PortfolioHistoryChart';
 import { DiversificationCharts } from '../components/DiversificationCharts';
-import { columns } from '../components/columns/columns';
-import { ColumnSort, DataTable } from '@/components/DataTables/DataTable';
 import { Button } from '@/components/ui/button';
 import { Plus as PlusIcon } from 'lucide-react';
-import { stockTableData } from '../mockData/stockTableData';
+import { PortfolioPerformanceTable } from '../components/PortfolioPerformanceTable';
 
 export const Dashboard = () => {
-  const defaultSorting: ColumnSort = { id: 'portfolioShare', desc: true };
-
   return (
     <section className="container mx-auto px-4 pb-12">
       <div className="flex flex-row justify-between py-6">
@@ -38,12 +34,7 @@ export const Dashboard = () => {
         </section>
 
         <section className="w-full">
-          <DataTable
-            data={stockTableData}
-            columns={columns}
-            headerTitle="Výkon jednotlivých aktiv"
-            defaultSorting={defaultSorting}
-          />
+          <PortfolioPerformanceTable />
         </section>
       </div>
     </section>
