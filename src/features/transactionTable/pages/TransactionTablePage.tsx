@@ -1,5 +1,5 @@
 import { AddTransactionModal } from '@/components/AddTransactionModal';
-import { ColumnSort, DataTable } from '@/components/DataTable';
+import { ColumnSort, DataTable } from '@/components/DataTables/DataTable';
 import { Plus as PlusIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { columns } from '../components/columns/columns';
