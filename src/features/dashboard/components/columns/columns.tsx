@@ -2,6 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { TableColumnHeader } from '@/components/TableColumnHeader';
 import { CurrentPortfolioItemWithPriceData } from '@/types/currentPortfolio';
 import { formatNumber } from '@/utils/formatNumber';
+import { Link } from 'react-router-dom';
 
 export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
   {
@@ -26,15 +27,25 @@ export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
             className="flex items-center justify-center rounded-full bg-gray-600"
             style={{ width: '4rem', height: '4rem', flexShrink: 0 }}
           >
-            <img
-              src={holding.holdingIcon}
-              alt={holding.holdingSymbol}
-              className="h-8 w-8 object-cover"
-            />
+            <Link to={`/detail/${holding.holdingSymbol}`}>
+              <img
+                src={holding.holdingIcon}
+                alt={holding.holdingSymbol}
+                className="h-8 w-8 object-cover"
+              />
+            </Link>
           </div>
           <div>
-            <div className="font-medium">{holding.holdingSymbol}</div>
-            <div>{holding.holdingName}</div>
+            <div className="font-medium hover:underline">
+              <Link to={`/detail/${holding.holdingSymbol}`}>
+                {holding.holdingSymbol}
+              </Link>
+            </div>
+            <div className="hover:underline">
+              <Link to={`/detail/${holding.holdingSymbol}`}>
+                {holding.holdingName}
+              </Link>
+            </div>
           </div>
         </div>
       );
