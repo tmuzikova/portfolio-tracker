@@ -4,7 +4,7 @@ import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPor
 import { useHistoricalStockPrices } from './useHistoricalStockPrices';
 import { calculateTotalPortfolioValue } from '@/utils/portfolioCalculations/calculateTotalPortfolioValue';
 import { PieChartDataType } from '@/types/pieCharts';
-import { sectorsTranslation } from '@/utils/sectorsTranslation';
+import { sectorsTranslation } from '@/utils/sectorsIndustryTranslation';
 import { CurrentPortfolioItem } from '@/types/currentPortfolio';
 import { HistoricalDividendDataWithLastUpdated } from '@/types/historicalDividends';
 import { useHistoricalDividends } from './useHistoricalDividends';
@@ -82,10 +82,6 @@ export const usePieChartsData = () => {
     return topItems;
   };
 
-  const translateSector = (sector: string): string => {
-    return sector ? sectorsTranslation[sector] : 'Nezařazeno';
-  };
-
   const groupByHoldings = groupTopTenAndOthers(
     currentPortfolio.reduce<Accumulator>((acc, item) => {
       const portfolioShare = (item.value.total / totalPortfolioValue) * 100;
@@ -111,7 +107,7 @@ export const usePieChartsData = () => {
   const groupBySector = groupTopTenAndOthers(
     currentPortfolio.reduce<Accumulator>((acc, item) => {
       const sector = item.sector || '';
-      const translatedSector = translateSector(sector);
+      const translatedSector = sectorsTranslation[sector] || 'Nezařazeno';
       const portfolioShare = (item.value.total / totalPortfolioValue) * 100;
 
       return {

@@ -1,17 +1,31 @@
 import { CompanyProfile } from '@/components/AddTransactionForm/companyProfileSchema';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import {
+  industriesTranslation,
+  sectorsTranslation,
+} from '@/utils/sectorsIndustryTranslation';
 
 type StockInfoProps = {
   companyProfile: CompanyProfile;
 };
 
 export const StockInfo = ({ companyProfile }: StockInfoProps) => {
+  const translatedSector =
+    companyProfile.sector && sectorsTranslation[companyProfile.sector]
+      ? sectorsTranslation[companyProfile.sector]
+      : 'Nezařazeno';
+
+  const translatedIndustry =
+    companyProfile.industry && industriesTranslation[companyProfile.industry]
+      ? industriesTranslation[companyProfile.industry]
+      : 'Nezařazeno';
+
   const companyInfo = [
     { label: 'Ticker symbol', value: companyProfile.symbol },
     { label: 'ISIN', value: companyProfile.isin },
-    { label: 'Sektor', value: companyProfile.sector },
-    { label: 'Průmyslové odvětví', value: companyProfile.industry },
+    { label: 'Sektor', value: translatedSector },
+    { label: 'Průmyslové odvětví', value: translatedIndustry },
   ];
 
   return (
