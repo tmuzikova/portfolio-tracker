@@ -1,40 +1,45 @@
-import { useSingleStockHistoricalPrices } from './useSingleStockHistoricalPrices';
+import { getLatestPriceForSymbol } from '@/utils/portfolioCalculations/getLatestPriceForSymbol';
+import { HistoricalPriceData } from '@/types/historicalPrices';
 
-export const useStockCardData = (symbol: string) => {
-  const { latestPrice, symbolHistoricalStockPrices, isLoading, error } =
-    useSingleStockHistoricalPrices(symbol);
+const getTradingMonthPriceDifference = (
+  stockPrices: HistoricalPriceData,
+  latestPrice: number,
+) => {
+  const tradingDaysInMonth = 21; //assuming approx. 21 trading days in a month
 
-  const getThirtyDayPriceDifference = () => {
-    const isDataMissing =
-      !symbolHistoricalStockPrices?.historical ||
-      symbolHistoricalStockPrices.historical.length < 30;
-    if (isDataMissing) {
-      return null;
-    }
+  const isDataMissing = stockPrices.historical.length < tradingDaysInMonth;
+  if (isDataMissing) {
+    return null;
+  }
 
-    const thirtyDaysAgoPrice = symbolHistoricalStockPrices.historical[30].close;
+  const monthAgoPrice = stockPrices.historical[tradingDaysInMonth].close;
 
-    const absoluteDifference = latestPrice - thirtyDaysAgoPrice;
-    const percentageDifference =
-      (absoluteDifference / thirtyDaysAgoPrice) * 100;
-
-    return {
-      absoluteDifference,
-      percentageDifference,
-    };
-  };
-
-  const thirtyDayPriceDifference = getThirtyDayPriceDifference();
-  const absoluteDifference = thirtyDayPriceDifference?.absoluteDifference || 0;
-  const percentageDifference =
-    thirtyDayPriceDifference?.percentageDifference || 0;
+  const absoluteDifference = latestPrice - monthAgoPrice;
+  const percentageDifference = (absoluteDifference / monthAgoPrice) * 100;
 
   return {
     absoluteDifference,
     percentageDifference,
+  };
+};
+
+export const useStockCardData = (
+  symbol: string,
+  stockPrices: HistoricalPriceData,
+) => {
+  const latestPrice = getLatestPriceForSymbol(symbol, stockPrices);
+  const tradingMonthPriceDifferences = getTradingMonthPriceDifference(
+    stockPrices,
     latestPrice,
-    symbolHistoricalStockPrices,
-    isLoading,
-    error,
+  );
+  const absoluteDifference =
+    tradingMonthPriceDifferences?.absoluteDifference || null;
+  const percentageDifference =
+    tradingMonthPriceDifferences?.percentageDifference || null;
+
+  return {
+    latestPrice,
+    absoluteDifference,
+    percentageDifference,
   };
 };

@@ -5,7 +5,6 @@ import {
   fetchAndSaveMissingData,
   getDateRange,
 } from './useHistoricalStockPrices';
-import { getLatestPriceForSymbol } from '@/utils/portfolioCalculations/getLatestPriceForSymbol';
 
 const fetchSingleSymbolHistoricalPrices = async (
   symbol: string,
@@ -38,7 +37,5 @@ export const useSingleStockHistoricalPrices = (symbol: string) => {
     enabled: !!symbol,
   });
 
-  const latestPrice = getLatestPriceForSymbol(symbol, data);
-
-  return { latestPrice, symbolHistoricalStockPrices: data, isLoading, error };
+  return { symbolHistoricalStockPrices: data, isLoading, error };
 };
