@@ -7,31 +7,105 @@ import {
 } from '@/components/ui/chart';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { chartData } from '../mockData/stockPrices';
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
-import { Separator } from '@radix-ui/react-separator';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { HistoricalPriceData } from '@/types/historicalPrices';
+import { useStockPriceChartData } from '@/hooks/useStockPriceChartData';
 
 const chartConfig = {
-  portfolio_value: {
-    label: 'Portfolio value',
-    color: 'hsl(var(--chart-3))',
+  stock_price: {
+    label: 'Cena aktiva',
+    color: 'hsl(var(--chart-1))',
   },
 } satisfies ChartConfig;
 
-type TimeRange = '5Y' | '12M' | 'YTD' | '30D' | '7D';
-const timeRanges: TimeRange[] = ['5Y', '12M', 'YTD', '30D', '7D'];
+type TimeRange = '5R' | '1R' | 'YTD' | '1M' | '7D';
+const timeRanges: TimeRange[] = ['5R', '1R', 'YTD', '1M', '7D'];
 
-export const StockPriceDevelopmentChart = () => {
-  const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>('30D');
+export const StockPriceDevelopmentChart = ({
+  stockPrices,
+}: {
+  stockPrices: HistoricalPriceData;
+}) => {
+  const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>('1M');
+  const { lastWeek, lastMonth, lastYear, ytd, fiveYears } =
+    useStockPriceChartData(stockPrices);
+  const chartData =
+    selectedTimeRange === '5R'
+      ? fiveYears
+      : selectedTimeRange === '1R'
+        ? lastYear
+        : selectedTimeRange === 'YTD'
+          ? ytd
+          : selectedTimeRange === '1M'
+            ? lastMonth
+            : lastWeek;
 
-  const handleTimeRangeChange = (range: TimeRange) => {
-    setSelectedTimeRange(range);
+  const formatXAxisTick = (dateStr: string, index: number) => {
+    const date = new Date(dateStr);
+
+    if (index === 0) {
+      return '';
+    }
+
+    switch (selectedTimeRange) {
+      case '5R':
+        return date.getFullYear().toString();
+      case '1R':
+      case 'YTD':
+        return (
+          date
+            .toLocaleDateString('cs-CZ', { month: 'short' })
+            .replace('.', '')
+            .charAt(0)
+            .toUpperCase() +
+          date
+            .toLocaleDateString('cs-CZ', { month: 'short' })
+            .replace('.', '')
+            .slice(1)
+        );
+      default:
+        return `${date.getDate()}.${date.getMonth() + 1}.`;
+    }
+  };
+
+  const getXAxisProps = () => {
+    switch (selectedTimeRange) {
+      case '5R':
+        return {
+          interval: Math.floor(chartData.length / 5),
+          minTickGap: 50,
+        };
+      case '1R':
+        return {
+          interval: Math.floor(chartData.length / 12),
+          minTickGap: 40,
+        };
+      case 'YTD':
+        return {
+          interval: Math.floor(chartData.length / 2),
+          minTickGap: 30,
+        };
+      case '1M':
+        return {
+          interval: Math.floor(chartData.length / 6),
+          minTickGap: 30,
+        };
+      case '7D':
+        return {
+          interval: Math.floor(chartData.length / 6),
+          minTickGap: 20,
+        };
+      default:
+        return {
+          interval: 0,
+          minTickGap: 30,
+        };
+    }
   };
 
   return (
     <Card>
       <CardHeader className="flex flex-col items-center p-0 md:flex-row md:justify-between">
-        <Separator orientation="horizontal" className="w-full md:hidden" />
         <div className="px-6 py-6">
           <CardTitle>Vývoj ceny aktiva</CardTitle>
         </div>
@@ -39,7 +113,7 @@ export const StockPriceDevelopmentChart = () => {
           {timeRanges.map((range) => (
             <Button
               key={range}
-              onClick={() => handleTimeRangeChange(range)}
+              onClick={() => setSelectedTimeRange(range)}
               className={`rounded-md px-4 py-2 text-sm ${
                 selectedTimeRange === range
                   ? 'text-white'
@@ -51,16 +125,16 @@ export const StockPriceDevelopmentChart = () => {
           ))}
         </div>
       </CardHeader>
-      <CardContent className="px-2 sm:p-6">
+      <CardContent className="px-4 sm:py-6">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[350px] w-full"
         >
-          <LineChart
+          <AreaChart
             accessibilityLayer
             data={chartData}
             margin={{
-              left: 12,
+              left: 0,
               right: 12,
               top: 20,
             }}
@@ -71,45 +145,40 @@ export const StockPriceDevelopmentChart = () => {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                });
-              }}
+              tickFormatter={(value, index) => formatXAxisTick(value, index)}
+              {...getXAxisProps()}
             />
             <YAxis
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               domain={['auto', 'auto']}
-              tickFormatter={(value) => `${value} CZK`}
+              width={70}
+              tickFormatter={(value) => `${value} USD`}
             />
             <ChartTooltip
               content={
                 <ChartTooltipContent
                   className="w-[200px]"
-                  nameKey="portfolio value"
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString('en-US', {
-                      month: 'short',
+                    const date = new Date(value);
+                    return date.toLocaleDateString('cs-CZ', {
                       day: 'numeric',
+                      month: 'long',
                       year: 'numeric',
                     });
                   }}
                 />
               }
             />
-            <Line
-              dataKey="portfolio_value"
+            <Area
+              dataKey="stock_price"
               type="monotone"
-              stroke={chartConfig.portfolio_value.color}
-              strokeWidth={2}
-              dot={false}
+              fill={chartConfig.stock_price.color}
+              fillOpacity={0.4}
+              stroke={chartConfig.stock_price.color}
             />
-          </LineChart>
+          </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>

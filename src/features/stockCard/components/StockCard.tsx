@@ -26,7 +26,7 @@ export const StockCard = ({
       </section>
 
       <section>
-        <StockPriceDevelopmentChart />
+        <StockPriceDevelopmentChart stockPrices={stockPrices} />
       </section>
 
       <section>
