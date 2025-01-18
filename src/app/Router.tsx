@@ -3,7 +3,7 @@ import { Layout } from './Layout/Layout';
 import { Dashboard } from '@/features/dashboard/pages/Dashboard';
 import { TransactionTablePage } from '@/features/transactionTable/pages/TransactionTablePage';
 import { NotFoundPage } from '@/components/NotFoundPage';
-import { StockCard } from '@/features/stockCard/pages/StockCard';
+import { StockCardPage } from '@/features/stockCard/pages/StockCardPage';
 
 const router = createBrowserRouter([
   {
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/detail/:symbol',
-        element: <StockCard />,
+        element: <StockCardPage />,
       },
     ],
     errorElement: <NotFoundPage />,
