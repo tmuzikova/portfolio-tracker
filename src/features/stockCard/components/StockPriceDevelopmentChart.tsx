@@ -5,11 +5,17 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { HistoricalPriceData } from '@/types/historicalPrices';
 import { useStockPriceChartData } from '@/hooks/useStockPriceChartData';
+import { TimeRange } from './StockCard';
+
+type StockPriceDevelopmentChartProps = {
+  stockPrices: HistoricalPriceData;
+  selectedTimeRange: TimeRange;
+  onTimeRangeChange: (range: TimeRange) => void;
+};
 
 const chartConfig = {
   stock_price: {
@@ -18,15 +24,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type TimeRange = '5R' | '1R' | 'YTD' | '1M' | '7D';
 const timeRanges: TimeRange[] = ['5R', '1R', 'YTD', '1M', '7D'];
 
 export const StockPriceDevelopmentChart = ({
   stockPrices,
-}: {
-  stockPrices: HistoricalPriceData;
-}) => {
-  const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>('1M');
+  selectedTimeRange,
+  onTimeRangeChange,
+}: StockPriceDevelopmentChartProps) => {
   const { lastWeek, lastMonth, lastYear, ytd, fiveYears } =
     useStockPriceChartData(stockPrices);
   const chartData =
@@ -113,7 +117,7 @@ export const StockPriceDevelopmentChart = ({
           {timeRanges.map((range) => (
             <Button
               key={range}
-              onClick={() => setSelectedTimeRange(range)}
+              onClick={() => onTimeRangeChange(range)}
               className={`rounded-md px-4 py-2 text-sm ${
                 selectedTimeRange === range
                   ? 'text-white'

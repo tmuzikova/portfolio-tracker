@@ -1,20 +1,23 @@
 import { CompanyProfile } from '@/components/AddTransactionForm/companyProfileSchema';
 import { useStockCardData } from '@/hooks/useStockCardData';
 import { HistoricalPriceData } from '@/types/historicalPrices';
+import { TimeRange } from './StockCard';
 
 type StockHeaderProps = {
   symbol: string;
   stockPrices: HistoricalPriceData;
   companyProfile: CompanyProfile;
+  selectedTimeRange: TimeRange;
 };
 
 export function StockHeader({
   symbol,
   stockPrices,
   companyProfile,
+  selectedTimeRange,
 }: StockHeaderProps) {
   const { latestPrice, absoluteDifference, percentageDifference } =
-    useStockCardData(symbol, stockPrices);
+    useStockCardData(symbol, stockPrices, selectedTimeRange);
 
   const hasCompanyLogo = !!companyProfile.image && companyProfile.image !== '';
 
@@ -74,7 +77,15 @@ export function StockHeader({
               </p>
             </div>
             <p className="text-sm text-gray-500 md:text-base">
-              za posledních 30 dní
+              {selectedTimeRange === '7D'
+                ? 'Za poslední týden'
+                : selectedTimeRange === '1M'
+                  ? 'Za poslední měsíc'
+                  : selectedTimeRange === '1R'
+                    ? 'Za poslední rok'
+                    : selectedTimeRange === 'YTD'
+                      ? 'Od začátku roku'
+                      : 'Za posledních 5 let'}
             </p>
           </div>
         )}
