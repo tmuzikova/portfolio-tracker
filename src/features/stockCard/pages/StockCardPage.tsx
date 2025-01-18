@@ -1,14 +1,15 @@
 import { useParams } from 'react-router-dom';
-import { AlertTriangle, Loader as LoaderIcon } from 'lucide-react';
+import { Loader as LoaderIcon } from 'lucide-react';
 import { StockCard } from '../components/StockCard';
 import { useSingleStockHistoricalPrices } from '@/hooks/useSingleStockHistoricalPrices';
 import { useCompanyProfile } from '@/hooks/useCompanyProfile';
+import { ErrorPage } from '@/components/ErrorPage';
 
 export const StockCardPage = () => {
   const { symbol } = useParams<{ symbol: string }>();
 
   if (!symbol) {
-    return <div>Chyba: chybějící symbol</div>;
+    return <ErrorPage />;
   }
 
   const {
@@ -37,12 +38,7 @@ export const StockCardPage = () => {
     !stockPrices ||
     !companyProfile
   ) {
-    return (
-      <div className="flex h-64 w-full items-center justify-center text-red-500">
-        <AlertTriangle className="mr-2 h-5 w-5" />
-        Chyba při načítání dat
-      </div>
-    );
+    return <ErrorPage />;
   }
 
   return (
