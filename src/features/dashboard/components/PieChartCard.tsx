@@ -2,9 +2,9 @@ import { Pie, PieChart } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { useState } from 'react';
-import { usePieChartsData } from '@/hooks/usePieChartsData';
+import { usePieChartsData } from '@/hooks/usePieChartsData/usePieChartsData';
 import { Loader as LoaderIcon } from 'lucide-react';
-import { PieChartDataType } from '@/types/pieCharts';
+import { PieChartDataType } from '@/hooks/usePieChartsData/types/pieCharts';
 import { DiversificationTypeButtons } from './DiversificationTypeButtons';
 
 const generateChartConfig = (data: PieChartDataType[]) => {
