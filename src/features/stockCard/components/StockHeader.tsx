@@ -25,38 +25,38 @@ export function StockHeader({
     (absoluteDifference ?? 0) < 0 || (percentageDifference ?? 0) < 0;
 
   return (
-    <div className="flex flex-col gap-6 py-6 md:flex-row md:justify-between">
-      <div className="flex flex-row items-center justify-center gap-4 md:gap-5">
+    <div className="flex flex-col items-center gap-6 py-6 md:flex-row md:justify-between">
+      <div className="flex flex-col items-center gap-4 md:flex-row md:gap-5">
         <div
           className="flex items-center justify-center rounded-full bg-gray-400"
-          style={{ width: '6rem', height: '6rem', flexShrink: 0 }}
+          style={{ width: '7rem', height: '7rem', flexShrink: 0 }}
         >
           {hasCompanyLogo ? (
             <img
               src={companyProfile.image ?? undefined}
               alt={companyProfile.companyName}
-              className="h-12 w-12 object-cover md:h-16 md:w-16"
+              className="h-14 w-14 object-cover md:h-16 md:w-16"
             />
           ) : (
             <div className="text-sm text-muted-foreground">Fallback</div>
           )}
         </div>
 
-        <div className="text-left">
+        <div className="text-center md:text-left">
           <h1 className="text-3xl font-semibold lg:text-4xl">{symbol}</h1>
-          <h2 className="text-sm text-muted-foreground md:text-base">
+          <h2 className="text-muted-foreground">
             {companyProfile.companyName} | {companyProfile.exchangeShortName}
           </h2>
         </div>
       </div>
 
-      <div className="flex flex-row items-center justify-center gap-4 md:items-end">
-        <p className="text-3xl font-semibold md:text-3xl lg:text-4xl">
+      <div className="flex flex-row items-center gap-2 md:gap-4">
+        <p className="text-3xl font-semibold lg:text-4xl">
           ${latestPrice.toFixed(2)}
         </p>
 
         {!isHistoricalPriceDataMissing && (
-          <div className="flex flex-col items-center md:items-end">
+          <div className="flex flex-col items-start md:items-end">
             <div
               className={`${
                 isPriceDifferenceNegative ? 'text-red-500' : 'text-green-500'
