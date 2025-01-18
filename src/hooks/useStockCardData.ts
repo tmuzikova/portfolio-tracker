@@ -60,7 +60,7 @@ const calculateYTDPriceDifference = (
       const entryDate = new Date(entry.date);
       return entryDate >= startOfYear && entryDate <= currentDate;
     })
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // Sort by date ascending
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   if (ytdData.length === 0) {
     return null;

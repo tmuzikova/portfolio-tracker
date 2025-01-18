@@ -53,13 +53,13 @@ export function StockHeader({
         </div>
       </div>
 
-      <div className="flex flex-row items-center gap-2 md:gap-4">
+      <div className="flex flex-col items-center gap-3 md:flex-row md:gap-4">
         <p className="text-3xl font-semibold lg:text-4xl">
           ${latestPrice.toFixed(2)}
         </p>
 
         {!isHistoricalPriceDataMissing && (
-          <div className="flex flex-col items-start md:items-end">
+          <div className="flex flex-col items-center md:items-end">
             <div
               className={`${
                 isPriceDifferenceNegative ? 'text-red-500' : 'text-green-500'
