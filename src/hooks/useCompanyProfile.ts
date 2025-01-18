@@ -67,7 +67,7 @@ const companyProfileQueryFn = async (
   return profileData;
 };
 
-export const useCompanyProfile = (symbol: string) => {
+export const useCompanyProfileManual = (symbol: string) => {
   const { data, refetch } = useQuery({
     queryKey: ['companyProfile', symbol],
     queryFn: () => companyProfileQueryFn(symbol),
@@ -77,5 +77,19 @@ export const useCompanyProfile = (symbol: string) => {
   return {
     companyProfile: data,
     refetch,
+  };
+};
+
+export const useCompanyProfile = (symbol: string) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['companyProfile', symbol],
+    queryFn: () => companyProfileQueryFn(symbol),
+    enabled: !!symbol,
+  });
+
+  return {
+    companyProfile: data,
+    isLoading,
+    error,
   };
 };
