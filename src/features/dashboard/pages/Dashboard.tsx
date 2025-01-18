@@ -1,7 +1,7 @@
 import { AddTransactionModal } from '@/components/AddTransactionModal';
 import { StatCards } from '../components/StatCards';
 import { PortfolioHistoryChart } from '../components/PortfolioHistoryChart';
-import { DiversificationCharts } from '../components/DiversificationCharts';
+import { PieChartCard } from '../components/PieChartCard';
 import { Button } from '@/components/ui/button';
 import { Plus as PlusIcon } from 'lucide-react';
 import { PortfolioPerformanceTable } from '../components/PortfolioPerformanceTable';
@@ -30,7 +30,7 @@ export const Dashboard = () => {
         </section>
 
         <section>
-          <DiversificationCharts />
+          <PieChartCard />
         </section>
 
         <section className="w-full">

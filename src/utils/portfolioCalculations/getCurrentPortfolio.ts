@@ -1,4 +1,7 @@
-import { CurrentPortfolioTransaction } from '@/types/currentPortfolio';
+import {
+  CurrentPortfolioItem,
+  CurrentPortfolioTransaction,
+} from '@/types/currentPortfolio';
 import { formatCurrentPortfolio } from './formatCurrentPortfolio';
 import {
   getSortedPurchaseTransactions,
@@ -9,7 +12,7 @@ import { calculationParams } from '@/types/calculations';
 export const getCurrentPortfolio = ({
   existingTransactions,
   savedTransactions,
-}: calculationParams) => {
+}: calculationParams): CurrentPortfolioItem[] => {
   const transactions = [...existingTransactions, ...savedTransactions];
 
   const purchaseTransactions: CurrentPortfolioTransaction[] =

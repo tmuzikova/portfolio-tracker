@@ -7,6 +7,11 @@ export type CurrentPortfolioTransaction = TransactionTableData & {
 export type CurrentPortfolioItem = {
   id: string;
   holding: { holdingIcon: string; holdingSymbol: string; holdingName: string };
+  sector: string;
+  type: {
+    isFund: boolean;
+    isEtf: boolean;
+  };
   totalNumberOfStocks: number;
   value: {
     total: number;
@@ -22,6 +27,11 @@ export type CurrentPortfolioItemWithPriceData = {
     holdingIcon: string;
     holdingSymbol: string;
     holdingName: string;
+  };
+  sector: string;
+  type: {
+    isFund: boolean;
+    isEtf: boolean;
   };
   totalNumberOfStocks: number;
   purchaseValue: {

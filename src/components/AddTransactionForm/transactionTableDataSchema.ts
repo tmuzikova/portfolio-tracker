@@ -23,4 +23,9 @@ export const transactionTableDataSchema = z.object({
       currency: z.string(),
     })
     .optional(),
+  sector: z.string(),
+  type: z.object({
+    isFund: z.boolean(),
+    isEtf: z.boolean(),
+  }),
 });
