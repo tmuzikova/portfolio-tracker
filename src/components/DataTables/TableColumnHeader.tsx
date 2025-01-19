@@ -1,5 +1,5 @@
 import { ArrowUpDown as ArrowUpDownIcon } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { ReactNode } from 'react';
 
 type TableColumnHeaderProps = {

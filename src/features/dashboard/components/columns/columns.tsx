@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { TableColumnHeader } from '@/components/TableColumnHeader';
+import { TableColumnHeader } from '@/components/DataTables/TableColumnHeader';
+import { HoldingCell } from '@/components/DataTables/HoldingCell';
 import { CurrentPortfolioItemWithPriceData } from '@/types/currentPortfolio';
 import { formatNumber } from '@/utils/formatNumber';
 import { Link } from 'react-router-dom';

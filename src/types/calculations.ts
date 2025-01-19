@@ -11,3 +11,23 @@ export type dailyPortfolioCalculationParams = {
   startDate: string;
   endDate: string;
 };
+
+export type CurrentPortfolioTransaction = TransactionTableData & {
+  remainingNumberOfStocksOwned: number;
+};
+
+export type CurrentPortfolioItem = {
+  id: string;
+  holding: {
+    holdingIcon: string | null;
+    holdingSymbol: string;
+    holdingName: string;
+  };
+  totalNumberOfStocks: number;
+  value: {
+    total: number;
+    avgPricePerShare: number;
+    currency: string;
+  };
+  totalFees: number;
+};

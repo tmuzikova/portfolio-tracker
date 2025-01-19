@@ -19,21 +19,35 @@ const initDB = async () => {
 export const saveCompanyProfileToDB = async (
   companyProfile: CompanyProfile,
 ): Promise<void> => {
-  const db = await initDB();
-  const tx = db.transaction(STORE_NAME, 'readwrite');
-  const store = tx.objectStore(STORE_NAME);
+  try {
+    const db = await initDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
 
-  await store.put(companyProfile);
-  await tx.done;
+    await store.put(companyProfile);
+    await tx.done;
+  } catch (error) {
+    console.error(`Error in saveCompanyProfileToDB:`, error);
+    throw error;
+  }
 };
 
 export const getCompanyProfileFromDB = async (
   symbol: string,
-): Promise<CompanyProfile> => {
-  const db = await initDB();
-  const tx = db.transaction(STORE_NAME, 'readonly');
-  const store = tx.objectStore(STORE_NAME);
-  const companyProfile = (await store.get(symbol)) as CompanyProfile;
-  await tx.done;
-  return companyProfile;
+): Promise<CompanyProfile | null> => {
+  try {
+    const db = await initDB();
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const companyProfile = (await store.get(symbol)) as CompanyProfile;
+    await tx.done;
+
+    return companyProfile || null;
+  } catch (error) {
+    console.error(
+      `Error in getCompanyProfileFromDB for symbol: ${symbol}`,
+      error,
+    );
+    throw error;
+  }
 };

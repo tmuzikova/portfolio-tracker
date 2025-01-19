@@ -6,7 +6,7 @@ export const transactionTableDataSchema = z.object({
     required_error: 'Transaction type must be "Nákup" or "Prodej".',
   }),
   holding: z.object({
-    holdingIcon: z.string(),
+    holdingIcon: z.string().nullable(),
     holdingSymbol: z.string(),
     holdingName: z.string(),
   }),
