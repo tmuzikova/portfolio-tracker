@@ -2,6 +2,8 @@ import { CompanyProfile } from '@/components/AddTransactionForm/companyProfileSc
 import { useStockCardData } from '@/hooks/useStockCardData';
 import { HistoricalPriceData } from '@/types/historicalPrices';
 import { TimeRange } from './StockCard';
+import { useState } from 'react';
+import FallbackLogo from '@/assets/fallback_logo.svg?react';
 
 type StockHeaderProps = {
   symbol: string;
@@ -16,10 +18,9 @@ export function StockHeader({
   companyProfile,
   selectedTimeRange,
 }: StockHeaderProps) {
+  const [hasError, setHasError] = useState(false);
   const { latestPrice, absoluteDifference, percentageDifference } =
     useStockCardData(symbol, stockPrices, selectedTimeRange);
-
-  const hasCompanyLogo = !!companyProfile.image && companyProfile.image !== '';
 
   const isHistoricalPriceDataMissing =
     !absoluteDifference || !percentageDifference;
@@ -34,14 +35,15 @@ export function StockHeader({
           className="flex items-center justify-center rounded-full bg-gray-400"
           style={{ width: '7rem', height: '7rem', flexShrink: 0 }}
         >
-          {hasCompanyLogo ? (
+          {companyProfile.image && !hasError ? (
             <img
-              src={companyProfile.image ?? undefined}
+              src={companyProfile.image}
               alt={companyProfile.companyName}
               className="h-14 w-14 object-cover md:h-16 md:w-16"
+              onError={() => setHasError(true)}
             />
           ) : (
-            <div className="text-sm text-muted-foreground">Fallback</div>
+            <FallbackLogo className="h-14 w-14" />
           )}
         </div>
 

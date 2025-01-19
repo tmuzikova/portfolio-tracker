@@ -3,7 +3,6 @@ import { TableColumnHeader } from '@/components/DataTables/TableColumnHeader';
 import { HoldingCell } from '@/components/DataTables/HoldingCell';
 import { CurrentPortfolioItemWithPriceData } from '@/types/currentPortfolio';
 import { formatNumber } from '@/utils/formatNumber';
-import { Link } from 'react-router-dom';
 
 export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
   {
@@ -22,34 +21,7 @@ export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
     cell: ({ row }) => {
       const holding =
         row.getValue<CurrentPortfolioItemWithPriceData['holding']>('holding');
-      return (
-        <div className="flex items-center space-x-4 text-left">
-          <div
-            className="flex items-center justify-center rounded-full bg-gray-600"
-            style={{ width: '4rem', height: '4rem', flexShrink: 0 }}
-          >
-            <Link to={`/detail/${holding.holdingSymbol}`}>
-              <img
-                src={holding.holdingIcon}
-                alt={holding.holdingSymbol}
-                className="h-8 w-8 object-cover"
-              />
-            </Link>
-          </div>
-          <div>
-            <div className="font-medium hover:underline">
-              <Link to={`/detail/${holding.holdingSymbol}`}>
-                {holding.holdingSymbol}
-              </Link>
-            </div>
-            <div className="hover:underline">
-              <Link to={`/detail/${holding.holdingSymbol}`}>
-                {holding.holdingName}
-              </Link>
-            </div>
-          </div>
-        </div>
-      );
+      return <HoldingCell holding={holding} />;
     },
     sortingFn: (rowA, rowB) => {
       const a =

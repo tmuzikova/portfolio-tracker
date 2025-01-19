@@ -53,7 +53,6 @@ export const columns: ColumnDef<TransactionTableData>[] = [
     ),
     cell: ({ row }) => {
       const holding = row.getValue<TransactionTableData['holding']>('holding');
-
       return <HoldingCell holding={holding} />;
     },
     sortingFn: (rowA, rowB) => {
