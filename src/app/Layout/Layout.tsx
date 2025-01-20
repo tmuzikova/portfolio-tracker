@@ -7,9 +7,9 @@ import { Toaster } from '@/components/ui/toaster';
 
 export const Layout = () => {
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <AppSidebar />
-      <main className="flex w-full flex-col">
+      <main className="flex w-full flex-col overflow-x-hidden">
         <div className="flex-grow">
           <Header />
           <Outlet />

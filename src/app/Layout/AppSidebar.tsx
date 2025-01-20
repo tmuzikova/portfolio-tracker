@@ -1,8 +1,11 @@
 import {
   Home as HomeIcon,
+  PanelLeft as PanelLeftIcon,
   Plus as PlusIcon,
   Receipt as ReceiptIcon,
+  X as XIcon,
 } from 'lucide-react';
+
 import {
   Sidebar,
   SidebarContent,
@@ -12,6 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
@@ -31,6 +35,7 @@ const items = [
 
 export const AppSidebar = () => {
   const location = useLocation();
+  const { isMobile, openMobile, setOpenMobile, setOpen } = useSidebar();
 
   const collapsedClasses = {
     trigger:
@@ -42,10 +47,17 @@ export const AppSidebar = () => {
     content: 'group-data-[state=collapsed]:!px-2',
   };
 
+  const triggerIcon = isMobile && openMobile ? <XIcon /> : <PanelLeftIcon />;
+
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar
+      collapsible="icon"
+      side={isMobile ? 'right' : 'left'}
+      variant="sidebar"
+    >
       <span className="flex">
         <SidebarTrigger
+          customIcon={triggerIcon}
           className={clsx(
             'flex w-full items-center justify-end py-6 pr-3 hover:bg-transparent',
             collapsedClasses.trigger,
@@ -63,7 +75,17 @@ export const AppSidebar = () => {
                   <SidebarMenuButton
                     asChild
                     isActive={location.pathname === item.url}
-                    className={clsx(collapsedClasses.button)}
+                    className={clsx(
+                      collapsedClasses.button,
+                      isMobile && 'mb-2',
+                    )}
+                    onClick={() => {
+                      if (isMobile) {
+                        setOpenMobile(false);
+                      } else {
+                        setOpen(false);
+                      }
+                    }}
                   >
                     <Link
                       to={item.url}
@@ -85,6 +107,13 @@ export const AppSidebar = () => {
                     collapsedClasses.button,
                     collapsedClasses.link,
                   )}
+                  onClick={() => {
+                    if (isMobile) {
+                      setOpenMobile(false);
+                    } else {
+                      setOpen(false);
+                    }
+                  }}
                 >
                   <span>
                     <PlusIcon />
