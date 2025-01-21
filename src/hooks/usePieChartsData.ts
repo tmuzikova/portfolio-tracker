@@ -141,8 +141,6 @@ export const usePieChartsData = () => {
     );
 
     return portfolio.reduce<Record<string, PieChartDataType>>((acc, item) => {
-      console.log('current value item:', item.currentValue.total);
-      console.log('totalportfolioValue', totalPortfolioValue);
       const portfolioShare =
         (item.currentValue.total / totalPortfolioValue) * 100;
       const groupKey = dividendSymbols.has(item.holding.holdingSymbol)
