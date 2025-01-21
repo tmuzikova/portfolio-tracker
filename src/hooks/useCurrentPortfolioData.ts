@@ -9,7 +9,7 @@ import {
 } from '@/types/currentPortfolio';
 import { HistoricalPriceData } from '@/types/historicalPrices';
 import { getLatestPriceForSymbol } from '@/utils/portfolioCalculations/getLatestPriceForSymbol';
-import { calculateTotalPortfolioValue } from '@/utils/portfolioCalculations/calculateTotalPortfolioValue';
+import { calculateCurrentTotalPortfolioValue } from '@/utils/portfolioCalculations/calculateCurrentTotalPortfolioValue';
 
 const enhancePortfolioItem = (
   item: CurrentPortfolioItem,
@@ -75,7 +75,7 @@ export const useCurrentPortfolioData = () => {
     error,
   } = useHistoricalStockPrices(currentPortfolio);
 
-  const totalPortfolioValue = calculateTotalPortfolioValue(
+  const totalPortfolioValue = calculateCurrentTotalPortfolioValue(
     currentPortfolio,
     priceData,
   );

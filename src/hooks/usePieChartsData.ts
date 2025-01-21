@@ -2,7 +2,7 @@ import { useTransactionStore } from '@/stores/TransactionStore';
 import { getSavedTransactions } from '@/utils/getSavedTransactions';
 import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';
 import { useHistoricalStockPrices } from './useHistoricalStockPrices';
-import { calculateTotalPortfolioValue } from '@/utils/portfolioCalculations/calculateTotalPortfolioValue';
+import { calculateCurrentTotalPortfolioValue } from '@/utils/portfolioCalculations/calculateCurrentTotalPortfolioValue';
 import { PieChartDataType } from '@/types/pieCharts';
 import { sectorsTranslation } from '@/utils/sectorsIndustryTranslation';
 import { CurrentPortfolioItem } from '@/types/currentPortfolio';
@@ -31,7 +31,7 @@ export const usePieChartsData = () => {
     error: dividendDataError,
   } = useHistoricalDividends();
 
-  const totalPortfolioValue = calculateTotalPortfolioValue(
+  const totalPortfolioValue = calculateCurrentTotalPortfolioValue(
     currentPortfolio,
     priceData,
   );
