@@ -1,41 +1,22 @@
-import { useTransactionStore } from '@/stores/TransactionStore';
-import { getSavedTransactions } from '@/utils/getSavedTransactions';
-import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';
-import { useHistoricalStockPrices } from './useHistoricalStockPrices';
-import { calculateCurrentTotalPortfolioValue } from '@/utils/portfolioCalculations/calculateCurrentTotalPortfolioValue';
+import { useCurrentPortfolioData } from './useCurrentPortfolioData';
 import { PieChartDataType } from '@/types/pieCharts';
 import { sectorsTranslation } from '@/utils/sectorsIndustryTranslation';
-import { CurrentPortfolioItem } from '@/types/currentPortfolio';
-import { HistoricalDividendDataWithLastUpdated } from '@/types/historicalDividends';
 import { useHistoricalDividends } from './useHistoricalDividends';
+import { CurrentPortfolioItemWithPriceData } from '@/types/currentPortfolio';
+import { HistoricalDividendDataWithLastUpdated } from '@/types/historicalDividends';
 
 export const usePieChartsData = () => {
-  const existingTransactions = useTransactionStore(
-    (state) => state.transactions,
-  );
-  const savedTransactions = getSavedTransactions();
-  const currentPortfolio = getCurrentPortfolio({
-    existingTransactions,
-    savedTransactions,
-  });
-
   const {
-    data: priceData,
+    totalPortfolioValueCZK: totalPortfolioValue,
+    currentPortfolioWithPrices,
     isLoading: isPriceDataLoading,
     error: priceDataError,
-  } = useHistoricalStockPrices(currentPortfolio);
-
+  } = useCurrentPortfolioData();
   const {
     data: dividendData,
     isLoading: isDividendDataLoading,
     error: dividendDataError,
   } = useHistoricalDividends();
-
-  const totalPortfolioValue = calculateCurrentTotalPortfolioValue(
-    currentPortfolio,
-    priceData,
-  );
-
   const COLORS = [
     'hsl(var(--chart-1))',
     'hsl(var(--chart-2))',
@@ -82,21 +63,20 @@ export const usePieChartsData = () => {
   };
 
   const groupByHoldings = groupTopTenAndOthers(
-    currentPortfolio.reduce<Accumulator>((acc, item) => {
-      const portfolioShare = (item.value.total / totalPortfolioValue) * 100;
-
+    currentPortfolioWithPrices.reduce<Accumulator>((acc, item) => {
       return {
         ...acc,
         [item.holding.holdingSymbol]: acc[item.holding.holdingSymbol]
           ? {
               ...acc[item.holding.holdingSymbol],
               portfolioShare:
-                acc[item.holding.holdingSymbol].portfolioShare + portfolioShare,
+                acc[item.holding.holdingSymbol].portfolioShare +
+                item.portfolioShare,
             }
           : {
               groupProperty: item.holding.holdingSymbol,
               holdingName: item.holding.holdingName,
-              portfolioShare,
+              portfolioShare: item.portfolioShare,
               fill: '',
             },
       };
@@ -104,10 +84,9 @@ export const usePieChartsData = () => {
   );
 
   const groupBySector = groupTopTenAndOthers(
-    currentPortfolio.reduce<Accumulator>((acc, item) => {
+    currentPortfolioWithPrices.reduce<Accumulator>((acc, item) => {
       const sector = item.sector || '';
       const translatedSector = sectorsTranslation[sector] || 'Nezařazeno';
-      const portfolioShare = (item.value.total / totalPortfolioValue) * 100;
 
       return {
         ...acc,
@@ -115,11 +94,11 @@ export const usePieChartsData = () => {
           ? {
               ...acc[translatedSector],
               portfolioShare:
-                acc[translatedSector].portfolioShare + portfolioShare,
+                acc[translatedSector].portfolioShare + item.portfolioShare,
             }
           : {
               groupProperty: translatedSector,
-              portfolioShare,
+              portfolioShare: item.portfolioShare,
               fill: '',
             },
       };
@@ -127,24 +106,23 @@ export const usePieChartsData = () => {
   );
 
   const groupByType = groupTopTenAndOthers(
-    currentPortfolio.reduce<Accumulator>((acc, item) => {
+    currentPortfolioWithPrices.reduce<Accumulator>((acc, item) => {
       const type = item.type.isEtf
         ? 'ETF'
         : item.type.isFund
           ? 'Fond'
           : 'Akcie';
-      const portfolioShare = (item.value.total / totalPortfolioValue) * 100;
 
       return {
         ...acc,
         [type]: acc[type]
           ? {
               ...acc[type],
-              portfolioShare: acc[type].portfolioShare + portfolioShare,
+              portfolioShare: acc[type].portfolioShare + item.portfolioShare,
             }
           : {
               groupProperty: type,
-              portfolioShare,
+              portfolioShare: item.portfolioShare,
               fill: '',
             },
       };
@@ -152,7 +130,7 @@ export const usePieChartsData = () => {
   );
 
   const groupByDividends = (
-    portfolio: CurrentPortfolioItem[],
+    portfolio: CurrentPortfolioItemWithPriceData[],
     dividendData: HistoricalDividendDataWithLastUpdated[],
     totalPortfolioValue: number,
   ): Record<string, PieChartDataType> => {
@@ -163,7 +141,10 @@ export const usePieChartsData = () => {
     );
 
     return portfolio.reduce<Record<string, PieChartDataType>>((acc, item) => {
-      const portfolioShare = (item.value.total / totalPortfolioValue) * 100;
+      console.log('current value item:', item.currentValue.total);
+      console.log('totalportfolioValue', totalPortfolioValue);
+      const portfolioShare =
+        (item.currentValue.total / totalPortfolioValue) * 100;
       const groupKey = dividendSymbols.has(item.holding.holdingSymbol)
         ? 'Vyplácí dividendy'
         : 'Nevyplácí dividendy';
@@ -185,7 +166,11 @@ export const usePieChartsData = () => {
   };
 
   const groupedDividendData = dividendData
-    ? groupByDividends(currentPortfolio, dividendData, totalPortfolioValue)
+    ? groupByDividends(
+        currentPortfolioWithPrices,
+        dividendData,
+        totalPortfolioValue,
+      )
     : {};
 
   const dividendDataForChart = Object.values(groupedDividendData).map(

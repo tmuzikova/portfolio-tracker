@@ -79,10 +79,16 @@ export const useCurrentPortfolioData = () => {
     currentPortfolio,
     priceData,
   );
+  const totalPortfolioValueCZK = totalPortfolioValue * FX_RATE;
 
   const currentPortfolioWithPrices = currentPortfolio.map((item) =>
     enhancePortfolioItem(item, priceData, totalPortfolioValue),
   );
 
-  return { currentPortfolioWithPrices, isLoading, error };
+  return {
+    totalPortfolioValueCZK,
+    currentPortfolioWithPrices,
+    isLoading,
+    error,
+  };
 };
