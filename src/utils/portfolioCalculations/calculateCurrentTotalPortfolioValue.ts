@@ -2,7 +2,7 @@ import { CurrentPortfolioItem } from '@/types/currentPortfolio';
 import { HistoricalPriceData } from '@/types/historicalPrices';
 import { getLatestPriceForSymbol } from './getLatestPriceForSymbol';
 
-export const calculateTotalPortfolioValue = (
+export const calculateCurrentTotalPortfolioValue = (
   currentPortfolio: CurrentPortfolioItem[],
   priceData: HistoricalPriceData[] = [],
 ): number => {
