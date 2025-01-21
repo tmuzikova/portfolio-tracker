@@ -1,7 +1,7 @@
 import { ColumnSort, DataTable } from '@/components/DataTables/DataTable';
 import { useCurrentPortfolioData } from '@/hooks/useCurrentPortfolioData';
 import { columns } from './columns/columns';
-import { Loader as LoaderIcon } from 'lucide-react';
+import { LoadingState } from '@/components/LoadingState';
 
 export const PortfolioPerformanceTable = () => {
   const defaultSorting: ColumnSort = { id: 'portfolioShare', desc: true };
@@ -9,11 +9,7 @@ export const PortfolioPerformanceTable = () => {
   const { currentPortfolioWithPrices, isLoading } = useCurrentPortfolioData();
 
   if (isLoading) {
-    return (
-      <div className="flex h-64 w-full items-center justify-center">
-        <LoaderIcon className="h-8 w-8 animate-spin text-slate-500" />
-      </div>
-    );
+    return <LoadingState />;
   }
 
   return (
