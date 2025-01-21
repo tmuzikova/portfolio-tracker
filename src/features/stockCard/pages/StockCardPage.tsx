@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
-import { Loader as LoaderIcon } from 'lucide-react';
 import { StockCard } from '../components/StockCard';
 import { useSingleStockHistoricalPrices } from '@/hooks/useSingleStockHistoricalPrices';
 import { useCompanyProfile } from '@/hooks/useCompanyProfile';
 import { ErrorPage } from '@/components/ErrorPage';
+import { LoadingState } from '@/components/LoadingState';
 
 export const StockCardPage = () => {
   const { symbol } = useParams<{ symbol: string }>();
@@ -25,11 +25,7 @@ export const StockCardPage = () => {
 
   const isLoading = isPriceDataLoading || isCompanyProfileLoading;
   if (isLoading) {
-    return (
-      <div className="flex h-64 w-full items-center justify-center">
-        <LoaderIcon className="h-8 w-8 animate-spin text-slate-500" />
-      </div>
-    );
+    return <LoadingState />;
   }
 
   if (

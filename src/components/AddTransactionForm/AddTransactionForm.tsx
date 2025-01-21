@@ -17,6 +17,7 @@ import { transactionTableDataSchema } from './transactionTableDataSchema';
 import { showErrorToast, showSuccessToast } from '@/utils/showToast';
 import { useState } from 'react';
 import { useCompanyProfileManual } from '@/hooks/useCompanyProfile';
+import { LoadingState } from '../LoadingState';
 
 export type AddTransactionFormFields = z.infer<typeof formFieldsSchema>;
 export type TransactionTableData = z.infer<typeof transactionTableDataSchema>;
@@ -124,11 +125,7 @@ export const AddTransactionForm = ({
   };
 
   if (isLoading) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <LoaderIcon className="h-8 w-8 animate-spin text-slate-500" />
-      </div>
-    );
+    return <LoadingState />;
   }
 
   return (

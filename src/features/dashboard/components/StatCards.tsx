@@ -1,7 +1,6 @@
 import { formatNumber } from '@/utils/formatNumber';
 import { CardData, StatCard } from './StatCard';
 import {
-  Loader as LoaderIcon,
   Wallet,
   TrendingUp,
   TrendingDown,
@@ -11,6 +10,7 @@ import {
   BarChart3,
 } from 'lucide-react';
 import { useStatCardData } from '@/hooks/useStatData';
+import { LoadingState } from '@/components/LoadingState';
 
 export const StatCards = () => {
   const { isLoading, statData, calculatedValues } = useStatCardData();
@@ -90,11 +90,7 @@ export const StatCards = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex h-64 w-full items-center justify-center">
-        <LoaderIcon className="h-8 w-8 animate-spin text-slate-500" />
-      </div>
-    );
+    return <LoadingState />;
   }
 
   return (

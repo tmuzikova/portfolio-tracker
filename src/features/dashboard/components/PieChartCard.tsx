@@ -4,8 +4,8 @@ import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { usePieChartsData } from '@/hooks/usePieChartsData';
-import { Loader as LoaderIcon } from 'lucide-react';
 import { PieChartDataType } from '@/types/pieCharts';
+import { LoadingState } from '@/components/LoadingState';
 
 const generateChartConfig = (data: PieChartDataType[]) => {
   return data.reduce<ChartConfig>((config, item) => {
@@ -43,11 +43,7 @@ export const PieChartCard = () => {
   const chartConfig = generateChartConfig(chartData);
 
   if (isLoading) {
-    return (
-      <div className="flex h-64 w-full items-center justify-center">
-        <LoaderIcon className="h-8 w-8 animate-spin text-slate-500" />
-      </div>
-    );
+    return <LoadingState />;
   }
 
   return (
