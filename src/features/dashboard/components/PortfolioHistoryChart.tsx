@@ -1,115 +1,163 @@
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { chartData } from '../mockData/portfolioHistoryData';
+import { usePortfolioPerformanceData } from '@/hooks/usePortfolioPerformanceData';
+import { HistoricalPriceData } from '@/types/historicalPrices';
+import { TimeRange } from './PortfolioHistoryChartCard';
+import { DailyPortfolio } from '@/utils/portfolioCalculations/getDailyPortfolio';
+
+type PortfolioHistoryChartProps = {
+  stockPrices: HistoricalPriceData[];
+  dailyPortfolio: DailyPortfolio;
+  selectedTimeRange: TimeRange;
+};
 
 const chartConfig = {
   portfolio_value: {
-    label: 'Portfolio value',
-    color: 'hsl(var(--chart-3))',
+    label: 'Hodnota portfolia',
+    color: 'hsl(var(--chart-2))',
   },
 } satisfies ChartConfig;
 
-type TimeRange = 'Za celou dobu' | '12M' | 'YTD' | '30D' | '7D';
-const timeRanges: TimeRange[] = ['Za celou dobu', '12M', 'YTD', '30D', '7D'];
+export const PortfolioHistoryChart = ({
+  stockPrices,
+  dailyPortfolio,
+  selectedTimeRange,
+}: PortfolioHistoryChartProps) => {
+  const { oneWeek, oneMonth, oneYear, ytd, allTime } =
+    usePortfolioPerformanceData(dailyPortfolio, stockPrices);
 
-export const PortfolioHistoryChart = () => {
-  const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>('30D');
+  const chartData =
+    selectedTimeRange === 'Za celou dobu'
+      ? allTime
+      : selectedTimeRange === 'YTD'
+        ? ytd
+        : selectedTimeRange === '1M'
+          ? oneMonth
+          : selectedTimeRange === '1R'
+            ? oneYear
+            : oneWeek;
 
-  const handleTimeRangeChange = (range: TimeRange) => {
-    setSelectedTimeRange(range);
+  const formatXAxisTick = (dateStr: string, index: number) => {
+    const date = new Date(dateStr);
+
+    if (index === 0) {
+      return '';
+    }
+
+    switch (selectedTimeRange) {
+      case 'Za celou dobu':
+        return date.getFullYear().toString();
+      case '1R':
+      case 'YTD':
+        return (
+          date
+            .toLocaleDateString('cs-CZ', { month: 'short' })
+            .replace('.', '')
+            .charAt(0)
+            .toUpperCase() +
+          date
+            .toLocaleDateString('cs-CZ', { month: 'short' })
+            .replace('.', '')
+            .slice(1)
+        );
+      default:
+        return `${date.getDate()}.${date.getMonth() + 1}.`;
+    }
+  };
+
+  const getXAxisProps = () => {
+    switch (selectedTimeRange) {
+      case 'Za celou dobu':
+        return {
+          interval: Math.floor(chartData.length / 5),
+          minTickGap: 50,
+        };
+      case '1R':
+        return {
+          interval: Math.floor(chartData.length / 12),
+          minTickGap: 40,
+        };
+      case 'YTD':
+        return {
+          interval: Math.floor(chartData.length / 2),
+          minTickGap: 30,
+        };
+      case '1M':
+        return {
+          interval: Math.floor(chartData.length / 6),
+          minTickGap: 30,
+        };
+      case '1T':
+        return {
+          interval: Math.floor(chartData.length / 6),
+          minTickGap: 20,
+        };
+      default:
+        return {
+          interval: 0,
+          minTickGap: 30,
+        };
+    }
   };
 
   return (
-    <Card>
-      <CardHeader className="flex flex-col items-center p-0 md:flex-row md:justify-between">
-        <div className="px-6 py-6">
-          <CardTitle>Vývoj hodnoty portfolia</CardTitle>
-        </div>
-        <div className="!mt-0 flex flex-wrap justify-center gap-2 px-6 sm:py-6">
-          {timeRanges.map((range) => (
-            <Button
-              key={range}
-              onClick={() => handleTimeRangeChange(range)}
-              className={`rounded-md px-4 py-2 text-sm ${
-                selectedTimeRange === range
-                  ? 'text-white'
-                  : 'bg-slate-200 text-primary hover:bg-slate-300'
-              }`}
-            >
-              {range}
-            </Button>
-          ))}
-        </div>
-      </CardHeader>
-      <CardContent className="px-2 sm:p-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[350px] w-full"
-        >
-          <LineChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-              top: 20,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
-              tickFormatter={(value) => {
+    <ChartContainer
+      config={chartConfig}
+      className="aspect-auto h-[350px] w-full"
+    >
+      <AreaChart
+        accessibilityLayer
+        data={chartData}
+        margin={{
+          left: 0,
+          right: 12,
+          top: 20,
+        }}
+      >
+        <CartesianGrid vertical={false} />
+        <XAxis
+          dataKey="date"
+          tickLine={false}
+          axisLine={false}
+          tickMargin={8}
+          tickFormatter={(value, index) => formatXAxisTick(value, index)}
+          {...getXAxisProps()}
+        />
+        <YAxis
+          tickLine={false}
+          axisLine={false}
+          tickMargin={8}
+          domain={['auto', 'auto']}
+          tickFormatter={(value) => `${value} CZK`}
+        />
+        <ChartTooltip
+          content={
+            <ChartTooltipContent
+              className="w-[200px]"
+              labelFormatter={(value) => {
                 const date = new Date(value);
-                return date.toLocaleDateString('en-US', {
-                  month: 'short',
+                return date.toLocaleDateString('cs-CZ', {
                   day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
                 });
               }}
             />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              domain={['auto', 'auto']}
-              tickFormatter={(value) => `${value} CZK`}
-            />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  className="w-[200px]"
-                  nameKey="portfolio value"
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    });
-                  }}
-                />
-              }
-            />
-            <Line
-              dataKey="portfolio_value"
-              type="monotone"
-              stroke={chartConfig.portfolio_value.color}
-              strokeWidth={2}
-              dot={false}
-            />
-          </LineChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+          }
+        />
+        <Area
+          dataKey="portfolio_value"
+          type="monotone"
+          stroke={chartConfig.portfolio_value.color}
+          fillOpacity={0.4}
+          fill={chartConfig.portfolio_value.color}
+        />
+      </AreaChart>
+    </ChartContainer>
   );
 };
