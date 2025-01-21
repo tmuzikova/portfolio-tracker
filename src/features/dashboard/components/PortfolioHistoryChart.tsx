@@ -41,7 +41,7 @@ export const PortfolioHistoryChart = () => {
               className={`rounded-md px-4 py-2 text-sm ${
                 selectedTimeRange === range
                   ? 'text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-slate-200 text-primary hover:bg-slate-300'
               }`}
             >
               {range}

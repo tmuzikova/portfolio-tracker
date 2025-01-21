@@ -8,16 +8,16 @@ import {
 
 export const ErrorPage = () => {
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-gray-100 text-gray-800">
-      <Card className="w-full max-w-md rounded-md bg-white shadow-md">
+    <div className="flex h-screen flex-col items-center justify-center bg-slate-100 text-slate-800">
+      <Card className="w-full max-w-md rounded-md shadow-md">
         <CardHeader className="flex flex-col items-center gap-4">
-          <AlertCircleIcon className="h-12 w-12 text-red-500" />
+          <AlertCircleIcon className="h-12 w-12 text-destructive" />
           <CardTitle className="text-2xl font-bold">
             Něco se nepovedlo
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center gap-4">
-          <p className="text-center text-gray-600">
+          <p className="text-center text-slate-600">
             Zkuste to prosím znovu později.
           </p>
           <Link to="/">

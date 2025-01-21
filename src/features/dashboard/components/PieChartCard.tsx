@@ -45,7 +45,7 @@ export const PieChartCard = () => {
   if (isLoading) {
     return (
       <div className="flex h-64 w-full items-center justify-center">
-        <LoaderIcon className="h-8 w-8 animate-spin text-gray-500" />
+        <LoaderIcon className="h-8 w-8 animate-spin text-slate-500" />
       </div>
     );
   }
@@ -63,7 +63,7 @@ export const PieChartCard = () => {
               className={`rounded-md px-4 py-2 text-sm ${
                 selectedType === type
                   ? 'text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-slate-200 text-primary hover:bg-slate-300'
               }`}
             >
               {type}

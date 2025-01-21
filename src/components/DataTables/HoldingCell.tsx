@@ -15,7 +15,7 @@ export const HoldingCell = ({ holding }: HoldingCellProps) => {
     <div className="flex items-center space-x-4 text-left">
       <Link to={`/detail/${holding.holdingSymbol}`}>
         <div
-          className="flex items-center justify-center rounded-full bg-gray-400"
+          className="flex items-center justify-center rounded-full bg-slate-400"
           style={{ width: '4rem', height: '4rem', flexShrink: 0 }}
         >
           {holding.holdingIcon && !hasError ? (

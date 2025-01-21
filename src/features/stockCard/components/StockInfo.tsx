@@ -41,7 +41,7 @@ export const StockInfo = ({ companyProfile }: StockInfoProps) => {
               {companyInfo.map((item, index) => (
                 <TableRow
                   key={index}
-                  className="transition-colors hover:bg-gray-100"
+                  className="transition-colors hover:bg-slate-100"
                 >
                   <TableCell className="mx-0 px-0 py-2 font-medium text-muted-foreground">
                     {item.label}

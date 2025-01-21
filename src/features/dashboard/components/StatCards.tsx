@@ -1,10 +1,38 @@
 import { formatNumber } from '@/utils/formatNumber';
 import { CardData, StatCard } from './StatCard';
-import { Loader as LoaderIcon } from 'lucide-react';
+import {
+  Loader as LoaderIcon,
+  Wallet,
+  TrendingUp,
+  TrendingDown,
+  PiggyBank,
+  Coins,
+  Receipt,
+  BarChart3,
+} from 'lucide-react';
 import { useStatCardData } from '@/hooks/useStatData';
 
 export const StatCards = () => {
   const { isLoading, statData, calculatedValues } = useStatCardData();
+
+  const getProfitColorAndIcon = (value: number) => {
+    const isPositive = value >= 0;
+    return {
+      icon: isPositive ? (
+        <TrendingUp className="h-5 w-5 text-[hsl(var(--chart-2))]" />
+      ) : (
+        <TrendingDown className="h-5 w-5 text-destructive" />
+      ),
+      valueColor: isPositive
+        ? 'text-[hsl(var(--chart-2))]'
+        : 'text-destructive',
+    };
+  };
+
+  const unrealizedProfitStyle = getProfitColorAndIcon(
+    statData.unrealizedProfit,
+  );
+  const realizedProfitStyle = getProfitColorAndIcon(statData.realizedProfit);
 
   const cardData: { [key: string]: CardData } = {
     portfolioValue: {
@@ -12,91 +40,115 @@ export const StatCards = () => {
       tooltip:
         'Hodnota aktuálního portfolia bez realizovaného zisku, poplatků a dividend.',
       title: 'Hodnota portfolia',
+      icon: <Wallet className="h-5 w-5 text-[hsl(var(--chart-1))]" />,
+      valueColor: 'text-[hsl(var(--chart-1))]',
     },
     totalValue: {
       value: formatNumber(calculatedValues.totalValue),
       tooltip:
         'Celková hodnota portfolia se započítaným realizovaným ziskem a poplatky.',
       title: 'Celková hodnota portfolia',
+      icon: <BarChart3 className="h-5 w-5 text-[hsl(var(--chart-3))]" />,
+      valueColor: 'text-[hsl(var(--chart-3))]',
     },
     unrealizedProfit: {
       value: formatNumber(statData.unrealizedProfit),
       tooltip:
         'Rozdíl mezi nákupní a současnou cenou aktuálně vlastněných aktiv.',
       title: 'Nerealizovaný zisk',
+      icon: unrealizedProfitStyle.icon,
+      valueColor: unrealizedProfitStyle.valueColor,
     },
     realizedProfit: {
       value: formatNumber(statData.realizedProfit),
       tooltip: 'Realizovaný zisk z prodeje aktiv.',
       title: 'Realizovaný zisk',
+      icon: realizedProfitStyle.icon,
+      valueColor: realizedProfitStyle.valueColor,
     },
     investedAmount: {
       value: formatNumber(statData.investedAmount.noFees),
       tooltip: 'Celková investovaná částka bez zahrnutých poplatků.',
       title: 'Investovaná částka',
+      icon: <PiggyBank className="h-5 w-5 text-[hsl(var(--chart-4))]" />,
+      valueColor: 'text-[hsl(var(--chart-4))]',
     },
     dividends: {
       value: formatNumber(statData.dividends),
       tooltip: 'Celková suma vyplacených dividend za dobu existence portfolia.',
       title: 'Dividendy',
+      icon: <Coins className="h-5 w-5 text-[hsl(var(--chart-5))]" />,
+      valueColor: 'text-[hsl(var(--chart-5))]',
     },
     fees: {
       value: formatNumber(statData.fees),
       tooltip: 'Poplatky za obchodování.',
       title: 'Poplatky',
+      icon: <Receipt className="h-5 w-5 text-[hsl(var(--chart-7))]" />,
+      valueColor: 'text-[hsl(var(--chart-7))]',
     },
   };
 
   if (isLoading) {
     return (
       <div className="flex h-64 w-full items-center justify-center">
-        <LoaderIcon className="h-8 w-8 animate-spin text-gray-500" />
+        <LoaderIcon className="h-8 w-8 animate-spin text-slate-500" />
       </div>
     );
   }
 
   return (
-    <>
-      <div className="flex w-full flex-wrap gap-5 lg:flex-nowrap">
-        <div className="flex w-full flex-col gap-5">
-          <StatCard data={cardData.portfolioValue} className="lg:h-[320px]" />
-          <StatCard data={cardData.totalValue} />
-        </div>
+    <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div className="flex flex-col gap-5">
+        <StatCard data={cardData.portfolioValue} className="md:h-[320px]" />
+        <StatCard data={cardData.totalValue} />
+      </div>
 
-        <div className="flex w-full flex-col gap-5">
-          <StatCard data={cardData.unrealizedProfit}>
-            {calculatedValues.unrealizedProfitRelativeToPortfolioValue && (
-              <div className="text-[14px] font-normal text-muted-foreground">
-                {calculatedValues.unrealizedProfitRelativeToPortfolioValue} % z
-                hodnoty portfolia
-              </div>
-            )}
-          </StatCard>
+      <div className="flex flex-col gap-5 md:col-span-1">
+        <StatCard data={cardData.unrealizedProfit}>
+          {calculatedValues.unrealizedProfitRelativeToPortfolioValue && (
+            <div className="mt-2 text-sm font-normal text-muted-foreground">
+              <span className={unrealizedProfitStyle.valueColor}>
+                {calculatedValues.unrealizedProfitRelativeToPortfolioValue} %
+              </span>{' '}
+              z hodnoty portfolia
+            </div>
+          )}
+        </StatCard>
+        <StatCard data={cardData.realizedProfit} />
+        <StatCard data={cardData.investedAmount} />
+      </div>
 
-          <StatCard data={cardData.realizedProfit} />
-          <StatCard data={cardData.investedAmount} />
-        </div>
-
-        <div className="flex w-full flex-col gap-5">
+      <div className="flex flex-col gap-5 md:col-span-2 lg:col-span-1">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-1">
           <StatCard data={cardData.dividends} className="h-[320px]">
-            <div className="text-[14px] font-normal text-muted-foreground">
-              Dividendový výnos
+            <div className="mt-4 space-y-2">
+              <div className="text-sm font-normal text-muted-foreground">
+                Dividendový výnos
+              </div>
+              <div className="text-xl text-[hsl(var(--chart-5))]">
+                {calculatedValues.dividendYield} %
+              </div>
+
+              <div className="text-sm font-normal text-muted-foreground">
+                Dividendový výnos vzhledem k nákladům
+              </div>
+              <div className="text-xl text-[hsl(var(--chart-5))]">
+                {calculatedValues.dividendYieldOnCost} %
+              </div>
             </div>
-            <div>{calculatedValues.dividendYield} %</div>
-            <div className="text-[14px] font-normal text-muted-foreground">
-              Dividendový výnos vzhledem k nákladům
-            </div>
-            <div>{calculatedValues.dividendYieldOnCost} %</div>
           </StatCard>
 
           <StatCard data={cardData.fees}>
-            <div className="text-[14px] font-normal text-muted-foreground">
-              {calculatedValues.feesPercentageOfInvestment} % z investované
-              částky
+            <div className="mt-2 text-sm font-normal text-muted-foreground">
+              <span className="text-[hsl(var(--chart-7))]">
+                {calculatedValues.feesPercentageOfInvestment} %
+              </span>{' '}
+              z investované částky
             </div>
           </StatCard>
         </div>
       </div>
-    </>
+    </div>
   );
 };

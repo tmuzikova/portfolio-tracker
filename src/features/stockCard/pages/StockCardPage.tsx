@@ -27,7 +27,7 @@ export const StockCardPage = () => {
   if (isLoading) {
     return (
       <div className="flex h-64 w-full items-center justify-center">
-        <LoaderIcon className="h-8 w-8 animate-spin text-gray-500" />
+        <LoaderIcon className="h-8 w-8 animate-spin text-slate-500" />
       </div>
     );
   }

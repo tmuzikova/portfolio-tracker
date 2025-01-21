@@ -32,7 +32,7 @@ export function StockHeader({
     <div className="flex flex-col items-center gap-6 py-6 md:flex-row md:justify-between">
       <div className="flex flex-col items-center gap-4 md:flex-row md:gap-5">
         <div
-          className="flex items-center justify-center rounded-full bg-gray-400"
+          className="flex items-center justify-center rounded-full bg-slate-400"
           style={{ width: '7rem', height: '7rem', flexShrink: 0 }}
         >
           {companyProfile.image && !hasError ? (
@@ -64,7 +64,9 @@ export function StockHeader({
           <div className="flex flex-col items-center md:items-end">
             <div
               className={`${
-                isPriceDifferenceNegative ? 'text-red-500' : 'text-green-500'
+                isPriceDifferenceNegative
+                  ? 'text-destructive'
+                  : 'text-[hsl(var(--chart-2))]'
               } flex flex-row items-center gap-2`}
             >
               <p className="text-lg font-semibold md:text-xl">
@@ -78,7 +80,7 @@ export function StockHeader({
                   : `(+${percentageDifference.toFixed(2)} %)`}
               </p>
             </div>
-            <p className="text-sm text-gray-500 md:text-base">
+            <p className="text-sm text-slate-500 md:text-base">
               {selectedTimeRange === '7D'
                 ? 'Za poslední týden'
                 : selectedTimeRange === '1M'

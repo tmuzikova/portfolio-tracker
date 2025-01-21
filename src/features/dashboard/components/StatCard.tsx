@@ -5,6 +5,8 @@ export type CardData = {
   value: string;
   tooltip?: string;
   title: string;
+  icon?: React.ReactNode;
+  valueColor?: string;
 };
 
 type StatCardProps = {
@@ -20,6 +22,7 @@ export const StatCard = (props: StatCardProps) => {
     >
       <CardHeader>
         <div className="flex items-center gap-2">
+          {props.data.icon}
           <CardTitle className="text-[18px] font-normal text-muted-foreground">
             {props.data.title}
           </CardTitle>
@@ -30,7 +33,9 @@ export const StatCard = (props: StatCardProps) => {
       </CardHeader>
 
       <div>
-        <CardContent className="text-[28px] font-semibold">
+        <CardContent
+          className={`text-[28px] font-semibold ${props.data.valueColor || ''}`}
+        >
           {props.data.value} CZK
           {props.children}
         </CardContent>

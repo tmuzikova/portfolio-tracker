@@ -27,7 +27,7 @@ export const DeleteButton = ({ transactionId }: Props) => {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="ghost" size="icon">
-          <TrashIcon className="h-4 w-4 text-red-500" />
+          <TrashIcon className="h-4 w-4 text-destructive" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
