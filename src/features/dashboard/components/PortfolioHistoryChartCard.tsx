@@ -62,7 +62,7 @@ export const PortfolioHistoryChartCard = () => {
       <CardHeader className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-between lg:pb-0">
         <CardTitle>Vývoj hodnoty portfolia</CardTitle>
 
-        <div className="flex gap-2 pb-2 pt-6 lg:pt-0">
+        <div className="flex flex-wrap justify-center gap-2 pb-2 pt-6 lg:pt-0">
           {TIME_RANGES.map((range) => (
             <Button
               key={range}
