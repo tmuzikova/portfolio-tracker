@@ -1,4 +1,4 @@
-import { ColumnSort, DataTable } from '@/components/DataTable';
+import { ColumnSort, DataTable } from '@/components/DataTables/DataTable';
 import { useCurrentPortfolioData } from '@/hooks/useCurrentPortfolioData';
 import { columns } from './columns/columns';
 import { Loader as LoaderIcon } from 'lucide-react';

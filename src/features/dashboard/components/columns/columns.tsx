@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { TableColumnHeader } from '@/components/TableColumnHeader';
+import { TableColumnHeader } from '@/components/DataTables/TableColumnHeader';
+import { HoldingCell } from '@/components/DataTables/HoldingCell';
 import { CurrentPortfolioItemWithPriceData } from '@/types/currentPortfolio';
 import { formatNumber } from '@/utils/formatNumber';
 
@@ -20,24 +21,7 @@ export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
     cell: ({ row }) => {
       const holding =
         row.getValue<CurrentPortfolioItemWithPriceData['holding']>('holding');
-      return (
-        <div className="flex items-center space-x-4 text-left">
-          <div
-            className="flex items-center justify-center rounded-full bg-gray-600"
-            style={{ width: '4rem', height: '4rem', flexShrink: 0 }}
-          >
-            <img
-              src={holding.holdingIcon}
-              alt={holding.holdingSymbol}
-              className="h-8 w-8 object-cover"
-            />
-          </div>
-          <div>
-            <div className="font-medium">{holding.holdingSymbol}</div>
-            <div>{holding.holdingName}</div>
-          </div>
-        </div>
-      );
+      return <HoldingCell holding={holding} />;
     },
     sortingFn: (rowA, rowB) => {
       const a =
