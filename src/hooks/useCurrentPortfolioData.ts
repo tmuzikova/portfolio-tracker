@@ -8,27 +8,8 @@ import {
   CurrentPortfolioItemWithPriceData,
 } from '@/types/currentPortfolio';
 import { HistoricalPriceData } from '@/types/historicalPrices';
-
-const calculateTotalPortfolioValue = (
-  currentPortfolio: CurrentPortfolioItem[],
-  priceData: HistoricalPriceData[] = [],
-): number => {
-  return currentPortfolio.reduce((sum, item) => {
-    const latestPrice = getLatestPriceForSymbol(
-      item.holding.holdingSymbol,
-      priceData,
-    );
-    return sum + latestPrice * item.totalNumberOfStocks;
-  }, 0);
-};
-
-const getLatestPriceForSymbol = (
-  symbol: string,
-  priceData: HistoricalPriceData[] = [],
-) => {
-  const priceInfo = priceData?.find((price) => price.symbol === symbol);
-  return priceInfo?.historical?.[0]?.close || 0;
-};
+import { getLatestPriceForSymbol } from '@/utils/portfolioCalculations/getLatestPriceForSymbol';
+import { calculateTotalPortfolioValue } from '@/utils/portfolioCalculations/calculateTotalPortfolioValue';
 
 const enhancePortfolioItem = (
   item: CurrentPortfolioItem,
@@ -52,6 +33,11 @@ const enhancePortfolioItem = (
       holdingIcon: item.holding.holdingIcon,
       holdingSymbol: item.holding.holdingSymbol,
       holdingName: item.holding.holdingName,
+    },
+    sector: item.sector,
+    type: {
+      isFund: item.type.isFund,
+      isEtf: item.type.isEtf,
     },
     totalNumberOfStocks: item.totalNumberOfStocks,
     purchaseValue: {

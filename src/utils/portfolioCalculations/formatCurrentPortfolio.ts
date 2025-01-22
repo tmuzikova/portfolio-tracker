@@ -29,6 +29,11 @@ export const formatCurrentPortfolio = (
             holdingSymbol,
             holdingName: holdingName || '',
           },
+          sector: tx.sector || 'Neznámý',
+          type: {
+            isFund: tx.type?.isFund || false,
+            isEtf: tx.type?.isEtf || false,
+          },
           totalNumberOfStocks: newNumberOfStocks,
           totalFees: newTotalFees,
           value: {

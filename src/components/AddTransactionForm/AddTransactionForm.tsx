@@ -82,6 +82,11 @@ export const AddTransactionForm = ({
           total: data.fee || 0,
           currency: data.currency,
         },
+        sector: companyProfile.data?.sector || 'Neznámý',
+        type: {
+          isFund: companyProfile.data?.isFund || false,
+          isEtf: companyProfile.data?.isEtf || false,
+        },
       };
 
       if (transactionToEdit) {
