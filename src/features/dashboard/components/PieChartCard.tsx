@@ -1,8 +1,8 @@
-import { Pie, PieChart } from 'recharts';
+import { Legend, Pie, PieChart } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePieChartsData } from '@/hooks/usePieChartsData';
 import { PieChartDataType } from '@/types/pieCharts';
 import { LoadingState } from '@/components/LoadingState';
@@ -31,6 +31,8 @@ export const PieChartCard = () => {
   const { holdingData, sectorData, typeData, dividendData, isLoading } =
     usePieChartsData();
 
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+
   const chartData =
     selectedType === 'Sektor'
       ? sectorData
@@ -42,6 +44,16 @@ export const PieChartCard = () => {
 
   const chartConfig = generateChartConfig(chartData);
 
+  useEffect(() => {
+    const updateScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+
+    updateScreenSize();
+    window.addEventListener('resize', updateScreenSize);
+    return () => window.removeEventListener('resize', updateScreenSize);
+  }, []);
+
   if (isLoading) {
     return <LoadingState />;
   }
@@ -51,7 +63,7 @@ export const PieChartCard = () => {
       <CardHeader className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-between lg:pb-0">
         <CardTitle>Diverzifikace portfolia</CardTitle>
 
-        <div className="flex gap-2 pb-2 pt-6 lg:pt-0">
+        <div className="mx-2 flex flex-wrap justify-center gap-2 pb-2 pt-6 lg:pt-0">
           {diversificationTypes.map((type) => (
             <Button
               key={type}
@@ -71,17 +83,42 @@ export const PieChartCard = () => {
       <CardContent className="flex pb-2">
         <ChartContainer
           config={chartConfig}
-          className="max-h-[450px] w-full [&_.recharts-pie-label-text]:fill-muted-foreground [&_.recharts-pie-label-text]:text-sm [&_.recharts-pie-label-text]:font-medium"
+          className={`w-full [&_.recharts-pie-label-text]:fill-muted-foreground [&_.recharts-pie-label-text]:text-sm [&_.recharts-pie-label-text]:font-medium ${
+            isLargeScreen ? 'h-[450px]' : 'h-[350px]'
+          }`}
         >
-          <PieChart>
+          <PieChart margin={{ bottom: !isLargeScreen ? 20 : 0 }}>
             <Pie
               data={chartData}
+              paddingAngle={2}
               dataKey="portfolioShare"
-              label={({ name, percent }) =>
-                `${name} (${(percent * 100).toFixed(1)}%)`
-              }
               nameKey="groupProperty"
+              labelLine={false}
+              outerRadius={isLargeScreen ? '80%' : '90%'}
+              innerRadius={isLargeScreen ? '40%' : '50%'}
+              label={
+                isLargeScreen
+                  ? ({ name, percent }) =>
+                      `${name} (${(percent * 100).toFixed(1)} %)`
+                  : undefined
+              }
             />
+            {!isLargeScreen && (
+              <Legend
+                layout="horizontal"
+                align="center"
+                verticalAlign="bottom"
+                wrapperStyle={{
+                  paddingTop: '24px',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                }}
+                formatter={(value, entry: any) => {
+                  const percentage = entry.payload.portfolioShare.toFixed(1);
+                  return `${value} (${percentage}%)`;
+                }}
+              />
+            )}
           </PieChart>
         </ChartContainer>
       </CardContent>
