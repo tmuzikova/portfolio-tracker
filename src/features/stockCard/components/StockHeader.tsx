@@ -1,5 +1,5 @@
 import { CompanyProfile } from '@/components/AddTransactionForm/companyProfileSchema';
-import { useStockCardData } from '@/hooks/useStockCardData';
+import { useStockCardData } from '@/hooks/useStockCardData/useStockCardData';
 import { HistoricalPriceData } from '@/types/historicalPrices';
 import { TimeRange } from './StockCard';
 import { CompanyLogo } from './CompanyLogo';
