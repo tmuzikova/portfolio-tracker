@@ -28,8 +28,6 @@ export const usePortfolioPerformanceData = (
     return allDailyValues.slice(-days);
   };
 
-  console.log(dailyPortfolio);
-
   const getYTDData = (): ChartDataPoint[] => {
     const currentDate = new Date();
     const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
