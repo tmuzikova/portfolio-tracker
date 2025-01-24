@@ -67,8 +67,9 @@ export const StatCards = () => {
       valueColor: realizedProfitStyle.valueColor,
     },
     investedAmount: {
-      value: formatNumber(statData.investedAmount.noFees),
-      tooltip: 'Celková investovaná částka bez zahrnutých poplatků.',
+      value: formatNumber(statData.investedAmountInCurrentPortfolio.noFees),
+      tooltip:
+        'Celková historická investovaná částka a investovaná částka do aktuálního portfolia (bez zahrnutých poplatků).',
       title: 'Investovaná částka',
       icon: <PiggyBank className="h-5 w-5 text-[hsl(var(--chart-4))]" />,
       valueColor: 'text-[hsl(var(--chart-4))]',
@@ -112,7 +113,16 @@ export const StatCards = () => {
           )}
         </StatCard>
         <StatCard data={cardData.realizedProfit} />
-        <StatCard data={cardData.investedAmount} />
+        <StatCard data={cardData.investedAmount}>
+          <div className="mt-2 text-sm font-normal text-muted-foreground">
+            Historicky investováno{' '}
+            <span
+              className={`${cardData.investedAmount.valueColor} font-semibold`}
+            >
+              {formatNumber(statData.historicalInvestedAmount.noFees)} CZK
+            </span>
+          </div>
+        </StatCard>
       </div>
 
       <div className="flex flex-col gap-5 md:col-span-2 lg:col-span-1">

@@ -1,5 +1,5 @@
 import { HistoricalPriceData } from '@/types/historicalPrices';
-import { calculateDailyPortfolioValues } from '@/utils/portfolioCalculations/calculateDailyPortfolioValue';
+import { calculateDailyPortfolioValues } from '@/hooks/usePortflioPerformanceData/utils/calculateDailyPortfolioValue';
 import { DailyPortfolio } from '@/utils/portfolioCalculations/getDailyPortfolio';
 
 type ChartDataPoint = {
@@ -27,6 +27,8 @@ export const usePortfolioPerformanceData = (
   const getDataForTimeRange = (days: number): ChartDataPoint[] => {
     return allDailyValues.slice(-days);
   };
+
+  console.log(dailyPortfolio);
 
   const getYTDData = (): ChartDataPoint[] => {
     const currentDate = new Date();

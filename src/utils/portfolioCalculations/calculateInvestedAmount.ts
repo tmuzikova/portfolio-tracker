@@ -1,5 +1,24 @@
+import { CurrentPortfolioItem } from '@/types/currentPortfolio';
 import { FX_RATE } from './const/FX_RATE';
 import { calculationParams } from '@/types/calculations';
+
+export const calculateCurrentInvestedAmount = (
+  currentPortfolio: CurrentPortfolioItem[],
+) => {
+  const totalInvestedAmountWithFees = currentPortfolio.reduce((sum, tx) => {
+    return sum + (tx.value.total + (tx.totalFees || 0)) * FX_RATE;
+  }, 0);
+  const totalInvestedAmountNoFees = currentPortfolio.reduce((sum, tx) => {
+    return sum + tx.value.total * FX_RATE;
+  }, 0);
+
+  const investedAmount = {
+    withFees: totalInvestedAmountWithFees,
+    noFees: totalInvestedAmountNoFees,
+  };
+
+  return investedAmount;
+};
 
 export const calculateInvestedAmount = ({
   existingTransactions,
