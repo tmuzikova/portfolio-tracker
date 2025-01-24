@@ -11,7 +11,7 @@ type StockCardProps = {
   companyProfile: CompanyProfile;
 };
 
-export type TimeRange = '5R' | '1R' | 'YTD' | '1M' | '7D';
+export type TimeRange = '5R' | '1R' | 'YTD' | '1M' | '1T';
 
 export const StockCard = ({
   symbol,

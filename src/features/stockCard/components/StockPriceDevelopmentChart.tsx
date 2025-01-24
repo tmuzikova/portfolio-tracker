@@ -5,11 +5,13 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { Button } from '@/components/ui/button';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { HistoricalPriceData } from '@/types/historicalPrices';
-import { useStockPriceChartData } from '@/hooks/useStockPriceChartData';
+import { useStockPriceChartData } from '@/hooks/useStockPriceChartData/useStockPriceChartData';
 import { TimeRange } from './StockCard';
+import { getXAxisProps } from '../utils/getXAxisProps';
+import { formatXAxisTick } from '../utils/formatXAxisTick';
+import { TimeRangeButtons } from './TimeRangeButtons';
 
 type StockPriceDevelopmentChartProps = {
   stockPrices: HistoricalPriceData;
@@ -24,7 +26,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const timeRanges: TimeRange[] = ['5R', '1R', 'YTD', '1M', '7D'];
+const TIME_RANGES: TimeRange[] = ['5R', '1R', 'YTD', '1M', '1T'];
 
 export const StockPriceDevelopmentChart = ({
   stockPrices,
@@ -33,79 +35,14 @@ export const StockPriceDevelopmentChart = ({
 }: StockPriceDevelopmentChartProps) => {
   const { lastWeek, lastMonth, lastYear, ytd, fiveYears } =
     useStockPriceChartData(stockPrices);
-  const chartData =
-    selectedTimeRange === '5R'
-      ? fiveYears
-      : selectedTimeRange === '1R'
-        ? lastYear
-        : selectedTimeRange === 'YTD'
-          ? ytd
-          : selectedTimeRange === '1M'
-            ? lastMonth
-            : lastWeek;
 
-  const formatXAxisTick = (dateStr: string, index: number) => {
-    const date = new Date(dateStr);
-
-    if (index === 0) {
-      return '';
-    }
-
-    switch (selectedTimeRange) {
-      case '5R':
-        return date.getFullYear().toString();
-      case '1R':
-      case 'YTD':
-        return (
-          date
-            .toLocaleDateString('cs-CZ', { month: 'short' })
-            .replace('.', '')
-            .charAt(0)
-            .toUpperCase() +
-          date
-            .toLocaleDateString('cs-CZ', { month: 'short' })
-            .replace('.', '')
-            .slice(1)
-        );
-      default:
-        return `${date.getDate()}.${date.getMonth() + 1}.`;
-    }
-  };
-
-  const getXAxisProps = () => {
-    switch (selectedTimeRange) {
-      case '5R':
-        return {
-          interval: Math.floor(chartData.length / 5),
-          minTickGap: 50,
-        };
-      case '1R':
-        return {
-          interval: Math.floor(chartData.length / 12),
-          minTickGap: 40,
-        };
-      case 'YTD':
-        return {
-          interval: Math.floor(chartData.length / 2),
-          minTickGap: 30,
-        };
-      case '1M':
-        return {
-          interval: Math.floor(chartData.length / 6),
-          minTickGap: 30,
-        };
-      case '7D':
-        return {
-          interval: Math.floor(chartData.length / 6),
-          minTickGap: 20,
-        };
-      default:
-        return {
-          interval: 0,
-          minTickGap: 30,
-        };
-    }
-  };
+  const chartData = {
+    '5R': fiveYears,
+    '1R': lastYear,
+    YTD: ytd,
+    '1M': lastMonth,
+    '1T': lastWeek,
+  }[selectedTimeRange];
 
   return (
     <Card>
@@ -113,22 +50,13 @@ export const StockPriceDevelopmentChart = ({
         <div className="px-6 py-6">
           <CardTitle>Vývoj ceny aktiva</CardTitle>
         </div>
-        <div className="!mt-0 flex flex-wrap justify-center gap-2 px-6 sm:py-6">
-          {timeRanges.map((range) => (
-            <Button
-              key={range}
-              onClick={() => onTimeRangeChange(range)}
-              className={`rounded-md px-4 py-2 text-sm ${
-                selectedTimeRange === range
-                  ? 'text-white'
-                  : 'bg-slate-200 text-primary hover:bg-slate-300'
-              }`}
-            >
-              {range}
-            </Button>
-          ))}
-        </div>
+        <TimeRangeButtons
+          ranges={TIME_RANGES}
+          selectedRange={selectedTimeRange}
+          onChange={onTimeRangeChange}
+        />
       </CardHeader>
+
       <CardContent className="px-4 sm:py-6">
         <ChartContainer
           config={chartConfig}
@@ -149,8 +77,10 @@ export const StockPriceDevelopmentChart = ({
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value, index) => formatXAxisTick(value, index)}
-              {...getXAxisProps()}
+              tickFormatter={(value, index) =>
+                formatXAxisTick(value, index, selectedTimeRange)
+              }
+              {...getXAxisProps(selectedTimeRange, chartData.length)}
             />
             <YAxis
               tickLine={false}

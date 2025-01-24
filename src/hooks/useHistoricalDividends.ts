@@ -6,9 +6,9 @@ import {
   historicalDividendDataSchema,
   HistoricalDividendDataWithLastUpdated,
 } from '@/types/historicalDividends';
-import { getLastTuesday } from '@/utils/getLastTuesday';
 import { getSavedTransactions } from '@/utils/getSavedTransactions';
 import { getUniqueHistoricalSymbols } from '@/utils/getUniqueHistoricalSymbols';
+import { isDividendDataStale } from '@/utils/isDividendDataStale';
 import { useQuery } from '@tanstack/react-query';
 
 const fetchHistoricalDividendsForSymbol = async (
@@ -25,39 +25,20 @@ const fetchHistoricalDividendsForSymbol = async (
   }
 };
 
-const fetchAndSaveData = async (
+const fetchAndUpdateDividends = async (
   symbol: string,
   dbData: HistoricalDividendDataWithLastUpdated | null,
 ): Promise<HistoricalDividendDataWithLastUpdated> => {
-  const lastTuesday = new Date(getLastTuesday());
-  const sixMonthsAgo = new Date();
-  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+  if (!isDividendDataStale(dbData)) return dbData!;
 
-  const isDividendDataMissing = !dbData || !dbData.lastUpdated;
-  const isStaleNonDividendData =
-    dbData?.hasDividends === false &&
-    dbData.lastUpdated &&
-    new Date(dbData.lastUpdated) < sixMonthsAgo;
-  const isStaleDividendData =
-    dbData?.lastUpdated && new Date(dbData.lastUpdated) < lastTuesday;
-
-  const needsUpdate =
-    isDividendDataMissing || isStaleNonDividendData || isStaleDividendData;
-
-  if (needsUpdate) {
-    const fetchedData = await fetchHistoricalDividendsForSymbol(symbol);
-
-    const dataToSave: HistoricalDividendDataWithLastUpdated = {
-      ...fetchedData,
-      lastUpdated: new Date().toISOString(),
-      hasDividends: fetchedData.historical.length > 0,
-    };
-
-    await saveDataToDB(symbol, dataToSave);
-    return dataToSave;
-  }
-
-  return dbData;
+  const fetchedData = await fetchHistoricalDividendsForSymbol(symbol);
+  const dataToSave: HistoricalDividendDataWithLastUpdated = {
+    ...fetchedData,
+    lastUpdated: new Date().toISOString(),
+    hasDividends: fetchedData.historical.length > 0,
+  };
+  await saveDataToDB(symbol, dataToSave);
+  return dataToSave;
 };
 
 const fetchPortfolioDividends = async (
@@ -68,7 +49,7 @@ const fetchPortfolioDividends = async (
   return Promise.all(
     symbols.map(async (symbol) => {
       const dbData = await getDataFromDB(symbol);
-      return await fetchAndSaveData(symbol, dbData);
+      return await fetchAndUpdateDividends(symbol, dbData);
     }),
   );
 };
