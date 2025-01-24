@@ -79,7 +79,7 @@ export function StockHeader({
               </p>
             </div>
             <p className="text-sm text-gray-500 md:text-base">
-              {selectedTimeRange === '7D'
+              {selectedTimeRange === '1T'
                 ? 'Za poslední týden'
                 : selectedTimeRange === '1M'
                   ? 'Za poslední měsíc'

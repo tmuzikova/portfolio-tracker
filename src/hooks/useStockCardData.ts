@@ -35,7 +35,7 @@ const getTradingDaysForTimeRange = (timeRange: TimeRange): number => {
   const DAYS_IN_FIVE_YEARS = DAYS_IN_YEAR * 5;
 
   switch (timeRange) {
-    case '7D':
+    case '1T':
       return DAYS_IN_WEEK;
     case '1M':
       return DAYS_IN_MONTH;

@@ -24,7 +24,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const timeRanges: TimeRange[] = ['5R', '1R', 'YTD', '1M', '7D'];
+const timeRanges: TimeRange[] = ['5R', '1R', 'YTD', '1M', '1T'];
 
 export const StockPriceDevelopmentChart = ({
   stockPrices,
@@ -94,7 +94,7 @@ export const StockPriceDevelopmentChart = ({
           interval: Math.floor(chartData.length / 6),
           minTickGap: 30,
         };
-      case '7D':
+      case '1T':
         return {
           interval: Math.floor(chartData.length / 6),
           minTickGap: 20,
