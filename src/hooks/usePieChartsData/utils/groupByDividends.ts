@@ -1,9 +1,9 @@
-import { CurrentPortfolioItem } from '@/types/currentPortfolio';
+import { CurrentPortfolioItemWithPriceData } from '@/types/currentPortfolio';
 import { HistoricalDividendDataWithLastUpdated } from '@/types/historicalDividends';
 import { PieChartDataType } from '../types/pieCharts';
 
 export const groupByDividends = (
-  portfolio: CurrentPortfolioItem[],
+  portfolio: CurrentPortfolioItemWithPriceData[],
   dividendData: HistoricalDividendDataWithLastUpdated[],
   totalPortfolioValue: number,
 ): Record<string, PieChartDataType> => {
@@ -12,7 +12,8 @@ export const groupByDividends = (
   );
 
   return portfolio.reduce<Record<string, PieChartDataType>>((acc, item) => {
-    const portfolioShare = (item.value.total / totalPortfolioValue) * 100;
+    const portfolioShare =
+      (item.currentValue.total / totalPortfolioValue) * 100;
     const groupKey = dividendSymbols.has(item.holding.holdingSymbol)
       ? 'Vyplácí dividendy'
       : 'Nevyplácí dividendy';

@@ -1,12 +1,13 @@
-import { CurrentPortfolioItem } from '@/types/currentPortfolio';
+import { CurrentPortfolioItemWithPriceData } from '@/types/currentPortfolio';
 import { Accumulator } from '../types/accumulator';
 
 export const groupByHoldings = (
-  currentPortfolio: CurrentPortfolioItem[],
+  currentPortfolio: CurrentPortfolioItemWithPriceData[],
   totalPortfolioValue: number,
 ) =>
   currentPortfolio.reduce<Accumulator>((acc, item) => {
-    const portfolioShare = (item.value.total / totalPortfolioValue) * 100;
+    const portfolioShare =
+      (item.currentValue.total / totalPortfolioValue) * 100;
 
     return {
       ...acc,
