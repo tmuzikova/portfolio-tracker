@@ -12,7 +12,7 @@ export const CompanyLogo = ({
 
   return (
     <div
-      className="flex items-center justify-center rounded-full bg-gray-400"
+      className="flex items-center justify-center rounded-full bg-slate-400"
       style={{ width: '7rem', height: '7rem', flexShrink: 0 }}
     >
       {image && !hasError ? (
