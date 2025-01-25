@@ -17,9 +17,7 @@ type StatCardProps = {
 
 export const StatCard = (props: StatCardProps) => {
   return (
-    <Card
-      className={`flex h-[150px] flex-col justify-between ${props.className}`}
-    >
+    <Card className={`flex flex-col justify-between ${props.className}`}>
       <CardHeader>
         <div className="flex items-center gap-2">
           {props.data.icon}
@@ -34,7 +32,7 @@ export const StatCard = (props: StatCardProps) => {
 
       <div>
         <CardContent
-          className={`text-[28px] font-semibold ${props.data.valueColor || ''}`}
+          className={`text-[28px] font-semibold ${props.data.valueColor || ''} py-2`}
         >
           {props.data.value} CZK
           {props.children}

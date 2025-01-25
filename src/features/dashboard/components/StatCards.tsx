@@ -97,8 +97,8 @@ export const StatCards = () => {
   return (
     <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
       <div className="flex flex-col gap-5">
-        <StatCard data={cardData.portfolioValue} className="md:h-[320px]" />
-        <StatCard data={cardData.totalValue} />
+        <StatCard data={cardData.portfolioValue} className="md:h-[317px]" />
+        <StatCard data={cardData.totalValue} className="md:h-[162px]" />
       </div>
 
       <div className="flex flex-col gap-5 md:col-span-1">
@@ -127,7 +127,7 @@ export const StatCards = () => {
 
       <div className="flex flex-col gap-5 md:col-span-2 lg:col-span-1">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-1">
-          <StatCard data={cardData.dividends} className="h-[320px]">
+          <StatCard data={cardData.dividends} className="h-[317px]">
             <div className="mt-4 space-y-2">
               <div className="text-sm font-normal text-muted-foreground">
                 Dividendový výnos
