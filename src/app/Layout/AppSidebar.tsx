@@ -1,14 +1,17 @@
 import {
+  ChevronUp,
   Home as HomeIcon,
   PanelLeft as PanelLeftIcon,
   Plus as PlusIcon,
   Receipt as ReceiptIcon,
+  User2 as UserIcon,
   X as XIcon,
 } from 'lucide-react';
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
@@ -20,6 +23,14 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { AddTransactionModal } from '@/components/AddTransactionModal';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useAuth } from '../AuthContextProvider';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 const items = [
   {
     title: 'Přehled',
@@ -35,7 +46,8 @@ const items = [
 
 export const AppSidebar = () => {
   const location = useLocation();
-  const { isMobile, openMobile, setOpenMobile, setOpen } = useSidebar();
+  const { isMobile, openMobile, setOpenMobile, setOpen, state } = useSidebar();
+  const { session, signOut } = useAuth();
 
   const collapsedClasses = {
     trigger:
@@ -48,6 +60,11 @@ export const AppSidebar = () => {
   };
 
   const triggerIcon = isMobile && openMobile ? <XIcon /> : <PanelLeftIcon />;
+
+  const user = session?.user;
+  const userName = user?.user_metadata?.full_name || 'Neznámý uživatel';
+  const userPhoto = user?.user_metadata?.avatar_url || null;
+  const userEmail = user?.email || null;
 
   return (
     <Sidebar
@@ -125,6 +142,41 @@ export const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton size="lg">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={userPhoto} />
+                    <AvatarFallback>
+                      <UserIcon className="h-6 w-6" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col items-start gap-0.5">
+                    <span className="text-sm font-medium">{userName}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {userEmail}
+                    </span>
+                  </div>
+                  <ChevronUp className="ml-auto h-4 w-4" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                side={isMobile || state === 'expanded' ? 'top' : 'right'}
+                sideOffset={15}
+                className="w-[--radix-popper-anchor-width]"
+              >
+                <DropdownMenuItem onClick={signOut}>
+                  <span className="text-[16px]">Odhlásit se</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 };
