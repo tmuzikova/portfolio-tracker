@@ -1,11 +1,11 @@
 import { Legend, Pie, PieChart } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
-import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
-import { usePieChartsData } from '@/hooks/usePieChartsData';
-import { PieChartDataType } from '@/types/pieCharts';
 import { LoadingState } from '@/components/LoadingState';
+import { usePieChartsData } from '@/hooks/usePieChartsData/usePieChartsData';
+import { PieChartDataType } from '@/hooks/usePieChartsData/types/pieCharts';
+import { DiversificationTypeButtons } from './DiversificationTypeButtons';
 
 const generateChartConfig = (data: PieChartDataType[]) => {
   return data.reduce<ChartConfig>((config, item) => {
@@ -17,13 +17,11 @@ const generateChartConfig = (data: PieChartDataType[]) => {
   }, {});
 };
 
-type DiversificationType = 'Aktiva' | 'Typ aktiva' | 'Sektor' | 'Dividendy';
-const diversificationTypes: DiversificationType[] = [
-  'Aktiva',
-  'Typ aktiva',
-  'Sektor',
-  'Dividendy',
-];
+export type DiversificationType =
+  | 'Aktiva'
+  | 'Typ aktiva'
+  | 'Sektor'
+  | 'Dividendy';
 
 export const PieChartCard = () => {
   const [selectedType, setSelectedType] =
@@ -62,22 +60,10 @@ export const PieChartCard = () => {
     <Card className="flex flex-col">
       <CardHeader className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-between lg:pb-0">
         <CardTitle>Diverzifikace portfolia</CardTitle>
-
-        <div className="mx-2 flex flex-wrap justify-center gap-2 pb-2 pt-6 lg:pt-0">
-          {diversificationTypes.map((type) => (
-            <Button
-              key={type}
-              onClick={() => setSelectedType(type)}
-              className={`rounded-md px-4 py-2 text-sm ${
-                selectedType === type
-                  ? 'text-white'
-                  : 'bg-slate-200 text-primary hover:bg-slate-300'
-              }`}
-            >
-              {type}
-            </Button>
-          ))}
-        </div>
+        <DiversificationTypeButtons
+          selectedType={selectedType}
+          onSelectType={setSelectedType}
+        />
       </CardHeader>
 
       <CardContent className="flex pb-2">

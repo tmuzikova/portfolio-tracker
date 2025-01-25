@@ -5,7 +5,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { usePortfolioPerformanceData } from '@/hooks/usePortfolioPerformanceData';
+import { usePortfolioPerformanceData } from '@/hooks/usePortflioPerformanceData/usePortfolioPerformanceData';
 import { HistoricalPriceData } from '@/types/historicalPrices';
 import { TimeRange } from './PortfolioHistoryChartCard';
 import { DailyPortfolio } from '@/utils/portfolioCalculations/getDailyPortfolio';
