@@ -145,16 +145,20 @@ export const AppSidebar = () => {
 
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem>
+          <SidebarMenuItem className="group-data-[state=collapsed]:!px-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size="lg">
+                <SidebarMenuButton
+                  size="lg"
+                  className="group-data-[state=collapsed]:!py-6"
+                >
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={userPhoto} />
                     <AvatarFallback>
                       <UserIcon className="h-6 w-6" />
                     </AvatarFallback>
                   </Avatar>
+
                   <div className="flex flex-col items-start gap-0.5">
                     <span className="text-sm font-medium">{userName}</span>
                     <span className="text-xs text-muted-foreground">
