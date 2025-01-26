@@ -21,7 +21,7 @@ export const SignInPage = () => {
               Vítejte v Trackfoliu
             </h1>
             <p className="text-md mt-2 text-muted-foreground">
-              Spravujte své investice na jednom místě
+              Sledujte své investice na jednom místě
             </p>
           </div>
         </CardHeader>
