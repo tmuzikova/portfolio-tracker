@@ -29,7 +29,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useAuth } from '../AuthContextProvider';
+import { useAuth } from '@/providers/AuthContextProvider';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 const items = [
   {

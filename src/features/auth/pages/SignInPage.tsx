@@ -1,4 +1,4 @@
-import { useAuth } from '@/app/AuthContextProvider';
+import { useAuth } from '@/providers/AuthContextProvider';
 import { LoadingState } from '@/components/LoadingState';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';

@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/app/AuthContextProvider';
+import { useAuth } from '@/providers/AuthContextProvider';
 import { LoadingState } from './LoadingState';
 
 type ProtectedRouteProps = {

@@ -1,5 +1,5 @@
 import { HistoricalPriceData } from '@/types/historicalPrices';
-import { DailyPortfolio } from '../../../utils/portfolioCalculations/getDailyPortfolio';
+import { DailyPortfolio } from '@/utils/portfolioCalculations/getDailyPortfolio';
 import { CurrentPortfolioItem } from '@/types/currentPortfolio';
 import { getLatestAvailablePrices } from './getLatestAvailablePrice';
 import { getApplicablePrice } from './getApplicablePrice';
