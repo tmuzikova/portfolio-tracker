@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/providers/AuthContextProvider';
-import { LoadingState } from './LoadingState';
+import { LoadingState } from '@/components/LoadingState';
 
 type ProtectedRouteProps = {
   children: React.ReactNode;
