@@ -29,14 +29,14 @@ export const PieChartCard = () => {
   const { holdingData, sectorData, typeData, dividendData, isLoading } =
     usePieChartsData();
 
-  const chartData =
-    selectedType === 'Sektor'
-      ? sectorData
-      : selectedType === 'Typ aktiva'
-        ? typeData
-        : selectedType === 'Aktiva'
-          ? holdingData
-          : dividendData;
+  const chartDataMap = {
+    Sektor: sectorData,
+    'Typ aktiva': typeData,
+    Aktiva: holdingData,
+    Dividendy: dividendData,
+  };
+
+  const chartData = chartDataMap[selectedType];
 
   const chartConfig = generateChartConfig(chartData);
 
