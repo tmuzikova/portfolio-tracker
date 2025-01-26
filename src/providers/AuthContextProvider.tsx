@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { supabase } from '@/api/supabaseClient';
+import { supabase } from '@/lib/supabaseClient';
 
 type AuthContextType = {
   session: Session | null;
