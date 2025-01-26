@@ -5,7 +5,6 @@ import { TransactionTablePage } from '@/features/transactionTable/pages/Transact
 import { ErrorPage } from '@/components/ErrorPage';
 import { StockCardPage } from '@/features/stockCard/pages/StockCardPage';
 import { SignInPage } from '@/features/auth/pages/SignInPage';
-import { ProtectedRoute } from './ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -18,27 +17,15 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        ),
+        element: <Dashboard />,
       },
       {
         path: '/transaction-table',
-        element: (
-          <ProtectedRoute>
-            <TransactionTablePage />
-          </ProtectedRoute>
-        ),
+        element: <TransactionTablePage />,
       },
       {
         path: '/detail/:symbol',
-        element: (
-          <ProtectedRoute>
-            <StockCardPage />
-          </ProtectedRoute>
-        ),
+        element: <StockCardPage />,
       },
     ],
     errorElement: <ErrorPage />,
