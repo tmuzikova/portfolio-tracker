@@ -1,11 +1,4 @@
-import {
-  Home as HomeIcon,
-  PanelLeft as PanelLeftIcon,
-  Plus as PlusIcon,
-  Receipt as ReceiptIcon,
-  X as XIcon,
-} from 'lucide-react';
-
+import { PanelLeft as PanelLeftIcon, Plus as PlusIcon } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -20,22 +13,15 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { AddTransactionModal } from '@/components/AddTransactionModal';
-const items = [
-  {
-    title: 'Přehled',
-    url: '/',
-    icon: HomeIcon,
-  },
-  {
-    title: 'Transakce',
-    url: '/transaction-table',
-    icon: ReceiptIcon,
-  },
-];
+import { SidebarItem } from './AppSidebar';
 
-export const AppSidebar = () => {
+type props = {
+  items: SidebarItem[];
+};
+
+export const DesktopSidebar = ({ items }: props) => {
   const location = useLocation();
-  const { isMobile, openMobile, setOpenMobile, setOpen } = useSidebar();
+  const { setOpen } = useSidebar();
 
   const collapsedClasses = {
     trigger:
@@ -47,14 +33,10 @@ export const AppSidebar = () => {
     content: 'group-data-[state=collapsed]:!px-2',
   };
 
-  const triggerIcon = isMobile && openMobile ? <XIcon /> : <PanelLeftIcon />;
+  const triggerIcon = <PanelLeftIcon />;
 
   return (
-    <Sidebar
-      collapsible="icon"
-      side={isMobile ? 'right' : 'left'}
-      variant="sidebar"
-    >
+    <Sidebar collapsible="icon" side="left" variant="sidebar">
       <span className="flex">
         <SidebarTrigger
           customIcon={triggerIcon}
@@ -75,17 +57,8 @@ export const AppSidebar = () => {
                   <SidebarMenuButton
                     asChild
                     isActive={location.pathname === item.url}
-                    className={clsx(
-                      collapsedClasses.button,
-                      isMobile && 'mb-2',
-                    )}
-                    onClick={() => {
-                      if (isMobile) {
-                        setOpenMobile(false);
-                      } else {
-                        setOpen(false);
-                      }
-                    }}
+                    className={clsx(collapsedClasses.button)}
+                    onClick={() => setOpen(false)}
                   >
                     <Link
                       to={item.url}
@@ -107,13 +80,7 @@ export const AppSidebar = () => {
                     collapsedClasses.button,
                     collapsedClasses.link,
                   )}
-                  onClick={() => {
-                    if (isMobile) {
-                      setOpenMobile(false);
-                    } else {
-                      setOpen(false);
-                    }
-                  }}
+                  onClick={() => setOpen(false)}
                 >
                   <span>
                     <PlusIcon />
