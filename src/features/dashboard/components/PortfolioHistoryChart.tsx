@@ -9,6 +9,8 @@ import { usePortfolioPerformanceData } from '@/hooks/usePortflioPerformanceData/
 import { HistoricalPriceData } from '@/types/historicalPrices';
 import { TimeRange } from './PortfolioHistoryChartCard';
 import { DailyPortfolio } from '@/utils/portfolioCalculations/getDailyPortfolio';
+import { formatXAxisTick } from '../utils/formatXAxisTick';
+import { getXAxisProps } from '../utils/getXAxisProps';
 
 type PortfolioHistoryChartProps = {
   stockPrices: HistoricalPriceData[];
@@ -31,79 +33,15 @@ export const PortfolioHistoryChart = ({
   const { oneWeek, oneMonth, oneYear, ytd, allTime } =
     usePortfolioPerformanceData(dailyPortfolio, stockPrices);
 
-  const chartData =
-    selectedTimeRange === 'Za celou dobu'
-      ? allTime
-      : selectedTimeRange === 'YTD'
-        ? ytd
-        : selectedTimeRange === '1M'
-          ? oneMonth
-          : selectedTimeRange === '1R'
-            ? oneYear
-            : oneWeek;
-
-  const formatXAxisTick = (dateStr: string, index: number) => {
-    const date = new Date(dateStr);
-
-    if (index === 0) {
-      return '';
-    }
-
-    switch (selectedTimeRange) {
-      case 'Za celou dobu':
-        return date.getFullYear().toString();
-      case '1R':
-      case 'YTD':
-        return (
-          date
-            .toLocaleDateString('cs-CZ', { month: 'short' })
-            .replace('.', '')
-            .charAt(0)
-            .toUpperCase() +
-          date
-            .toLocaleDateString('cs-CZ', { month: 'short' })
-            .replace('.', '')
-            .slice(1)
-        );
-      default:
-        return `${date.getDate()}.${date.getMonth() + 1}.`;
-    }
+  const chartDataMap = {
+    'Za celou dobu': allTime,
+    '1R': oneYear,
+    YTD: ytd,
+    '1M': oneMonth,
+    '1T': oneWeek,
   };
 
-  const getXAxisProps = () => {
-    switch (selectedTimeRange) {
-      case 'Za celou dobu':
-        return {
-          interval: Math.floor(chartData.length / 5),
-          minTickGap: 50,
-        };
-      case '1R':
-        return {
-          interval: Math.floor(chartData.length / 12),
-          minTickGap: 40,
-        };
-      case 'YTD':
-        return {
-          interval: Math.floor(chartData.length / 2),
-          minTickGap: 30,
-        };
-      case '1M':
-        return {
-          interval: Math.floor(chartData.length / 6),
-          minTickGap: 30,
-        };
-      case '1T':
-        return {
-          interval: Math.floor(chartData.length / 6),
-          minTickGap: 20,
-        };
-      default:
-        return {
-          interval: 0,
-          minTickGap: 30,
-        };
-    }
-  };
+  const chartData = chartDataMap[selectedTimeRange];
 
   return (
     <ChartContainer
@@ -125,8 +63,10 @@ export const PortfolioHistoryChart = ({
           tickLine={false}
           axisLine={false}
           tickMargin={8}
-          tickFormatter={(value, index) => formatXAxisTick(value, index)}
-          {...getXAxisProps()}
+          tickFormatter={(value, index) =>
+            formatXAxisTick(value, index, selectedTimeRange)
+          }
+          {...getXAxisProps(selectedTimeRange, chartData)}
         />
         <YAxis
           tickLine={false}
