@@ -12,8 +12,8 @@ export const SignInPage = () => {
   if (session) return <Navigate to="/" />;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-6">
-      <Card className="w-full max-w-sm shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-[hsl(var(--sidebar-accent))] px-4 py-6">
+      <Card className="w-full max-w-sm">
         <CardHeader>
           <div className="mb-6 flex flex-col items-center">
             <img src="/trackfolio.svg" alt="Logo" className="h-16 w-16" />
@@ -30,7 +30,7 @@ export const SignInPage = () => {
             onClick={signInWithGoogle}
             disabled={loading}
             variant="outline"
-            className="w-full bg-white shadow-sm hover:bg-slate-50 focus:ring"
+            className="w-full bg-white hover:bg-slate-50"
           >
             <GoogleLogo className="mr-2 !h-[24px] !w-[24px]" />
             <span className="text-[16px] font-medium text-slate-700">
