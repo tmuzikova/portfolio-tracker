@@ -1,13 +1,12 @@
 import { TimeRange } from '@/features/stockCard/components/StockCard';
 
-export const getTradingDaysForTimeRange = (timeRange: TimeRange): number => {
-  // approx. number of trading days
-  const DAYS_IN_WEEK = 5;
-  const DAYS_IN_MONTH = 21;
-  const DAYS_IN_YEAR = 252;
+export const getDaysForTimeRange = (timeRange: TimeRange): number => {
+  const DAYS_IN_WEEK = 7;
+  const DAYS_IN_MONTH = 30;
+  const DAYS_IN_YEAR = 360;
   const DAYS_IN_FIVE_YEARS = DAYS_IN_YEAR * 5;
 
-  const tradingDaysMap: Record<string, number> = {
+  const daysMap: Record<string, number> = {
     '1T': DAYS_IN_WEEK,
     '1M': DAYS_IN_MONTH,
     '1R': DAYS_IN_YEAR,
@@ -15,5 +14,5 @@ export const getTradingDaysForTimeRange = (timeRange: TimeRange): number => {
     YTD: 0, // separate case for YTD, as it's calculated differently
   };
 
-  return tradingDaysMap[timeRange];
+  return daysMap[timeRange];
 };

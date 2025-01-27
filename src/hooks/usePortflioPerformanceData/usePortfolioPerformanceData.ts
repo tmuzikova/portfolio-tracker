@@ -38,10 +38,9 @@ export const usePortfolioPerformanceData = (
     });
   };
 
-  // approx. number of trading days
-  const DAYS_IN_WEEK = 5;
-  const DAYS_IN_MONTH = 21;
-  const DAYS_IN_YEAR = 252;
+  const DAYS_IN_WEEK = 7;
+  const DAYS_IN_MONTH = 30;
+  const DAYS_IN_YEAR = 365;
 
   return {
     allTime: allDailyValues,

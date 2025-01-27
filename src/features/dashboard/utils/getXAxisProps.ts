@@ -16,7 +16,7 @@ const timeRangeConfig: Record<TimeRange, XAxisConfig> = {
     minTickGap: 40,
   },
   YTD: {
-    divisor: 2,
+    divisor: 6,
     minTickGap: 30,
   },
   '1M': {
