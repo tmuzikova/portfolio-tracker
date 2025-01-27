@@ -1,3 +1,4 @@
+import { formatMonth } from '@/utils/formatMonth';
 import { TimeRange } from '../components/StockCard';
 
 export const formatXAxisTick = (
@@ -7,18 +8,17 @@ export const formatXAxisTick = (
 ) => {
   const date = new Date(dateStr);
 
-  if (index === 0) return '';
-
-  switch (range) {
-    case '5R':
-      return date.getFullYear().toString();
-    case '1R':
-    case 'YTD':
-      const formattedMonth = date
-        .toLocaleDateString('cs-CZ', { month: 'short' })
-        .replace('.', '');
-      return `${formattedMonth.charAt(0).toUpperCase()}${formattedMonth.slice(1)}`;
-    default:
-      return `${date.getDate()}.${date.getMonth() + 1}.`;
+  if (index === 0) {
+    return '';
   }
+
+  const timeRangeMap: Record<string, (date: Date) => string> = {
+    '5R': (date) => date.getFullYear().toString(),
+    '1R': (date) => formatMonth(date),
+    YTD: (date) => formatMonth(date),
+    '1M': (date) => `${date.getDate()}.${date.getMonth() + 1}.`,
+    '1T': (date) => `${date.getDate()}.${date.getMonth() + 1}.`,
+  };
+
+  return timeRangeMap[range](date);
 };
