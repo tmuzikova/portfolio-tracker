@@ -1,51 +1,86 @@
 import { TransactionTableData } from '@/components/AddTransactionForm/AddTransactionForm';
+import { supabase } from '@/lib/supabaseClient';
 import { showErrorToast, showSuccessToast } from '@/utils/showToast';
 import { create } from 'zustand';
 
 type TransactionStore = {
   transactions: TransactionTableData[];
+  isLoading: boolean;
+  fetchTransactions: () => void;
   addTransaction: (transaction: TransactionTableData) => void;
   editTransaction: (updatedTransaction: TransactionTableData) => void;
   deleteTransaction: (id: string) => void;
 };
 
 export const useTransactionStore = create<TransactionStore>((set) => ({
-  transactions: JSON.parse(localStorage.getItem('transactions') || '[]'),
+  transactions: [],
+  isLoading: false,
 
-  addTransaction: (transaction) =>
-    set((state) => {
-      const newTransactions = [...state.transactions, transaction];
-      localStorage.setItem('transactions', JSON.stringify(newTransactions));
-      return { transactions: newTransactions };
-    }),
+  fetchTransactions: async () => {
+    try {
+      set({ isLoading: true });
+      const { data, error } = await supabase
+        .from('transactions')
+        .select('*')
+        .order('transactionDate', { ascending: false });
 
-  editTransaction: (updatedTransaction) =>
-    set((state) => {
-      const newTransactions = state.transactions.map((transaction) =>
-        transaction.id === updatedTransaction.id
-          ? updatedTransaction
-          : transaction,
-      );
-      localStorage.setItem('transactions', JSON.stringify(newTransactions));
-      return { transactions: newTransactions };
-    }),
+      if (error) throw error;
 
-  deleteTransaction: (id) => {
-    set((state) => {
-      const newTransactions = state.transactions.filter(
-        (transaction) => transaction.id !== id,
-      );
+      set({ transactions: data || [] });
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      showErrorToast('Nastala chyba při načítání transakcí');
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 
-      try {
-        localStorage.setItem('transactions', JSON.stringify(newTransactions));
-      } catch (error) {
-        console.error('Error deleting transaction from localStorage:', error);
-        showErrorToast('Nastala chyba při mazání transakce');
-        return { transactions: state.transactions };
-      }
+  addTransaction: async (transaction) => {
+    set({ isLoading: true });
+    const { error } = await supabase.from('transactions').insert(transaction);
+
+    if (error) throw error;
+
+    useTransactionStore.getState().fetchTransactions();
+    set({ isLoading: false });
+  },
+
+  editTransaction: async (updatedTransaction) => {
+    set({ isLoading: true });
+    const { error } = await supabase
+      .from('transactions')
+      .update(updatedTransaction)
+      .eq('id', updatedTransaction.id);
+
+    if (error) throw error;
+
+    useTransactionStore.getState().fetchTransactions();
+    set({ isLoading: false });
+  },
+
+  deleteTransaction: async (id) => {
+    try {
+      set({ isLoading: true });
+      const { error } = await supabase
+        .from('transactions')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      set((state) => ({
+        transactions: state.transactions.filter(
+          (transaction) => transaction.id !== id,
+        ),
+      }));
 
       showSuccessToast('Transakce byla úspěšně smazána');
-      return { transactions: newTransactions };
-    });
+    } catch (error) {
+      console.error('Error deleting transaction:', error);
+      showErrorToast('Nastala chyba při mazání transakce');
+      throw error;
+    } finally {
+      set({ isLoading: false });
+    }
   },
 }));
