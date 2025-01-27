@@ -2,13 +2,13 @@ import { z } from 'zod';
 
 export const CompanyProfileSchema = z.object({
   symbol: z.string(),
-  price: z.number(),
+  price: z.number().nullable(),
   beta: z.number().nullable(),
   volAvg: z.number(),
   mktCap: z.number(),
   lastDiv: z.number().nullable(),
-  range: z.string(),
-  changes: z.number(),
+  range: z.string().nullable(),
+  changes: z.number().nullable(),
   companyName: z.string(),
   currency: z.string(),
   cik: z.string().nullable(),
