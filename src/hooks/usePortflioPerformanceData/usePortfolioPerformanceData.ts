@@ -2,7 +2,7 @@ import { HistoricalPriceData } from '@/types/historicalPrices';
 import { calculateDailyPortfolioValues } from '@/hooks/usePortflioPerformanceData/utils/calculateDailyPortfolioValue';
 import { DailyPortfolio } from '@/utils/portfolioCalculations/getDailyPortfolio';
 
-type ChartDataPoint = {
+export type ChartDataPoint = {
   date: string;
   portfolio_value: number;
 };

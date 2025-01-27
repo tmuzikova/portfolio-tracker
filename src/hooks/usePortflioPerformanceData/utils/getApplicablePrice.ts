@@ -1,28 +1,46 @@
 import { HistoricalPriceData } from '@/types/historicalPrices';
 import { FX_RATE } from '@/utils/portfolioCalculations/const/FX_RATE';
 
+type PriceEntry = {
+  date: string;
+  close: number;
+};
+
+const findExactDatePrice = (
+  historicalPrices: PriceEntry[],
+  targetDate: string,
+): number | undefined => {
+  const priceOnDate = historicalPrices.find(
+    (entry) => entry.date === targetDate,
+  );
+  return priceOnDate ? priceOnDate.close * FX_RATE : undefined;
+};
+
+const findMostRecentPrice = (
+  historicalPrices: PriceEntry[],
+  targetDate: string,
+): number | undefined => {
+  const previousPrices = historicalPrices
+    .filter((entry) => entry.date < targetDate)
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+  return previousPrices.length > 0
+    ? previousPrices[0].close * FX_RATE
+    : undefined;
+};
+
 export const getApplicablePrice = (
-  symbolPriceData: HistoricalPriceData | undefined,
+  symbolPriceData: HistoricalPriceData,
   date: string,
   lastAvailablePrices: Record<string, number>,
 ): number | undefined => {
-  if (!symbolPriceData) return undefined;
+  const { historical, symbol } = symbolPriceData;
 
-  const priceOnDate = symbolPriceData.historical.find(
-    (entry) => entry.date === date,
-  );
+  const exactPrice = findExactDatePrice(historical, date);
+  if (exactPrice) return exactPrice;
 
-  if (priceOnDate) {
-    return priceOnDate.close * FX_RATE;
-  }
+  const recentPrice = findMostRecentPrice(historical, date);
+  if (recentPrice) return recentPrice;
 
-  const previousPrices = symbolPriceData.historical
-    .filter((entry) => entry.date < date)
-    .sort((a, b) => b.date.localeCompare(a.date));
-
-  if (previousPrices.length > 0) {
-    return previousPrices[0].close * FX_RATE;
-  }
-
-  return lastAvailablePrices[symbolPriceData.symbol];
+  return lastAvailablePrices[symbol];
 };
