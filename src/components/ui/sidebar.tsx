@@ -216,11 +216,11 @@ const Sidebar = React.forwardRef<
           >
             <DialogDescription>
               <VisuallyHidden>
-                Use the navigation links to browse the app.
+                Pro procházení aplikace použijte odkazy v menu.
               </VisuallyHidden>
             </DialogDescription>
             <DialogTitle>
-              <VisuallyHidden>Sidebar Navigation</VisuallyHidden>
+              <VisuallyHidden>Boční navigační menu</VisuallyHidden>
             </DialogTitle>
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>

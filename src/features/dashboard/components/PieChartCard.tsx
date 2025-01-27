@@ -1,11 +1,12 @@
-import { Legend, Pie, PieChart } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartConfig, ChartContainer } from '@/components/ui/chart';
+import { ChartConfig } from '@/components/ui/chart';
 import { useState, useEffect } from 'react';
 import { LoadingState } from '@/components/LoadingState';
 import { usePieChartsData } from '@/hooks/usePieChartsData/usePieChartsData';
 import { PieChartDataType } from '@/hooks/usePieChartsData/types/pieCharts';
 import { DiversificationTypeButtons } from './DiversificationTypeButtons';
+import { LargePie } from './LargePie';
+import { SmallPie } from './SmallPie';
 
 const generateChartConfig = (data: PieChartDataType[]) => {
   return data.reduce<ChartConfig>((config, item) => {
@@ -67,46 +68,11 @@ export const PieChartCard = () => {
       </CardHeader>
 
       <CardContent className="flex pb-2">
-        <ChartContainer
-          config={chartConfig}
-          className={`w-full [&_.recharts-pie-label-text]:fill-muted-foreground [&_.recharts-pie-label-text]:text-sm [&_.recharts-pie-label-text]:font-medium ${
-            isLargeScreen ? 'h-[450px]' : 'h-[350px]'
-          }`}
-        >
-          <PieChart margin={{ bottom: !isLargeScreen ? 20 : 0 }}>
-            <Pie
-              data={chartData}
-              paddingAngle={2}
-              dataKey="portfolioShare"
-              nameKey="groupProperty"
-              labelLine={false}
-              outerRadius={isLargeScreen ? '80%' : '90%'}
-              innerRadius={isLargeScreen ? '40%' : '50%'}
-              label={
-                isLargeScreen
-                  ? ({ name, percent }) =>
-                      `${name} (${(percent * 100).toFixed(1)} %)`
-                  : undefined
-              }
-            />
-            {!isLargeScreen && (
-              <Legend
-                layout="horizontal"
-                align="center"
-                verticalAlign="bottom"
-                wrapperStyle={{
-                  paddingTop: '24px',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                }}
-                formatter={(value, entry: any) => {
-                  const percentage = entry.payload.portfolioShare.toFixed(1);
-                  return `${value} (${percentage}%)`;
-                }}
-              />
-            )}
-          </PieChart>
-        </ChartContainer>
+        {isLargeScreen ? (
+          <LargePie chartConfig={chartConfig} chartData={chartData} />
+        ) : (
+          <SmallPie chartConfig={chartConfig} chartData={chartData} />
+        )}
       </CardContent>
     </Card>
   );

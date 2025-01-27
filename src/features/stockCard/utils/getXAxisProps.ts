@@ -4,7 +4,7 @@ export const getXAxisProps = (range: TimeRange, dataLength: number) => {
   const intervals = {
     '5R': Math.floor(dataLength / 5),
     '1R': Math.floor(dataLength / 12),
-    YTD: Math.floor(dataLength / 2),
+    YTD: Math.floor(dataLength / 6),
     '1M': Math.floor(dataLength / 6),
     '1T': Math.floor(dataLength / 6),
   };

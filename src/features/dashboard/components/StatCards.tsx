@@ -15,24 +15,21 @@ import { LoadingState } from '@/components/LoadingState';
 export const StatCards = () => {
   const { isLoading, statData, calculatedValues } = useStatCardData();
 
-  const getProfitColorAndIcon = (value: number) => {
-    const isPositive = value >= 0;
-    return {
-      icon: isPositive ? (
-        <TrendingUp className="h-5 w-5 text-[hsl(var(--chart-2))]" />
-      ) : (
-        <TrendingDown className="h-5 w-5 text-destructive" />
-      ),
-      valueColor: isPositive
-        ? 'text-[hsl(var(--chart-2))]'
-        : 'text-destructive',
-    };
-  };
+  const getProfitIcon = (value: number) =>
+    value >= 0 ? (
+      <TrendingUp className="h-5 w-5 text-[hsl(var(--chart-2))]" />
+    ) : (
+      <TrendingDown className="h-5 w-5 text-destructive" />
+    );
 
-  const unrealizedProfitStyle = getProfitColorAndIcon(
-    statData.unrealizedProfit,
-  );
-  const realizedProfitStyle = getProfitColorAndIcon(statData.realizedProfit);
+  const profitStyle = (value: number) =>
+    value >= 0 ? 'text-[hsl(var(--chart-2))]' : 'text-destructive';
+
+  const unrealizedProfitIcon = getProfitIcon(statData.unrealizedProfit);
+  const realizedProfitIcon = getProfitIcon(statData.realizedProfit);
+
+  const unrealizedProfitStyle = profitStyle(statData.unrealizedProfit);
+  const realizedProfitStyle = profitStyle(statData.realizedProfit);
 
   const cardData: { [key: string]: CardData } = {
     portfolioValue: {
@@ -56,15 +53,15 @@ export const StatCards = () => {
       tooltip:
         'Rozdíl mezi nákupní a současnou cenou aktuálně vlastněných aktiv.',
       title: 'Nerealizovaný zisk',
-      icon: unrealizedProfitStyle.icon,
-      valueColor: unrealizedProfitStyle.valueColor,
+      icon: unrealizedProfitIcon,
+      valueColor: unrealizedProfitStyle,
     },
     realizedProfit: {
       value: formatNumber(statData.realizedProfit),
       tooltip: 'Realizovaný zisk z prodeje aktiv.',
       title: 'Realizovaný zisk',
-      icon: realizedProfitStyle.icon,
-      valueColor: realizedProfitStyle.valueColor,
+      icon: realizedProfitIcon,
+      valueColor: realizedProfitStyle,
     },
     investedAmount: {
       value: formatNumber(statData.investedAmountInCurrentPortfolio.noFees),
@@ -105,7 +102,7 @@ export const StatCards = () => {
         <StatCard data={cardData.unrealizedProfit}>
           {calculatedValues.unrealizedProfitRelativeToPortfolioValue && (
             <div className="mt-2 text-sm font-normal text-muted-foreground">
-              <span className={unrealizedProfitStyle.valueColor}>
+              <span className={unrealizedProfitStyle}>
                 {calculatedValues.unrealizedProfitRelativeToPortfolioValue} %
               </span>{' '}
               z hodnoty portfolia

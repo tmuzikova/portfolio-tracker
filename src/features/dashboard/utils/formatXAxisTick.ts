@@ -1,10 +1,10 @@
 import { formatMonth } from '@/utils/formatMonth';
-import { TimeRange } from '../components/StockCard';
+import { TimeRange } from '../components/PortfolioHistoryChartCard';
 
 export const formatXAxisTick = (
   dateStr: string,
   index: number,
-  range: TimeRange,
+  selectedTimeRange: TimeRange,
 ) => {
   const date = new Date(dateStr);
 
@@ -13,12 +13,12 @@ export const formatXAxisTick = (
   }
 
   const timeRangeMap: Record<string, (date: Date) => string> = {
-    '5R': (date) => date.getFullYear().toString(),
+    'Za celou dobu': (date) => date.getFullYear().toString(),
     '1R': (date) => formatMonth(date),
     YTD: (date) => `${date.getDate()}.${date.getMonth() + 1}.`,
     '1M': (date) => `${date.getDate()}.${date.getMonth() + 1}.`,
     '1T': (date) => `${date.getDate()}.${date.getMonth() + 1}.`,
   };
 
-  return timeRangeMap[range](date);
+  return timeRangeMap[selectedTimeRange](date);
 };
