@@ -1,13 +1,11 @@
 import { TransactionTableData } from '@/components/AddTransactionForm/AddTransactionForm';
 
 export type calculationParams = {
-  existingTransactions: TransactionTableData[];
-  savedTransactions: TransactionTableData[];
+  transactions: TransactionTableData[];
 };
 
 export type dailyPortfolioCalculationParams = {
-  existingTransactions: TransactionTableData[];
-  savedTransactions: TransactionTableData[];
+  transactions: TransactionTableData[];
   startDate: string;
   endDate: string;
 };

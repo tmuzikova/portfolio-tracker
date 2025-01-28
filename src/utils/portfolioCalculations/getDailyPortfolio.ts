@@ -5,13 +5,10 @@ import { getCurrentPortfolio } from './getCurrentPortfolio';
 export type DailyPortfolio = Record<string, CurrentPortfolioItem[]>;
 
 export const getDailyPortfolio = ({
-  existingTransactions,
-  savedTransactions,
+  transactions,
   startDate,
   endDate,
 }: dailyPortfolioCalculationParams): DailyPortfolio => {
-  const transactions = [...existingTransactions, ...savedTransactions];
-
   const dateRange = Array.from(
     {
       length:
@@ -31,8 +28,7 @@ export const getDailyPortfolio = ({
     );
 
     const portfolioForTheDay = getCurrentPortfolio({
-      existingTransactions: transactionsUpToDate,
-      savedTransactions: [],
+      transactions: transactionsUpToDate,
     });
 
     return {
