@@ -70,8 +70,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       console.error('Sign out error:', error);
       throw error;
     }
-
-    setSession(null);
   };
 
   return (
