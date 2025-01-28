@@ -1,5 +1,5 @@
 import { api } from '@/api/client';
-import { getDataFromDB, saveDataToDB } from '@/lib/historicalDividendsIDB';
+import { getDataFromDB, saveDataToDB } from '@/lib/historicalDividendsDB';
 import { useTransactionStore } from '@/stores/TransactionStore';
 import {
   HistoricalDividendData,
