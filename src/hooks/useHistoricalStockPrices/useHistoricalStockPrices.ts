@@ -1,17 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/api/client';
-import {
-  getDataFromDB,
-  saveDataToDB,
-  getLatestDateFromData,
-  addOneDay,
-} from '@/lib/stockPricesIDB';
+import { getDataFromDB, saveDataToDB } from '@/lib/stockPricesDB';
 import { getPreviousTradingDay } from '@/utils/portfolioCalculations/getPreviousTradingDay';
 import {
   HistoricalPriceData,
   HistoricalPriceDataSchema,
 } from '@/types/historicalPrices';
 import { CurrentPortfolioItem } from '@/types/currentPortfolio';
+import { getLatestDateFromData } from './utils/getLatestDateFromData';
+import { addOneDay } from './utils/addOneDay';
 
 export const fetchPriceDataForSymbol = async (
   symbol: string,

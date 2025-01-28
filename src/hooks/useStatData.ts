@@ -1,4 +1,4 @@
-import { useHistoricalStockPrices } from '@/hooks/useHistoricalStockPrices';
+import { useHistoricalStockPrices } from '@/hooks/useHistoricalStockPrices/useHistoricalStockPrices';
 import { getSavedTransactions } from '@/utils/getSavedTransactions';
 import { useTransactionStore } from '@/stores/TransactionStore';
 import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';

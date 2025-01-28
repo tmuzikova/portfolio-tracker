@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { getDataFromDB } from '@/lib/stockPricesIDB';
+import { getDataFromDB } from '@/lib/stockPricesDB';
 import { HistoricalPriceData } from '@/types/historicalPrices';
 import {
   fetchAndSaveMissingData,
   getDateRange,
-} from './useHistoricalStockPrices';
+} from './useHistoricalStockPrices/useHistoricalStockPrices';
 
 const fetchSingleSymbolHistoricalPrices = async (
   symbol: string,

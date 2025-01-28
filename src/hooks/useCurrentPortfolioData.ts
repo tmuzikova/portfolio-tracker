@@ -1,7 +1,7 @@
 import { useTransactionStore } from '@/stores/TransactionStore';
 import { getSavedTransactions } from '@/utils/getSavedTransactions';
 import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';
-import { useHistoricalStockPrices } from './useHistoricalStockPrices';
+import { useHistoricalStockPrices } from './useHistoricalStockPrices/useHistoricalStockPrices';
 import { FX_RATE } from '@/utils/portfolioCalculations/const/FX_RATE';
 import {
   CurrentPortfolioItem,

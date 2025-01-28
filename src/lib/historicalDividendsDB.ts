@@ -12,7 +12,7 @@ export const getDataFromDB = async (
     .from('historical_dividends')
     .select('*')
     .eq('symbol', symbol)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error('Error fetching dividend data:', error);
@@ -34,20 +34,19 @@ export const saveDataToDB = async (
   data: HistoricalDividendData,
 ) => {
   const hasDividends = data.historical.length > 0;
-
-  const { error } = await supabase.from('historical_dividends').upsert(
-    {
-      symbol,
-      historical: data.historical,
-      lastUpdated: new Date().toISOString(),
-      hasDividends: hasDividends,
-    },
-    {
-      onConflict: 'symbol',
-    },
-  );
-
-  if (error) {
+  try {
+    await supabase.from('historical_dividends').upsert(
+      {
+        symbol,
+        historical: data.historical,
+        lastUpdated: new Date().toISOString(),
+        hasDividends,
+      },
+      {
+        onConflict: 'symbol',
+      },
+    );
+  } catch (error) {
     console.error('Error saving dividend data:', error);
     throw error;
   }

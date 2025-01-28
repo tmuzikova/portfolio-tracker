@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useHistoricalStockPrices } from '@/hooks/useHistoricalStockPrices';
+import { useHistoricalStockPrices } from '@/hooks/useHistoricalStockPrices/useHistoricalStockPrices';
 import { useTransactionStore } from '@/stores/TransactionStore';
 import { CurrentPortfolioItem } from '@/types/currentPortfolio';
 import { getSavedTransactions } from '@/utils/getSavedTransactions';

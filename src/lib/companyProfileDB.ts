@@ -6,14 +6,9 @@ export const saveCompanyProfileToDB = async (
   companyProfile: CompanyProfile,
 ): Promise<void> => {
   try {
-    const { error } = await supabase
-      .from('company_profiles')
-      .upsert(companyProfile, {
-        //upsert = insert or update
-        onConflict: 'symbol',
-      });
-
-    if (error) throw error;
+    await supabase.from('company_profiles').upsert(companyProfile, {
+      onConflict: 'symbol',
+    });
   } catch (error) {
     console.error(`Error in saveCompanyProfileToDB:`, error);
     throw error;
@@ -28,7 +23,7 @@ export const getCompanyProfileFromDB = async (
       .from('company_profiles')
       .select()
       .eq('symbol', symbol)
-      .maybeSingle(); // returns null if no record found
+      .maybeSingle();
 
     return data || null;
   } catch (error) {
