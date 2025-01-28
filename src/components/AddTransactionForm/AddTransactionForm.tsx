@@ -16,7 +16,7 @@ import { useTransactionStore } from '@/stores/TransactionStore';
 import { transactionTableDataSchema } from './transactionTableDataSchema';
 import { showErrorToast, showSuccessToast } from '@/utils/showToast';
 import { useState } from 'react';
-import { useCompanyProfile } from '@/hooks/useCompanyProfile';
+import { useCompanyProfileManual } from '@/hooks/useCompanyProfile';
 
 export type AddTransactionFormFields = z.infer<typeof formFieldsSchema>;
 export type TransactionTableData = z.infer<typeof transactionTableDataSchema>;
@@ -53,7 +53,7 @@ export const AddTransactionForm = ({
       : undefined,
   });
 
-  const { refetch } = useCompanyProfile(methods.watch('symbol'));
+  const { refetch } = useCompanyProfileManual(methods.watch('symbol'));
 
   const onSubmit: SubmitHandler<AddTransactionFormFields> = async (
     data: AddTransactionFormFields,

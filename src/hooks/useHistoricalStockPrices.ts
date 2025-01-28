@@ -13,7 +13,7 @@ import {
 } from '@/types/historicalPrices';
 import { CurrentPortfolioItem } from '@/types/currentPortfolio';
 
-const fetchPriceDataForSymbol = async (
+export const fetchPriceDataForSymbol = async (
   symbol: string,
   from: string,
   to: string,
@@ -33,7 +33,7 @@ const fetchPriceDataForSymbol = async (
   }
 };
 
-const fetchAndSaveMissingData = async (
+export const fetchAndSaveMissingData = async (
   symbol: string,
   dbData: HistoricalPriceData | null,
   fiveYearsAgo: string,
@@ -96,7 +96,7 @@ const fetchPortfolioPrices = async (
   );
 };
 
-const getDateRange = () => {
+export const getDateRange = () => {
   const previousTradingDay = getPreviousTradingDay();
   const fiveYearsAgoObj = new Date();
   fiveYearsAgoObj.setFullYear(fiveYearsAgoObj.getFullYear() - 5);

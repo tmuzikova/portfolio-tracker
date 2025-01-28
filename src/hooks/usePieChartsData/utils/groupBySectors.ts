@@ -1,4 +1,4 @@
-import { sectorsTranslation } from '@/utils/sectorsTranslation';
+import { sectorsTranslation } from '@/utils/sectorsIndustryTranslation';
 import { Accumulator } from '../types/accumulator';
 import { CurrentPortfolioItem } from '@/types/currentPortfolio';
 

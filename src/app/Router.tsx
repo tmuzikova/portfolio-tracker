@@ -2,7 +2,8 @@ import { createBrowserRouter } from 'react-router-dom';
 import { Layout } from './Layout/Layout';
 import { Dashboard } from '@/features/dashboard/pages/Dashboard';
 import { TransactionTablePage } from '@/features/transactionTable/pages/TransactionTablePage';
-import { NotFoundPage } from '@/components/NotFoundPage';
+import { ErrorPage } from '@/components/ErrorPage';
+import { StockCardPage } from '@/features/stockCard/pages/StockCardPage';
 
 const router = createBrowserRouter([
   {
@@ -17,8 +18,12 @@ const router = createBrowserRouter([
         path: '/transaction-table',
         element: <TransactionTablePage />,
       },
+      {
+        path: '/detail/:symbol',
+        element: <StockCardPage />,
+      },
     ],
-    errorElement: <NotFoundPage />,
+    errorElement: <ErrorPage />,
   },
 ]);
 
