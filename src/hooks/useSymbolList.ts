@@ -1,5 +1,5 @@
 import { api } from '@/api/client';
-import { getDataFromDB, saveDataToDB } from '@/lib/symbolDB';
+import { getDataFromDB, saveDataToDB } from '@/lib/symbolIDB';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
