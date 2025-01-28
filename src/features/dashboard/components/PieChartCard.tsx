@@ -7,6 +7,13 @@ import { PieChartDataType } from '@/hooks/usePieChartsData/types/pieCharts';
 import { DiversificationTypeButtons } from './DiversificationTypeButtons';
 import { LargePie } from './LargePie';
 import { SmallPie } from './SmallPie';
+import { getChartData } from '../utils/getChartData';
+
+export type DiversificationType =
+  | 'Aktiva'
+  | 'Typ aktiva'
+  | 'Sektor'
+  | 'Dividendy';
 
 const generateChartConfig = (data: PieChartDataType[]) => {
   return data.reduce<ChartConfig>((config, item) => {
@@ -18,12 +25,6 @@ const generateChartConfig = (data: PieChartDataType[]) => {
   }, {});
 };
 
-export type DiversificationType =
-  | 'Aktiva'
-  | 'Typ aktiva'
-  | 'Sektor'
-  | 'Dividendy';
-
 export const PieChartCard = () => {
   const [selectedType, setSelectedType] =
     useState<DiversificationType>('Aktiva');
@@ -32,15 +33,13 @@ export const PieChartCard = () => {
 
   const [isLargeScreen, setIsLargeScreen] = useState(false);
 
-  const chartData =
-    selectedType === 'Sektor'
-      ? sectorData
-      : selectedType === 'Typ aktiva'
-        ? typeData
-        : selectedType === 'Aktiva'
-          ? holdingData
-          : dividendData;
-
+  const chartData = getChartData(
+    selectedType,
+    holdingData,
+    sectorData,
+    typeData,
+    dividendData,
+  );
   const chartConfig = generateChartConfig(chartData);
 
   useEffect(() => {
