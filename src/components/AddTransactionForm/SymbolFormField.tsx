@@ -26,7 +26,7 @@ export const SymbolSelectFormField = ({
   const onSelectHandler = (holding: SymbolItem) => {
     methods.setValue('symbol', holding.symbol);
     const selectedCurrency = EXCHANGES.find(
-      (exchange) => exchange.name === holding.exchange,
+      (exchange) => exchange.name === holding.exchangeShortName,
     )?.currency;
 
     methods.setValue('currency', selectedCurrency ?? '');
@@ -47,8 +47,8 @@ export const SymbolSelectFormField = ({
             onSelect={onSelectHandler}
           />
           <FormDescription>
-            Lze zadávat pouze aktiva obchodovaná na burzách v USA. Ostatní
-            transakce nebudou zpracovány.
+            Lze zadávat pouze aktiva obchodovaná na burzách v USA (např.
+            NASDAQ). Ostatní transakce nebudou zpracovány.
           </FormDescription>
           <FormMessage />
         </FormItem>
