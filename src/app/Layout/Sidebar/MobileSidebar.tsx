@@ -78,12 +78,7 @@ export const MobileSidebar = ({ items }: props) => {
               ))}
 
               <AddTransactionModal>
-                <SidebarMenuButton
-                  className="mt-6 bg-[hsl(var(--sidebar-primary))] py-6 pl-4 text-[hsl(var(--sidebar-primary-foreground))] transition-colors hover:bg-[hsl(var(--sidebar-primary))] hover:text-[hsl(var(--sidebar-primary-foreground))]"
-                  onClick={() => {
-                    setOpenMobile(false);
-                  }}
-                >
+                <SidebarMenuButton className="mt-6 bg-[hsl(var(--sidebar-primary))] py-6 pl-4 text-[hsl(var(--sidebar-primary-foreground))] transition-colors hover:bg-[hsl(var(--sidebar-primary))] hover:text-[hsl(var(--sidebar-primary-foreground))]">
                   <span>
                     <PlusIcon />
                   </span>
