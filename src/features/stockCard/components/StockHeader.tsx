@@ -35,7 +35,7 @@ export function StockHeader({
 
         <div className="text-center md:text-left">
           <h1 className="text-3xl font-semibold lg:text-4xl">{symbol}</h1>
-          <h2 className="text-muted-foreground">
+          <h2 className="max-w-[280px] text-muted-foreground">
             {companyProfile.companyName} | {companyProfile.exchangeShortName}
           </h2>
         </div>
