@@ -1,8 +1,3 @@
-import { useTransactionStore } from '@/stores/TransactionStore';
-import { getSavedTransactions } from '@/utils/getSavedTransactions';
-import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';
-import { useHistoricalStockPrices } from '../useHistoricalStockPrices';
-import { calculateTotalPortfolioValue } from '@/utils/portfolioCalculations/calculateTotalPortfolioValue';
 import { groupTopTenAndOthers } from './utils/groupTopTenAndOthers';
 import { groupByHoldings } from './utils/groupByHoldings';
 import { groupBySector } from './utils/groupBySectors';
@@ -10,22 +5,15 @@ import { groupByType } from './utils/groupByType';
 import { useHistoricalDividends } from '../useHistoricalDividends';
 import { groupByDividends } from './utils/groupByDividends';
 import { COLORS } from './const/COLORS';
+import { useCurrentPortfolioData } from '../useCurrentPortfolioData';
 
 export const usePieChartsData = () => {
-  const existingTransactions = useTransactionStore(
-    (state) => state.transactions,
-  );
-  const savedTransactions = getSavedTransactions();
-  const currentPortfolio = getCurrentPortfolio({
-    existingTransactions,
-    savedTransactions,
-  });
-
   const {
-    data: priceData,
+    totalPortfolioValueCZK: totalPortfolioValue,
+    currentPortfolioWithPrices,
     isLoading: isPriceDataLoading,
     error: priceDataError,
-  } = useHistoricalStockPrices(currentPortfolio);
+  } = useCurrentPortfolioData();
 
   const {
     data: dividendData,
@@ -33,24 +21,23 @@ export const usePieChartsData = () => {
     error: dividendDataError,
   } = useHistoricalDividends();
 
-  const totalPortfolioValue = calculateTotalPortfolioValue(
-    currentPortfolio,
-    priceData,
-  );
-
   const groupedHoldings = groupTopTenAndOthers(
-    groupByHoldings(currentPortfolio, totalPortfolioValue),
+    groupByHoldings(currentPortfolioWithPrices, totalPortfolioValue),
   );
   const groupedSectors = groupTopTenAndOthers(
-    groupBySector(currentPortfolio, totalPortfolioValue),
+    groupBySector(currentPortfolioWithPrices, totalPortfolioValue),
   );
 
   const groupedTypes = groupTopTenAndOthers(
-    groupByType(currentPortfolio, totalPortfolioValue),
+    groupByType(currentPortfolioWithPrices, totalPortfolioValue),
   );
 
   const groupedDividends = dividendData
-    ? groupByDividends(currentPortfolio, dividendData, totalPortfolioValue)
+    ? groupByDividends(
+        currentPortfolioWithPrices,
+        dividendData,
+        totalPortfolioValue,
+      )
     : {};
 
   const groupedDividendsForChart = Object.values(groupedDividends).map(

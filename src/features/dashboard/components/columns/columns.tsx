@@ -142,7 +142,9 @@ export const columns: ColumnDef<CurrentPortfolioItemWithPriceData>[] = [
         row.getValue<CurrentPortfolioItemWithPriceData['profit']>('profit');
       const profitPercentage = profit.percentage.toFixed(2);
       const profitColor =
-        profit.absolute >= 0 ? 'text-green-500' : 'text-red-500';
+        profit.absolute >= 0
+          ? 'text-[hsl(var(--chart-2))]'
+          : 'text-destructive';
       return (
         <div className={`text-center ${profitColor}`}>
           <div className="font-medium">{`${formatNumber(Math.round(profit.absolute))} CZK`}</div>

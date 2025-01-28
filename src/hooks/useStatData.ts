@@ -4,7 +4,10 @@ import { useTransactionStore } from '@/stores/TransactionStore';
 import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';
 import { calculateUnrealizedProfit } from '@/utils/portfolioCalculations/calculateUnrealizedProfit';
 import { calculateRealizedProfit } from '@/utils/portfolioCalculations/calculateRealizedProfit';
-import { calculateInvestedAmount } from '@/utils/portfolioCalculations/calculateInvestedAmount';
+import {
+  calculateCurrentInvestedAmount,
+  calculateInvestedAmount,
+} from '@/utils/portfolioCalculations/calculateInvestedAmount';
 import { calculateTotalFees } from '@/utils/portfolioCalculations/calculateFees';
 import { useDividendCalculator } from './useDividendCalculator';
 import { FX_RATE } from '@/utils/portfolioCalculations/const/FX_RATE';
@@ -36,7 +39,9 @@ export const useStatCardData = () => {
       existingTransactions,
       savedTransactions,
     }),
-    investedAmount: calculateInvestedAmount({
+    investedAmountInCurrentPortfolio:
+      calculateCurrentInvestedAmount(currentPortfolio),
+    historicalInvestedAmount: calculateInvestedAmount({
       existingTransactions,
       savedTransactions,
     }),
@@ -45,7 +50,8 @@ export const useStatCardData = () => {
   };
 
   const portfolioValue =
-    statData.unrealizedProfit + statData.investedAmount.noFees;
+    statData.unrealizedProfit +
+    statData.investedAmountInCurrentPortfolio.noFees;
   const totalValue = statData.realizedProfit + portfolioValue - statData.fees;
   const unrealizedProfitRelativeToPortfolioValue =
     statData.unrealizedProfit > 0
@@ -55,11 +61,11 @@ export const useStatCardData = () => {
     2,
   );
   const dividendYieldOnCost = (
-    (statData.dividends / statData.investedAmount.withFees) *
+    (statData.dividends / statData.historicalInvestedAmount.withFees) *
     100
   ).toFixed(2);
   const feesPercentageOfInvestment = (
-    (statData.fees / statData.investedAmount.withFees) *
+    (statData.fees / statData.historicalInvestedAmount.withFees) *
     100
   ).toFixed(2);
 

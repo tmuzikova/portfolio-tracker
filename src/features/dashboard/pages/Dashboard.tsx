@@ -1,10 +1,10 @@
 import { AddTransactionModal } from '@/components/AddTransactionModal';
 import { StatCards } from '../components/StatCards';
-import { PortfolioHistoryChart } from '../components/PortfolioHistoryChart';
 import { PieChartCard } from '../components/PieChartCard';
 import { Button } from '@/components/ui/button';
 import { Plus as PlusIcon } from 'lucide-react';
 import { PortfolioPerformanceTable } from '../components/PortfolioPerformanceTable';
+import { PortfolioHistoryChartCard } from '../components/PortfolioHistoryChartCard';
 
 export const Dashboard = () => {
   return (
@@ -26,7 +26,7 @@ export const Dashboard = () => {
         </section>
 
         <section>
-          <PortfolioHistoryChart />
+          <PortfolioHistoryChartCard />
         </section>
 
         <section>

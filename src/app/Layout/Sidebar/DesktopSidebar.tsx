@@ -1,8 +1,4 @@
-import {
-  Home as HomeIcon,
-  Plus as PlusIcon,
-  Receipt as ReceiptIcon,
-} from 'lucide-react';
+import { PanelLeft as PanelLeftIcon, Plus as PlusIcon } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -12,25 +8,20 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { AddTransactionModal } from '@/components/AddTransactionModal';
-const items = [
-  {
-    title: 'Přehled',
-    url: '/',
-    icon: HomeIcon,
-  },
-  {
-    title: 'Transakce',
-    url: '/transaction-table',
-    icon: ReceiptIcon,
-  },
-];
+import { SidebarItem } from './AppSidebar';
 
-export const AppSidebar = () => {
+type props = {
+  items: SidebarItem[];
+};
+
+export const DesktopSidebar = ({ items }: props) => {
   const location = useLocation();
+  const { setOpen } = useSidebar();
 
   const collapsedClasses = {
     trigger:
@@ -42,10 +33,13 @@ export const AppSidebar = () => {
     content: 'group-data-[state=collapsed]:!px-2',
   };
 
+  const triggerIcon = <PanelLeftIcon />;
+
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" side="left" variant="sidebar">
       <span className="flex">
         <SidebarTrigger
+          customIcon={triggerIcon}
           className={clsx(
             'flex w-full items-center justify-end py-6 pr-3 hover:bg-transparent',
             collapsedClasses.trigger,
@@ -64,6 +58,7 @@ export const AppSidebar = () => {
                     asChild
                     isActive={location.pathname === item.url}
                     className={clsx(collapsedClasses.button)}
+                    onClick={() => setOpen(false)}
                   >
                     <Link
                       to={item.url}
@@ -85,6 +80,7 @@ export const AppSidebar = () => {
                     collapsedClasses.button,
                     collapsedClasses.link,
                   )}
+                  onClick={() => setOpen(false)}
                 >
                   <span>
                     <PlusIcon />

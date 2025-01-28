@@ -52,7 +52,7 @@ export function StockHeader({
               absoluteDifference={absoluteDifference}
               percentageDifference={percentageDifference}
             />
-            <p className="text-sm text-gray-500 md:text-base">
+            <p className="text-sm text-slate-500 md:text-base">
               {getTimeRangeLabel(selectedTimeRange)}
             </p>
           </div>

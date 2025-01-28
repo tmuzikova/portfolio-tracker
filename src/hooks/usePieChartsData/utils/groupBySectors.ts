@@ -1,15 +1,16 @@
 import { sectorsTranslation } from '@/utils/sectorsIndustryTranslation';
 import { Accumulator } from '../types/accumulator';
-import { CurrentPortfolioItem } from '@/types/currentPortfolio';
+import { CurrentPortfolioItemWithPriceData } from '@/types/currentPortfolio';
 
 export const groupBySector = (
-  currentPortfolio: CurrentPortfolioItem[],
+  currentPortfolio: CurrentPortfolioItemWithPriceData[],
   totalPortfolioValue: number,
 ) => {
   return currentPortfolio.reduce<Accumulator>((acc, item) => {
     const sector = item.sector || '';
     const translatedSector = sectorsTranslation[sector] || 'Nezařazeno';
-    const portfolioShare = (item.value.total / totalPortfolioValue) * 100;
+    const portfolioShare =
+      (item.currentValue.total / totalPortfolioValue) * 100;
 
     return {
       ...acc,

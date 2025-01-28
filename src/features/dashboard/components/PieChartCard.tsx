@@ -1,11 +1,19 @@
-import { Pie, PieChart } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartConfig, ChartContainer } from '@/components/ui/chart';
-import { useState } from 'react';
+import { ChartConfig } from '@/components/ui/chart';
+import { useState, useEffect } from 'react';
+import { LoadingState } from '@/components/LoadingState';
 import { usePieChartsData } from '@/hooks/usePieChartsData/usePieChartsData';
-import { Loader as LoaderIcon } from 'lucide-react';
 import { PieChartDataType } from '@/hooks/usePieChartsData/types/pieCharts';
 import { DiversificationTypeButtons } from './DiversificationTypeButtons';
+import { LargePie } from './LargePie';
+import { SmallPie } from './SmallPie';
+import { getChartData } from '../utils/getChartData';
+
+export type DiversificationType =
+  | 'Aktiva'
+  | 'Typ aktiva'
+  | 'Sektor'
+  | 'Dividendy';
 
 const generateChartConfig = (data: PieChartDataType[]) => {
   return data.reduce<ChartConfig>((config, item) => {
@@ -17,35 +25,35 @@ const generateChartConfig = (data: PieChartDataType[]) => {
   }, {});
 };
 
-export type DiversificationType =
-  | 'Aktiva'
-  | 'Typ aktiva'
-  | 'Sektor'
-  | 'Dividendy';
-
 export const PieChartCard = () => {
   const [selectedType, setSelectedType] =
     useState<DiversificationType>('Aktiva');
   const { holdingData, sectorData, typeData, dividendData, isLoading } =
     usePieChartsData();
 
-  const chartDataMap = {
-    Sektor: sectorData,
-    'Typ aktiva': typeData,
-    Aktiva: holdingData,
-    Dividendy: dividendData,
-  };
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
 
-  const chartData = chartDataMap[selectedType];
-
+  const chartData = getChartData(
+    selectedType,
+    holdingData,
+    sectorData,
+    typeData,
+    dividendData,
+  );
   const chartConfig = generateChartConfig(chartData);
 
+  useEffect(() => {
+    const updateScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+
+    updateScreenSize();
+    window.addEventListener('resize', updateScreenSize);
+    return () => window.removeEventListener('resize', updateScreenSize);
+  }, []);
+
   if (isLoading) {
-    return (
-      <div className="flex h-64 w-full items-center justify-center">
-        <LoaderIcon className="h-8 w-8 animate-spin text-gray-500" />
-      </div>
-    );
+    return <LoadingState />;
   }
 
   return (
@@ -59,21 +67,11 @@ export const PieChartCard = () => {
       </CardHeader>
 
       <CardContent className="flex pb-2">
-        <ChartContainer
-          config={chartConfig}
-          className="max-h-[450px] w-full [&_.recharts-pie-label-text]:fill-muted-foreground [&_.recharts-pie-label-text]:text-sm [&_.recharts-pie-label-text]:font-medium"
-        >
-          <PieChart>
-            <Pie
-              data={chartData}
-              dataKey="portfolioShare"
-              label={({ name, percent }) =>
-                `${name} (${(percent * 100).toFixed(1)}%)`
-              }
-              nameKey="groupProperty"
-            />
-          </PieChart>
-        </ChartContainer>
+        {isLargeScreen ? (
+          <LargePie chartConfig={chartConfig} chartData={chartData} />
+        ) : (
+          <SmallPie chartConfig={chartConfig} chartData={chartData} />
+        )}
       </CardContent>
     </Card>
   );

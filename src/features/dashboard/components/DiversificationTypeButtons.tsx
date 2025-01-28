@@ -15,7 +15,7 @@ export const DiversificationTypeButtons = ({
   selectedType: DiversificationType;
   onSelectType: (type: DiversificationType) => void;
 }) => (
-  <div className="flex gap-2 pb-2 pt-6 lg:pt-0">
+  <div className="mx-2 flex flex-wrap justify-center gap-2 pb-2 pt-6 lg:pt-0">
     {diversificationTypes.map((type) => (
       <Button
         key={type}
@@ -23,7 +23,7 @@ export const DiversificationTypeButtons = ({
         className={`rounded-md px-4 py-2 text-sm ${
           selectedType === type
             ? 'text-white'
-            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            : 'bg-slate-200 text-primary hover:bg-slate-300'
         }`}
       >
         {type}
