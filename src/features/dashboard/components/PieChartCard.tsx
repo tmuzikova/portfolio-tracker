@@ -26,14 +26,17 @@ export type DiversificationType =
 export const PieChartCard = () => {
   const [selectedType, setSelectedType] =
     useState<DiversificationType>('Aktiva');
-  const { holdingData, sectorData, typeData, isLoading } = usePieChartsData();
+  const { holdingData, sectorData, typeData, dividendData, isLoading } =
+    usePieChartsData();
 
-  const chartData =
-    selectedType === 'Sektor'
-      ? sectorData
-      : selectedType === 'Typ aktiva'
-        ? typeData
-        : holdingData;
+  const chartDataMap = {
+    Sektor: sectorData,
+    'Typ aktiva': typeData,
+    Aktiva: holdingData,
+    Dividendy: dividendData,
+  };
+
+  const chartData = chartDataMap[selectedType];
 
   const chartConfig = generateChartConfig(chartData);
 

@@ -5,6 +5,13 @@ export type calculationParams = {
   savedTransactions: TransactionTableData[];
 };
 
+export type dailyPortfolioCalculationParams = {
+  existingTransactions: TransactionTableData[];
+  savedTransactions: TransactionTableData[];
+  startDate: string;
+  endDate: string;
+};
+
 export type CurrentPortfolioTransaction = TransactionTableData & {
   remainingNumberOfStocksOwned: number;
 };
