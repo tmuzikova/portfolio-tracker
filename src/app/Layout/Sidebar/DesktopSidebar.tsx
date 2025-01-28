@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuthUserData } from '@/hooks/useAuthUserData';
 
 type props = {
   items: SidebarItem[];
@@ -35,8 +36,9 @@ type props = {
 
 export const DesktopSidebar = ({ items }: props) => {
   const location = useLocation();
-  const { session, signOut } = useAuth();
+  const { signOut } = useAuth();
   const { setOpen, state } = useSidebar();
+  const { userName, userPhoto, userEmail } = useAuthUserData();
 
   const collapsedClasses = {
     trigger:
@@ -49,11 +51,6 @@ export const DesktopSidebar = ({ items }: props) => {
   };
 
   const triggerIcon = <PanelLeftIcon />;
-
-  const user = session?.user;
-  const userName = user?.user_metadata?.full_name || 'Neznámý uživatel';
-  const userPhoto = user?.user_metadata?.avatar_url || null;
-  const userEmail = user?.email || null;
 
   return (
     <Sidebar collapsible="icon" side="left" variant="sidebar">
@@ -123,7 +120,7 @@ export const DesktopSidebar = ({ items }: props) => {
                   className="group-data-[state=collapsed]:!py-6"
                 >
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={userPhoto} />
+                    <AvatarImage src={userPhoto || undefined} />
                     <AvatarFallback>
                       <UserIcon className="h-6 w-6" />
                     </AvatarFallback>
