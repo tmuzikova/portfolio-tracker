@@ -1,7 +1,13 @@
-import { PanelLeft as PanelLeftIcon, Plus as PlusIcon } from 'lucide-react';
+import {
+  ChevronUp as ChevronUpIcon,
+  PanelLeft as PanelLeftIcon,
+  Plus as PlusIcon,
+  User2 as UserIcon,
+} from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
@@ -14,6 +20,15 @@ import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { AddTransactionModal } from '@/components/AddTransactionModal';
 import { SidebarItem } from './AppSidebar';
+import { useAuth } from '@/providers/AuthContextProvider';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuthUserData } from '@/hooks/useAuthUserData';
 
 type props = {
   items: SidebarItem[];
@@ -21,7 +36,9 @@ type props = {
 
 export const DesktopSidebar = ({ items }: props) => {
   const location = useLocation();
-  const { setOpen } = useSidebar();
+  const { signOut } = useAuth();
+  const { setOpen, state } = useSidebar();
+  const { userName, userPhoto, userEmail } = useAuthUserData();
 
   const collapsedClasses = {
     trigger:
@@ -92,6 +109,45 @@ export const DesktopSidebar = ({ items }: props) => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem className="group-data-[state=collapsed]:!px-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  size="lg"
+                  className="group-data-[state=collapsed]:!py-6"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={userPhoto || undefined} />
+                    <AvatarFallback>
+                      <UserIcon className="h-6 w-6" />
+                    </AvatarFallback>
+                  </Avatar>
+
+                  <div className="flex flex-col items-start gap-0.5">
+                    <span className="text-sm font-medium">{userName}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {userEmail}
+                    </span>
+                  </div>
+                  <ChevronUpIcon className="ml-auto h-4 w-4" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                side={state === 'expanded' ? 'top' : 'right'}
+                sideOffset={15}
+                className="w-[--radix-popper-anchor-width]"
+              >
+                <DropdownMenuItem onClick={signOut}>
+                  <span className="text-[16px]">Odhlásit se</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 };

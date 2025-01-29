@@ -4,6 +4,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { Toaster } from '@/components/ui/toaster';
+import { ProtectedRoute } from '../ProtectedRoute';
 
 export const Layout = () => {
   return (
@@ -12,7 +13,11 @@ export const Layout = () => {
       <main className="flex w-full flex-col overflow-x-hidden">
         <div className="flex-grow">
           <Header />
-          <Outlet />
+
+          <ProtectedRoute>
+            <Outlet />
+          </ProtectedRoute>
+
           <Toaster />
         </div>
         <Footer />
