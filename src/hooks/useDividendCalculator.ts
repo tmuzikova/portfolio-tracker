@@ -1,23 +1,18 @@
 import { useHistoricalDividends } from '@/hooks/useHistoricalDividends';
 import { getDailyPortfolio } from '@/utils/portfolioCalculations/getDailyPortfolio';
-import { getSavedTransactions } from '@/utils/getSavedTransactions';
 import { useTransactionStore } from '@/stores/TransactionStore';
 import { getSortedTransactions } from '@/utils/portfolioCalculations/getSortedTransactions';
 import { calculateTotalDividendsForSymbol } from '@/utils/portfolioCalculations/calculateTotalDividendsForSymbol';
 
 export const useDividendCalculator = () => {
-  const savedTransactions = getSavedTransactions();
-  const existingTransactions = useTransactionStore(
-    (state) => state.transactions,
-  );
-  const transactions = [...existingTransactions, ...savedTransactions];
+  const transactions = useTransactionStore((state) => state.transactions);
+
   const startDate = getSortedTransactions(transactions)[0]?.transactionDate;
 
   const endDate = new Date().toISOString().split('T')[0];
 
   const dailyPortfolio = getDailyPortfolio({
-    existingTransactions,
-    savedTransactions,
+    transactions,
     startDate,
     endDate,
   });

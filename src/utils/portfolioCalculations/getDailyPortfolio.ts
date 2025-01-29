@@ -23,13 +23,10 @@ const generateDateRange = (startDate: string, endDate: string): string[] => {
 };
 
 export const getDailyPortfolio = ({
-  existingTransactions,
-  savedTransactions,
+  transactions,
   startDate,
   endDate,
 }: dailyPortfolioCalculationParams): DailyPortfolio => {
-  const transactions = [...existingTransactions, ...savedTransactions];
-
   const dateRange = generateDateRange(startDate, endDate);
 
   return dateRange.reduce<DailyPortfolio>((dailyPortfolio, currentDate) => {
@@ -38,8 +35,7 @@ export const getDailyPortfolio = ({
     );
 
     const portfolioForTheDay = getCurrentPortfolio({
-      existingTransactions: transactionsUpToDate,
-      savedTransactions: [],
+      transactions: transactionsUpToDate,
     });
 
     return {

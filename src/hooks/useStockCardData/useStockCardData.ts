@@ -3,7 +3,7 @@ import { HistoricalPriceData } from '@/types/historicalPrices';
 import { TimeRange } from '@/features/stockCard/components/StockCard';
 import { calculatePriceDifference } from './utils/calculatePriceDifference';
 import { calculateYTDPriceDifference } from './utils/calculateYTDPriceDifference';
-import { getDaysForTimeRange } from './utils/getDaysForTimeRange';
+import { getTradingDaysForTimeRange } from './utils/getDaysForTimeRange';
 
 export const useStockCardData = (
   symbol: string,
@@ -21,7 +21,7 @@ export const useStockCardData = (
       return calculateYTDPriceDifference(stockPrices, latestPrice);
     }
 
-    const days = getDaysForTimeRange(selectedTimeRange);
+    const days = getTradingDaysForTimeRange(selectedTimeRange);
     return calculatePriceDifference(stockPrices, latestPrice, days);
   };
 
