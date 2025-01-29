@@ -1,6 +1,81 @@
 [
   {
-    "id": "1",
+    "id": "1689635c-d2eb-4003-a7ed-c18f219d1a20",
+    "transactionType": "Nákup",
+    "holding": {
+      "holdingIcon": "https://images.financialmodelingprep.com/symbol/ISHG.png",
+      "holdingSymbol": "ISHG",
+      "holdingName": "i Shares1-3Year International Treasury Bond ETF"
+    },
+    "sector": "Financial Services",
+    "type": {
+      "isFund": false,
+      "isEtf": true
+    },
+    "transactionDate": "2024-06-28",
+    "numberOfStocks": 20,
+    "transactionValue": {
+      "total": 1400,
+      "perShare": 70,
+      "currency": "USD"
+    },
+    "transactionFee": {
+      "total": 12,
+      "currency": "USD"
+    }
+  },
+  {
+    "id": "3bff4beb-c682-4145-a8b7-8f1e3ea31612",
+    "transactionType": "Nákup",
+    "holding": {
+      "holdingIcon": "https://images.financialmodelingprep.com/symbol/SBUX.png",
+      "holdingSymbol": "SBUX",
+      "holdingName": "Starbucks Corporation"
+    },
+    "sector": "Consumer Cyclical",
+    "type": {
+      "isFund": false,
+      "isEtf": false
+    },
+    "transactionDate": "2024-10-02",
+    "numberOfStocks": 30,
+    "transactionValue": {
+      "total": 2895,
+      "perShare": 96.5,
+      "currency": "USD"
+    },
+    "transactionFee": {
+      "total": 10,
+      "currency": "USD"
+    }
+  },
+  {
+    "id": "4203be34-0e8a-4b6f-81a8-fa11bd3dbdf1",
+    "transactionType": "Prodej",
+    "holding": {
+      "holdingIcon": "https://images.financialmodelingprep.com/symbol/NVDA.png",
+      "holdingSymbol": "NVDA",
+      "holdingName": "NVIDIA Corporation"
+    },
+    "sector": "Technology",
+    "type": {
+      "isFund": false,
+      "isEtf": false
+    },
+    "transactionDate": "2025-01-27",
+    "numberOfStocks": 10,
+    "transactionValue": {
+      "total": 1420,
+      "perShare": 142,
+      "currency": "USD"
+    },
+    "transactionFee": {
+      "total": 10,
+      "currency": "USD"
+    }
+  },
+  {
+    "id": "770e764e-bc23-4c0a-8411-e8591342d658",
     "transactionType": "Nákup",
     "holding": {
       "holdingIcon": "https://images.financialmodelingprep.com/symbol/AAPL.png",
@@ -12,20 +87,45 @@
       "isFund": false,
       "isEtf": false
     },
-    "transactionDate": "2024-10-01",
+    "transactionDate": "2022-05-16",
     "numberOfStocks": 10,
     "transactionValue": {
-      "total": 1000,
-      "perShare": 100,
+      "total": 1500,
+      "perShare": 150,
       "currency": "USD"
     },
     "transactionFee": {
-      "total": 0,
+      "total": 5,
       "currency": "USD"
     }
   },
   {
-    "id": "2",
+    "id": "795a59de-fa77-4ae7-bd2a-f0b8e0a5ca70",
+    "transactionType": "Nákup",
+    "holding": {
+      "holdingIcon": "https://images.financialmodelingprep.com/symbol/NVDA.png",
+      "holdingSymbol": "NVDA",
+      "holdingName": "NVIDIA Corporation"
+    },
+    "sector": "Technology",
+    "type": {
+      "isFund": false,
+      "isEtf": false
+    },
+    "transactionDate": "2024-02-22",
+    "numberOfStocks": 20,
+    "transactionValue": {
+      "total": 1560,
+      "perShare": 78,
+      "currency": "USD"
+    },
+    "transactionFee": {
+      "total": 10,
+      "currency": "USD"
+    }
+  },
+  {
+    "id": "8b623fb6-3a2e-4874-8b06-f38fd377db30",
     "transactionType": "Nákup",
     "holding": {
       "holdingIcon": "https://images.financialmodelingprep.com/symbol/MSFT.png",
@@ -37,15 +137,40 @@
       "isFund": false,
       "isEtf": false
     },
-    "transactionDate": "2024-10-02",
+    "transactionDate": "2021-08-10",
     "numberOfStocks": 5,
     "transactionValue": {
-      "total": 2000,
-      "perShare": 400,
+      "total": 750,
+      "perShare": 150,
       "currency": "USD"
     },
     "transactionFee": {
-      "total": 0,
+      "total": 10,
+      "currency": "USD"
+    }
+  },
+  {
+    "id": "c1b5c6af-da98-431e-a047-eba8a3b5bc9f",
+    "transactionType": "Nákup",
+    "holding": {
+      "holdingIcon": "https://images.financialmodelingprep.com/symbol/GOOG.png",
+      "holdingSymbol": "GOOG",
+      "holdingName": "Alphabet Inc."
+    },
+    "sector": "Communication Services",
+    "type": {
+      "isFund": false,
+      "isEtf": false
+    },
+    "transactionDate": "2023-12-01",
+    "numberOfStocks": 3,
+    "transactionValue": {
+      "total": 720,
+      "perShare": 240,
+      "currency": "USD"
+    },
+    "transactionFee": {
+      "total": 10,
       "currency": "USD"
     }
   }
