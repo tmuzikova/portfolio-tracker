@@ -3,9 +3,9 @@
     "id": "1689635c-d2eb-4003-a7ed-c18f219d1a20",
     "transactionType": "Nákup",
     "holding": {
-      "holdingIcon": "https://images.financialmodelingprep.com/symbol/ISHG.png",
-      "holdingSymbol": "ISHG",
-      "holdingName": "i Shares1-3Year International Treasury Bond ETF"
+      "holdingIcon": "https://images.financialmodelingprep.com/symbol/VOO.png",
+      "holdingSymbol": "VOO",
+      "holdingName": "Vanguard S&P 500 ETF"
     },
     "sector": "Financial Services",
     "type": {
@@ -13,10 +13,10 @@
       "isEtf": true
     },
     "transactionDate": "2024-06-28",
-    "numberOfStocks": 20,
+    "numberOfStocks": 10,
     "transactionValue": {
-      "total": 1400,
-      "perShare": 70,
+      "total": 4810,
+      "perShare": 481,
       "currency": "USD"
     },
     "transactionFee": {
@@ -53,11 +53,11 @@
     "id": "4203be34-0e8a-4b6f-81a8-fa11bd3dbdf1",
     "transactionType": "Prodej",
     "holding": {
-      "holdingIcon": "https://images.financialmodelingprep.com/symbol/NVDA.png",
-      "holdingSymbol": "NVDA",
-      "holdingName": "NVIDIA Corporation"
+      "holdingIcon": "https://images.financialmodelingprep.com/symbol/TSLA.png",
+      "holdingSymbol": "TSLA",
+      "holdingName": "Tesla, Inc."
     },
-    "sector": "Technology",
+    "sector": "Consumer Cyclical",
     "type": {
       "isFund": false,
       "isEtf": false
@@ -103,11 +103,11 @@
     "id": "795a59de-fa77-4ae7-bd2a-f0b8e0a5ca70",
     "transactionType": "Nákup",
     "holding": {
-      "holdingIcon": "https://images.financialmodelingprep.com/symbol/NVDA.png",
-      "holdingSymbol": "NVDA",
-      "holdingName": "NVIDIA Corporation"
+      "holdingIcon": "https://images.financialmodelingprep.com/symbol/TSLA.png",
+      "holdingSymbol": "TSLA",
+      "holdingName": "Tesla, Inc."
     },
-    "sector": "Technology",
+    "sector": "Consumer Cyclical",
     "type": {
       "isFund": false,
       "isEtf": false
