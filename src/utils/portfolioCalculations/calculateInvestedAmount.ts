@@ -21,11 +21,8 @@ export const calculateCurrentInvestedAmount = (
 };
 
 export const calculateInvestedAmount = ({
-  existingTransactions,
-  savedTransactions,
+  transactions,
 }: calculationParams) => {
-  const transactions = [...existingTransactions, ...savedTransactions];
-
   const purchaseTransactions = transactions.filter(
     (tx) => tx.transactionType === 'Nákup',
   );

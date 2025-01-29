@@ -10,11 +10,8 @@ import {
 import { calculationParams } from '@/types/calculations';
 
 export const getCurrentPortfolio = ({
-  existingTransactions,
-  savedTransactions,
+  transactions,
 }: calculationParams): CurrentPortfolioItem[] => {
-  const transactions = [...existingTransactions, ...savedTransactions];
-
   const purchaseTransactions: CurrentPortfolioTransaction[] =
     getSortedPurchaseTransactions(transactions).map((tx) => ({
       ...tx,

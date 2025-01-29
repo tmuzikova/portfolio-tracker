@@ -7,11 +7,8 @@ import { FX_RATE } from './const/FX_RATE';
 import { CurrentPortfolioTransaction } from '@/types/currentPortfolio';
 
 export const calculateRealizedProfit = ({
-  existingTransactions,
-  savedTransactions,
+  transactions,
 }: calculationParams) => {
-  const transactions = [...existingTransactions, ...savedTransactions];
-
   const purchaseTransactions: CurrentPortfolioTransaction[] =
     getSortedPurchaseTransactions(transactions).map((tx) => ({
       ...tx,

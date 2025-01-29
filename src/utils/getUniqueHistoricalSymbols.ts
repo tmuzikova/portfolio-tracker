@@ -1,11 +1,8 @@
 import { calculationParams } from '@/types/calculations';
 
 export const getUniqueHistoricalSymbols = ({
-  existingTransactions,
-  savedTransactions,
+  transactions,
 }: calculationParams): string[] => {
-  const transactions = [...existingTransactions, ...savedTransactions];
-
   const uniqueSymbols = new Set(
     transactions.map((tx) => tx.holding.holdingSymbol),
   );

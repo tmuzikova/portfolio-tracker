@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useHistoricalStockPrices } from '@/hooks/useHistoricalStockPrices';
 import { useTransactionStore } from '@/stores/TransactionStore';
 import { CurrentPortfolioItem } from '@/types/currentPortfolio';
-import { getSavedTransactions } from '@/utils/getSavedTransactions';
 import { getDailyPortfolio } from '@/utils/portfolioCalculations/getDailyPortfolio';
 import { getSortedTransactions } from '@/utils/portfolioCalculations/getSortedTransactions';
 import { PortfolioHistoryChart } from './PortfolioHistoryChart';
@@ -15,18 +14,15 @@ const TIME_RANGES: TimeRange[] = ['Za celou dobu', '1R', 'YTD', '1M', '1T'];
 
 export const PortfolioHistoryChartCard = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>('1R');
-  const savedTransactions = getSavedTransactions();
-  const existingTransactions = useTransactionStore(
-    (state) => state.transactions,
-  );
-  const transactions = [...existingTransactions, ...savedTransactions];
+
+  const transactions = useTransactionStore((state) => state.transactions);
+
   const startDate = getSortedTransactions(transactions)[0]?.transactionDate;
 
   const endDate = new Date().toISOString().split('T')[0];
 
   const dailyPortfolio = getDailyPortfolio({
-    existingTransactions,
-    savedTransactions,
+    transactions,
     startDate,
     endDate,
   });
