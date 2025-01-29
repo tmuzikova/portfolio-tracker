@@ -15,8 +15,6 @@ export const calculatePriceDifference = (
 
   const pastPrice = sortedData[sortedData.length - days]?.close;
 
-  console.log(sortedData[sortedData.length - days]);
-
   if (pastPrice === undefined) {
     return null;
   }
