@@ -4,6 +4,7 @@ import { create } from 'zustand';
 
 type TransactionStore = {
   transactions: TransactionTableData[];
+  initializeTransactions: (transactions: TransactionTableData[]) => void;
   addTransaction: (transaction: TransactionTableData) => void;
   editTransaction: (updatedTransaction: TransactionTableData) => void;
   deleteTransaction: (id: string) => void;
@@ -11,6 +12,26 @@ type TransactionStore = {
 
 export const useTransactionStore = create<TransactionStore>((set) => ({
   transactions: JSON.parse(localStorage.getItem('transactions') || '[]'),
+
+  initializeTransactions: (initialTransactions) =>
+    set((state) => {
+      const existingTransactions = state.transactions;
+
+      const mergedTransactions = [
+        ...existingTransactions,
+        ...initialTransactions.filter(
+          (newTransaction) =>
+            !existingTransactions.some(
+              (existingTransaction) =>
+                existingTransaction.id === newTransaction.id,
+            ),
+        ),
+      ];
+
+      localStorage.setItem('transactions', JSON.stringify(mergedTransactions));
+
+      return { transactions: mergedTransactions };
+    }),
 
   addTransaction: (transaction) =>
     set((state) => {
