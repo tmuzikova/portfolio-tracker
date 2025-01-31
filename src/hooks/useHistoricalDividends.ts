@@ -1,12 +1,11 @@
 import { api } from '@/api/client';
-import { getDataFromDB, saveDataToDB } from '@/lib/historicalDividendsIDB';
+import { getDataFromDB, saveDataToDB } from '@/lib/historicalDividendsDB';
 import { useTransactionStore } from '@/stores/TransactionStore';
 import {
   HistoricalDividendData,
   historicalDividendDataSchema,
   HistoricalDividendDataWithLastUpdated,
 } from '@/types/historicalDividends';
-import { getSavedTransactions } from '@/utils/getSavedTransactions';
 import { getUniqueHistoricalSymbols } from '@/utils/getUniqueHistoricalSymbols';
 import { isDividendDataStale } from '@/utils/isDividendDataStale';
 import { useQuery } from '@tanstack/react-query';
@@ -55,14 +54,10 @@ const fetchPortfolioDividends = async (
 };
 
 export const useHistoricalDividends = () => {
-  const existingTransactions = useTransactionStore(
-    (state) => state.transactions,
-  );
-  const savedTransactions = getSavedTransactions();
+  const transactions = useTransactionStore((state) => state.transactions);
 
   const symbols = getUniqueHistoricalSymbols({
-    existingTransactions,
-    savedTransactions,
+    transactions,
   });
 
   const { data, isLoading, error } = useQuery<

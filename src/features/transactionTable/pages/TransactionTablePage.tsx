@@ -4,16 +4,11 @@ import { Plus as PlusIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { columns } from '../components/columns/columns';
 import { useTransactionStore } from '@/stores/TransactionStore';
-import { getSavedTransactions } from '@/utils/getSavedTransactions';
 
 export const TransactionTablePage = () => {
   const defaultSorting: ColumnSort = { id: 'transactionDate', desc: true };
 
-  const savedTransactions = getSavedTransactions();
-  const existingTransactions = useTransactionStore(
-    (state) => state.transactions,
-  );
-  const transactions = [...existingTransactions, ...savedTransactions];
+  const transactions = useTransactionStore((state) => state.transactions);
 
   return (
     <section className="container mx-auto px-4 pb-12">

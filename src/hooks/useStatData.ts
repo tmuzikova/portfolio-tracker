@@ -1,5 +1,4 @@
-import { useHistoricalStockPrices } from '@/hooks/useHistoricalStockPrices';
-import { getSavedTransactions } from '@/utils/getSavedTransactions';
+import { useHistoricalStockPrices } from '@/hooks/useHistoricalStockPrices/useHistoricalStockPrices';
 import { useTransactionStore } from '@/stores/TransactionStore';
 import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';
 import { calculateUnrealizedProfit } from '@/utils/portfolioCalculations/calculateUnrealizedProfit';
@@ -13,14 +12,10 @@ import { useDividendCalculator } from './useDividendCalculator';
 import { FX_RATE } from '@/utils/portfolioCalculations/const/FX_RATE';
 
 export const useStatCardData = () => {
-  const savedTransactions = getSavedTransactions();
-  const existingTransactions = useTransactionStore(
-    (state) => state.transactions,
-  );
+  const transactions = useTransactionStore((state) => state.transactions);
 
   const currentPortfolio = getCurrentPortfolio({
-    existingTransactions,
-    savedTransactions,
+    transactions,
   });
   const { data: historicalPrices, isLoading } =
     useHistoricalStockPrices(currentPortfolio);
@@ -36,17 +31,15 @@ export const useStatCardData = () => {
           historicalPrices: historicalPrices ?? [],
         }),
     realizedProfit: calculateRealizedProfit({
-      existingTransactions,
-      savedTransactions,
+      transactions,
     }),
     investedAmountInCurrentPortfolio:
       calculateCurrentInvestedAmount(currentPortfolio),
     historicalInvestedAmount: calculateInvestedAmount({
-      existingTransactions,
-      savedTransactions,
+      transactions,
     }),
     dividends: dividends,
-    fees: calculateTotalFees({ existingTransactions, savedTransactions }),
+    fees: calculateTotalFees({ transactions }),
   };
 
   const portfolioValue =

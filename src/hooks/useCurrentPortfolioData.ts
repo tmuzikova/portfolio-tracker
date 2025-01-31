@@ -1,7 +1,6 @@
 import { useTransactionStore } from '@/stores/TransactionStore';
-import { getSavedTransactions } from '@/utils/getSavedTransactions';
 import { getCurrentPortfolio } from '@/utils/portfolioCalculations/getCurrentPortfolio';
-import { useHistoricalStockPrices } from './useHistoricalStockPrices';
+import { useHistoricalStockPrices } from './useHistoricalStockPrices/useHistoricalStockPrices';
 import { FX_RATE } from '@/utils/portfolioCalculations/const/FX_RATE';
 import {
   CurrentPortfolioItem,
@@ -60,14 +59,9 @@ const enhancePortfolioItem = (
 };
 
 export const useCurrentPortfolioData = () => {
-  const existingTransactions = useTransactionStore(
-    (state) => state.transactions,
-  );
-  const savedTransactions = getSavedTransactions();
-  const currentPortfolio = getCurrentPortfolio({
-    existingTransactions,
-    savedTransactions,
-  });
+  const transactions = useTransactionStore((state) => state.transactions);
+
+  const currentPortfolio = getCurrentPortfolio({ transactions });
 
   const {
     data: priceData,

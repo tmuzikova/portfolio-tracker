@@ -6,7 +6,7 @@ import {
 import {
   getCompanyProfileFromDB,
   saveCompanyProfileToDB,
-} from '@/lib/companyProfileIDB';
+} from '@/lib/companyProfileDB';
 import { api } from '@/api/client';
 
 const fetchCompanyProfile = async (symbol: string): Promise<CompanyProfile> => {
