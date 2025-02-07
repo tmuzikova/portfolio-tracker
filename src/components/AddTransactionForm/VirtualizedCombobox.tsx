@@ -67,7 +67,7 @@ export function VirtualizedCombobox({
           variant="outline"
           role="combobox"
           className={cn(
-            'justify-between font-normal',
+            'justify-between px-3 font-normal',
             !selectedOption && 'text-muted-foreground',
           )}
         >

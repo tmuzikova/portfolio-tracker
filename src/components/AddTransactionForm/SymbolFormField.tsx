@@ -1,5 +1,4 @@
 import {
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -46,10 +45,6 @@ export const SymbolSelectFormField = ({
             selectedOption={selectedHolding}
             onSelect={onSelectHandler}
           />
-          <FormDescription>
-            Lze zadávat pouze aktiva obchodovaná na burzách v USA (např.
-            NASDAQ). Ostatní transakce nebudou zpracovány.
-          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
